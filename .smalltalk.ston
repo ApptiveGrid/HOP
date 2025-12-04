@@ -1,0 +1,10 @@
+SmalltalkCISpec {
+  #loading : [
+    SCIMetacelloLoadSpec {
+      #baseline : 'HOP',
+      #platforms : [ #pharo ],
+      #directory : 'source',
+      #onConflict : #useIncoming
+    }
+  ]
+}
