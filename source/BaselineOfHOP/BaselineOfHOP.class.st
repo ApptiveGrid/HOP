@@ -1,12 +1,12 @@
 Class {
-	#name : 'BaselineOfHyperObjectPresentation',
+	#name : 'BaselineOfHOP',
 	#superclass : 'BaselineOf',
-	#category : 'BaselineOfHyperObjectPresentation',
-	#package : 'BaselineOfHyperObjectPresentation'
+	#category : 'BaselineOfHOP',
+	#package : 'BaselineOfHOP'
 }
 
 { #category : 'baselines' }
-BaselineOfHyperObjectPresentation >> baseline: spec [
+BaselineOfHOP >> baseline: spec [
 	<baseline>
 	spec for: #'common' do: [
 		self 
@@ -25,7 +25,7 @@ BaselineOfHyperObjectPresentation >> baseline: spec [
 ]
 
 { #category : 'as yet unclassified' }
-BaselineOfHyperObjectPresentation >> jsonSchema: spec [
+BaselineOfHOP >> jsonSchema: spec [
 	
 	spec baseline: 'JSONSchema' with: [ 
 		spec 
@@ -33,7 +33,7 @@ BaselineOfHyperObjectPresentation >> jsonSchema: spec [
 ]
 
 { #category : 'baselines' }
-BaselineOfHyperObjectPresentation >> zinc: spec [
+BaselineOfHOP >> zinc: spec [
 	spec baseline: 'ZincHTTPComponents' with: [ 
 		spec 
 			loads: #('REST' 'Zinc-HTTP-Examples');
