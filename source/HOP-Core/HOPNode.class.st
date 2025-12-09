@@ -17,6 +17,11 @@ HOPNode >> canonicalUriFor: aResource [
 ]
 
 { #category : 'accessing' }
+HOPNode >> label [
+	^ self name 
+]
+
+{ #category : 'accessing' }
 HOPNode >> name [
 
 	^ name
@@ -47,7 +52,7 @@ HOPNode >> parent: anObject [
 
 { #category : 'printing' }
 HOPNode >> printOn: aStream [ 
-	aStream << name asString << ' [' << self nodeLabel << ']' 
+	aStream << self label asString << ' [' << self nodeLabel << ']' 
 ]
 
 { #category : 'accessing' }
