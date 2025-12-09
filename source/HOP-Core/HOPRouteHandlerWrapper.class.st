@@ -15,7 +15,7 @@ HOPRouteHandlerWrapper class >> asHOPRouteHandler [
 
 { #category : 'instance creation' }
 HOPRouteHandlerWrapper >> asHOPRouteHandler [
-	^ self copy
+	^ self
 ]
 
 { #category : 'as yet unclassified' }

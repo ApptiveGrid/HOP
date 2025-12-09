@@ -16,7 +16,7 @@ HOPZincHandlerAdaptor class >> httpParameters [
 
 { #category : 'instance creation' }
 HOPZincHandlerAdaptor >> asHOPRouteHandler [
-	^ self copy
+	^ self
 ]
 
 { #category : 'accessing' }

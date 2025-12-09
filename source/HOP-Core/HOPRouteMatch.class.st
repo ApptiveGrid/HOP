@@ -24,7 +24,9 @@ HOPRouteMatch >> addExtraPath: aString [
 { #category : 'adding' }
 HOPRouteMatch >> addHandler: aHOPRequestHandler [ 
 	| handler |
-	handler := aHOPRequestHandler asHOPRouteHandler copy.
+	handler := aHOPRequestHandler asHOPRouteHandler.
+	(handler == aHOPRequestHandler ) 
+		ifTrue: [ handler := handler copy ].
 	handlers ifNotEmpty: [ 
 		handlers last next: handler ].
 	handlers add: handler

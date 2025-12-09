@@ -25,7 +25,7 @@ HOPCall class >> newHttpCall [
 
 { #category : 'instance creation' }
 HOPCall >> asHOPRouteHandler [
-	^ self copy
+	^ self
 ]
 
 { #category : 'execution' }
