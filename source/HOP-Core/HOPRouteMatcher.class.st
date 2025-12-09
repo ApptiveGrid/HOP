@@ -109,6 +109,11 @@ HOPRouteMatcher >> routeMatch [
 	^ routeMatch
 ]
 
+{ #category : 'accessing' }
+HOPRouteMatcher >> routeMatch: aRouteMatch [ 
+	routeMatch := aRouteMatch
+]
+
 { #category : 'accessing - segments' }
 HOPRouteMatcher >> segments [
 	^ segments 
