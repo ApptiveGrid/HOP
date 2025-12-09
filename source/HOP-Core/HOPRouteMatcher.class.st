@@ -104,6 +104,11 @@ HOPRouteMatcher >> resource [
 	^ self realNode valueIn: routeMatch
 ]
 
+{ #category : 'accessing' }
+HOPRouteMatcher >> routeMatch [
+	^ routeMatch
+]
+
 { #category : 'accessing - segments' }
 HOPRouteMatcher >> segments [
 	^ segments 
