@@ -9,12 +9,6 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
-HOPServerDelegate >> dispatchRouteMatch: routeMatch [
-	^ routeMatch dispatch  
-	
-]
-
-{ #category : 'as yet unclassified' }
 HOPServerDelegate >> handleRequest: request [ 
 	| routeMatch |
 	routeMatch := self 
@@ -25,7 +19,13 @@ HOPServerDelegate >> handleRequest: request [
 	fit the URI space. We create a dedicated route handler object to 
 	enable complex operations. This delegate is shared between all 
 	processes so concurrency needs to be handled in a method cascade"
-	^ self dispatchRouteMatch: routeMatch
+	^ self handleRouteMatch: routeMatch
+	
+]
+
+{ #category : 'as yet unclassified' }
+HOPServerDelegate >> handleRouteMatch: routeMatch [
+	^ routeMatch handle  
 	
 ]
 

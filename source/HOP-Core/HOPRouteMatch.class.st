@@ -24,7 +24,7 @@ HOPRouteMatch >> addExtraPath: aString [
 { #category : 'adding' }
 HOPRouteMatch >> addHandler: aHOPRequestHandler [ 
 	| handler |
-	handler := aHOPRequestHandler asHOPRouteHandler.
+	handler := aHOPRequestHandler asHOPRouteHandler copy.
 	handlers ifNotEmpty: [ 
 		handlers last next: handler ].
 	handlers add: handler
@@ -48,12 +48,6 @@ HOPRouteMatch >> call [
 		yourself 
 ]
 
-{ #category : 'as yet unclassified' }
-HOPRouteMatch >> dispatch [
-	self addHandler: (operation asHOPRouteHandler).
-	^ handlers first handleRouteMatch: self
-]
-
 { #category : 'accessing' }
 HOPRouteMatch >> extraPath [
 	^ extraPath
@@ -71,6 +65,12 @@ HOPRouteMatch >> extraRequestContext [
 { #category : 'accessing' }
 HOPRouteMatch >> firstHandler [
 	^ handlers first 
+]
+
+{ #category : 'as yet unclassified' }
+HOPRouteMatch >> handle [
+	self addHandler: (operation asHOPRouteHandler).
+	^ handlers first handleRouteMatch: self
 ]
 
 { #category : 'as yet unclassified' }

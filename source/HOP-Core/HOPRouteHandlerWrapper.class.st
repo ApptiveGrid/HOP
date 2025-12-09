@@ -15,7 +15,7 @@ HOPRouteHandlerWrapper class >> asHOPRouteHandler [
 
 { #category : 'instance creation' }
 HOPRouteHandlerWrapper >> asHOPRouteHandler [
-	^ self 
+	^ self copy
 ]
 
 { #category : 'as yet unclassified' }
@@ -34,4 +34,9 @@ HOPRouteHandlerWrapper >> next: aHOPHandler [
 	next ifNotNil: [ 
 		^ next next: aHOPHandler ].
 	next := aHOPHandler
+]
+
+{ #category : 'copying' }
+HOPRouteHandlerWrapper >> postCopy [ 
+	next := nil 
 ]

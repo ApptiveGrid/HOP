@@ -16,7 +16,7 @@ HOPServerDelegateTest >> testComposed [
 	request := ZnRequest get: 'api/objects/1234' asZnUrl.
 	matched := matcher matchRequest: request.
 	self assert: (matched variableAt: #objectId) equals: '1234'.
-	response := matched dispatch.
+	response := matched handle.
 	self assert: response status equals: 200
 ]
 
