@@ -4,3 +4,11 @@ Class {
 	#category : 'HOP-Core',
 	#package : 'HOP-Core'
 }
+
+{ #category : 'as yet unclassified' }
+HOPBodyParameter >> readFromRequest: aRequest [
+
+	aRequest hasEntity ifFalse: [ 
+		AGHTTPConstraintsError signal: 'request has no body'  ].
+	^ aRequest contents
+]
