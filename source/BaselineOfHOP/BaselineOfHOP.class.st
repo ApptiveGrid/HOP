@@ -37,5 +37,5 @@ BaselineOfHOP >> zinc: spec [
 	spec baseline: 'ZincHTTPComponents' with: [ 
 		spec 
 			loads: #('REST' 'Zinc-HTTP-Examples');
-			repository: 'github://svenvc/zinc/repository']
+			repository: 'github://ApptiveGrid/zinc/repository']
 ]
