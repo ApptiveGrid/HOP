@@ -60,7 +60,7 @@ HOPRouteMatch >> extraRequestContext [
 	^ self copy
 		resetExtraPath;
 		startReceiver: self receiver scope yourself;
-		resolvePathSegments: extraPath;
+		resolveSegments: extraPath;
 		yourself.
 ]
 
@@ -99,6 +99,11 @@ HOPRouteMatch >> initialize [
 	variables := Dictionary new.
 	nodes := OrderedCollection new.
 	handlers := OrderedCollection new 
+]
+
+{ #category : 'as yet unclassified' }
+HOPRouteMatch >> lastSegment [
+	^ nodes last
 ]
 
 { #category : 'testing' }
@@ -172,9 +177,9 @@ HOPRouteMatch >> resetExtraPath [
 ]
 
 { #category : 'as yet unclassified' }
-HOPRouteMatch >> resolvePathSegments: aCollection [ 
+HOPRouteMatch >> resolveSegments: aCollection [ 
 	^ self receiver 
-		resolvePathSegments: aCollection requestContext: self 
+		resolveSegments: aCollection routeMatch: self 
 ]
 
 { #category : 'as yet unclassified' }
@@ -186,11 +191,6 @@ HOPRouteMatch >> resourceOfNode: aNode [
 HOPRouteMatch >> startReceiver: aResource [
 	receiverNode := uriSpace nodeForResource: aResource.
 	self receiver: aResource.
-]
-
-{ #category : 'as yet unclassified' }
-HOPRouteMatch >> topNode [
-	^ nodes last
 ]
 
 { #category : 'accessing' }

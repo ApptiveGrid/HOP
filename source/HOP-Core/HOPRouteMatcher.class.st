@@ -87,7 +87,7 @@ HOPRouteMatcher >> realNode [
 		ifTrue: [ 
 			routeMatch 
 				receiver: routeMatch receiver scope yourself;
-				resolvePathSegments: routeMatch extraPath;
+				resolveSegments: routeMatch extraPath;
 				receiverNode.
 			 ]
 		ifFalse: [ routeMatch receiverNode ]
