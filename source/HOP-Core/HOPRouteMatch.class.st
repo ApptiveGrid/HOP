@@ -55,15 +55,6 @@ HOPRouteMatch >> extraPath [
 	^ extraPath
 ]
 
-{ #category : 'as yet unclassified' }
-HOPRouteMatch >> extraRequestContext [
-	^ self copy
-		resetExtraPath;
-		startReceiver: self receiver scope yourself;
-		resolveSegments: extraPath;
-		yourself.
-]
-
 { #category : 'accessing' }
 HOPRouteMatch >> firstHandler [
 	^ handlers first 
@@ -104,6 +95,15 @@ HOPRouteMatch >> initialize [
 { #category : 'as yet unclassified' }
 HOPRouteMatch >> lastSegment [
 	^ nodes last
+]
+
+{ #category : 'as yet unclassified' }
+HOPRouteMatch >> matchExtraPath [ 
+	^ HOPRouteMatcher new 
+		uriSpace: uriSpace;
+		startReceiver: self receiver scope yourself;
+		matchSegments: extraPath;
+		yourself 
 ]
 
 { #category : 'testing' }
