@@ -53,6 +53,11 @@ HOPRouteMatcher >> initialize [
 	currentIndex := 0.
 ]
 
+{ #category : 'testing' }
+HOPRouteMatcher >> matchPath: aString [ 
+	^ self matchUri: aString asZnUrl 
+]
+
 { #category : 'as yet unclassified' }
 HOPRouteMatcher >> matchRequest: aZnRequest [ 
 	| segment |
@@ -64,9 +69,14 @@ HOPRouteMatcher >> matchRequest: aZnRequest [
 ]
 
 { #category : 'as yet unclassified' }
-HOPRouteMatcher >> matchUri: aUri [
-	segments := aUri segments.
+HOPRouteMatcher >> matchSegments: aCollection [
+	segments := aCollection.
 	^ self findRoute
+]
+
+{ #category : 'as yet unclassified' }
+HOPRouteMatcher >> matchUri: aUri [
+	^ self matchSegments: aUri segments
 ]
 
 { #category : 'accessing' }
@@ -81,8 +91,6 @@ HOPRouteMatcher >> path: aString [
 
 { #category : 'accessing' }
 HOPRouteMatcher >> realNode [
-	| node |
-	node := self findRoute. 
 	^ routeMatch hasExtraPath 
 		ifTrue: [ 
 			routeMatch 
@@ -119,11 +127,6 @@ HOPRouteMatcher >> startReceiver: aResource [
 HOPRouteMatcher >> startSegment [
 	^ startNode ifNil: [ 
 		startNode := self builStartNode ]
-]
-
-{ #category : 'accessing' }
-HOPRouteMatcher >> uri: aZnUrl [ 
-	self segments: aZnUrl segments 
 ]
 
 { #category : 'accessing' }
