@@ -92,16 +92,16 @@ HOPRouteMatcher >> path: aString [
 { #category : 'accessing' }
 HOPRouteMatcher >> realNode [
 	^ routeMatch hasExtraPath 
-		ifTrue: [ 
-			routeMatch matchExtraPath routeMatch receiverNode.
-			 ]
+		ifTrue: [ routeMatch matchExtraPath routeMatch receiverNode ]
 		ifFalse: [ routeMatch receiverNode ]
 ]
 
 { #category : 'resolving' }
 HOPRouteMatcher >> resource [
-	
-	^ self realNode valueIn: routeMatch
+	^ routeMatch hasExtraPath 
+		ifTrue: [ routeMatch matchExtraPath routeMatch resource ]
+		ifFalse: [ routeMatch resource ]
+
 ]
 
 { #category : 'accessing' }

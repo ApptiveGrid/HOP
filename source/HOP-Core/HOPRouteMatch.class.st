@@ -176,6 +176,11 @@ HOPRouteMatch >> resetExtraPath [
 	extraPath := nil
 ]
 
+{ #category : 'accessing' }
+HOPRouteMatch >> resource [ 
+	^ receiverNode valueIn: self 
+]
+
 { #category : 'as yet unclassified' }
 HOPRouteMatch >> resourceOfNode: aNode [ 
 	^ self variableAt: aNode name
