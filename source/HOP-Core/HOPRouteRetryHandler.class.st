@@ -16,7 +16,7 @@ HOPRouteRetryHandler >> errors: anObject [
 ]
 
 { #category : 'public' }
-HOPRouteRetryHandler >> handleRouteMatch: aRouteMatch [
+HOPRouteRetryHandler >> handleRoute: aRouteMatch [
 	^ self handleRouteMatchWithRetries: aRouteMatch
 ]
 
@@ -28,7 +28,7 @@ HOPRouteRetryHandler >> handleRouteMatchWithRetries: aRouteMatch [
 	the next time. But just try numberOfRetriess times and then give up"
 	counter := 1.
 	[ counter <= numberOfRetries ] whileTrue: [  
-		[ ^ super handleRouteMatch: aRouteMatch ]
+		[ ^ super handleRoute: aRouteMatch ]
 			on: errors 
 			do: [ :error | 
 				(counter < numberOfRetries) ifFalse: [ 

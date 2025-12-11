@@ -1,8 +1,9 @@
 Class {
 	#name : 'HOPTreeNodeTest',
 	#superclass : 'TestCase',
-	#category : 'HOP-Core-Tests',
-	#package : 'HOP-Core-Tests'
+	#category : 'HOP-Core-Tests-Tests',
+	#package : 'HOP-Core-Tests',
+	#tag : 'Tests'
 }
 
 { #category : 'tests' }

@@ -16,6 +16,11 @@ HOPNode >> canonicalUriFor: aResource [
 		ifNil: [ OrderedCollection new ]
 ]
 
+{ #category : 'testing' }
+HOPNode >> isSpaceZone [ 
+	^ false 
+]
+
 { #category : 'accessing' }
 HOPNode >> label [
 	^ self name 

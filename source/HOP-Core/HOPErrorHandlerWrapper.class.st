@@ -32,8 +32,8 @@ HOPErrorHandlerWrapper >> handleException: exception request: request [
 ]
 
 { #category : 'public' }
-HOPErrorHandlerWrapper >> handleRouteMatch: aRouteMatch [
-	^ [ super handleRouteMatch: aRouteMatch ]
+HOPErrorHandlerWrapper >> handleRoute: aRouteMatch [
+	^ [ super handleRoute: aRouteMatch ]
 		on: Error
 		do: [ :exception | 
 			self 

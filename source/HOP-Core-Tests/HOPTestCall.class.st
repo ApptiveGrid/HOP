@@ -21,7 +21,7 @@ HOPTestCall >> execute [
 ]
 
 { #category : 'public' }
-HOPTestCall >> handleRouteMatch: aRouteMatch [
+HOPTestCall >> handleRoute: aRouteMatch [
 	routeMatch := aRouteMatch.
 	^ self execute 
 ]

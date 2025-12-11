@@ -72,7 +72,7 @@ HOPRouteMatch >> firstHandler [
 { #category : 'as yet unclassified' }
 HOPRouteMatch >> handle [
 	self addHandler: (operation asHOPRouteHandler).
-	^ handlers first handleRouteMatch: self
+	^ handlers first handleRoute: self
 ]
 
 { #category : 'as yet unclassified' }

@@ -1,12 +1,13 @@
 Class {
-	#name : 'AGHOPCodeTest',
+	#name : 'HOPCodeTest',
 	#superclass : 'TestCase',
-	#category : 'HOP-Core-Tests',
-	#package : 'HOP-Core-Tests'
+	#category : 'HOP-Core-Tests-Tests',
+	#package : 'HOP-Core-Tests',
+	#tag : 'Tests'
 }
 
 { #category : 'tests' }
-AGHOPCodeTest >> testDependencies [ 
+HOPCodeTest >> testDependencies [ 
 	| dependencies invalid |
 	self skip.
 	dependencies := (self dependencyPackageFor: HOPUriSpace package) dependentPackages collect: #name.
@@ -15,7 +16,7 @@ AGHOPCodeTest >> testDependencies [
 ]
 
 { #category : 'tests' }
-AGHOPCodeTest >> testNoShadowedVariablesInMethods [
+HOPCodeTest >> testNoShadowedVariablesInMethods [
 	"Fail if there are methods who define shadowed temps or args"
 	| found validExceptions remaining |
 	found := HOPUriSpace package methods select: [ :m |
@@ -34,7 +35,7 @@ AGHOPCodeTest >> testNoShadowedVariablesInMethods [
 ]
 
 { #category : 'tests' }
-AGHOPCodeTest >> testNoVarsDefinedByClassesShadow [ [
+HOPCodeTest >> testNoVarsDefinedByClassesShadow [ [
 	"make sure no class vars or ivars shadow"
 	| classes |
 	classes := HOPUriSpace package definedClasses select: [ :class |
@@ -46,7 +47,7 @@ AGHOPCodeTest >> testNoVarsDefinedByClassesShadow [ [
 ]
 
 { #category : 'as yet unclassified' }
-AGHOPCodeTest >> validDependentPackages [
+HOPCodeTest >> validDependentPackages [
 	^ #( 
 			'Collections-Abstract'
 			'Collections-Sequenceable'

@@ -1,6 +1,6 @@
 Class {
 	#name : 'HOPZincHandlerAdaptor',
-	#superclass : 'HOPCatchAllSegment',
+	#superclass : 'AnObsoleteHOPCatchAllSegment',
 	#instVars : [
 		'routeMatch',
 		'handlerClass'
@@ -30,7 +30,7 @@ HOPZincHandlerAdaptor >> execute [
 ]
 
 { #category : 'public' }
-HOPZincHandlerAdaptor >> handleRouteMatch: aRouteMatch [ 
+HOPZincHandlerAdaptor >> handleRoute: aRouteMatch [ 
 	^ handlerClass new handleRequest: aRouteMatch request 
 ]
 

@@ -19,8 +19,8 @@ HOPRouteHandlerWrapper >> asHOPRouteHandler [
 ]
 
 { #category : 'as yet unclassified' }
-HOPRouteHandlerWrapper >> handleRouteMatch: aMatch [ 
-	^ next handleRouteMatch: aMatch 
+HOPRouteHandlerWrapper >> handleRoute: aMatch [ 
+	^ next handleRoute: aMatch 
 ]
 
 { #category : 'accessing' }

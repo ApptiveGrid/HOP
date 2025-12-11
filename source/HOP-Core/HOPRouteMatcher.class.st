@@ -7,8 +7,8 @@ Class {
 		'startNode',
 		'startReceiver',
 		'currentIndex',
-		'currentNode',
-		'routeMatch'
+		'routeMatch',
+		'currentSegment'
 	],
 	#category : 'HOP-Core',
 	#package : 'HOP-Core'
@@ -32,9 +32,19 @@ HOPRouteMatcher >> builStartNode [
 			n ]
 ]
 
-{ #category : 'accessing' }
-HOPRouteMatcher >> currentNode [
-	^ currentNode
+{ #category : 'navigating' }
+HOPRouteMatcher >> findRoute [ 
+	currentSegment ifNil: [  
+		currentSegment := self startSegment ].
+
+	currentSegment isSpaceZone ifTrue: [  
+		routeMatch addHandlers: currentSegment handlers ].
+	
+	[ self atEnd ] whileFalse: [
+		currentSegment := currentSegment 
+			detectSegmentNamed: self nextSegment 
+			routeMatch: routeMatch ].
+	^ currentSegment
 ]
 
 { #category : 'initialization' }
@@ -45,17 +55,18 @@ HOPRouteMatcher >> initialize [
 
 { #category : 'as yet unclassified' }
 HOPRouteMatcher >> matchRequest: aZnRequest [ 
-	self segments: aZnRequest uri segments.
-	routeMatch 
-		request: aZnRequest;
-		operation: (self resolveNode atMethod: aZnRequest method).
+	| segment |
+	segment := self matchUri: aZnRequest uri.
+	routeMatch operation: (segment atMethod: aZnRequest method).
 	^ routeMatch 
+		request: aZnRequest;
+		yourself
 ]
 
 { #category : 'as yet unclassified' }
 HOPRouteMatcher >> matchUri: aUri [
-	self segments: aUri segments.
-	^ self resolveNode
+	segments := aUri segments.
+	^ self findRoute
 ]
 
 { #category : 'accessing' }
@@ -71,7 +82,7 @@ HOPRouteMatcher >> path: aString [
 { #category : 'accessing' }
 HOPRouteMatcher >> realNode [
 	| node |
-	node := self resolveNode. 
+	node := self findRoute. 
 	^ routeMatch hasExtraPath 
 		ifTrue: [ 
 			routeMatch 
@@ -80,22 +91,6 @@ HOPRouteMatcher >> realNode [
 				receiverNode.
 			 ]
 		ifFalse: [ routeMatch receiverNode ]
-]
-
-{ #category : 'navigating' }
-HOPRouteMatcher >> resolveNode [ 
-	currentNode ifNil: [  
-		currentNode := self startNode ].
-
-	(currentNode respondsTo: #handlers) ifTrue: [  
-		currentNode hasHandlers ifTrue: [ 
-			routeMatch addHandlers: currentNode handlers ] ].
-	
-	[ self atEnd ] whileFalse: [
-		currentNode := currentNode 
-			detectSegmentNamed: self nextSegment 
-			routeMatch: routeMatch ].
-	^ currentNode
 ]
 
 { #category : 'resolving' }
@@ -114,26 +109,16 @@ HOPRouteMatcher >> routeMatch: aRouteMatch [
 	routeMatch := aRouteMatch
 ]
 
-{ #category : 'accessing - segments' }
-HOPRouteMatcher >> segments [
-	^ segments 
-]
-
-{ #category : 'accessing' }
-HOPRouteMatcher >> segments: aCollection [ 
-	segments := aCollection
-]
-
-{ #category : 'as yet unclassified' }
-HOPRouteMatcher >> startNode [
-	^ startNode ifNil: [ 
-		startNode := self builStartNode ]
-]
-
 { #category : 'as yet unclassified' }
 HOPRouteMatcher >> startReceiver: aResource [ 
 	routeMatch startReceiver: aResource.
 	startReceiver := aResource
+]
+
+{ #category : 'as yet unclassified' }
+HOPRouteMatcher >> startSegment [
+	^ startNode ifNil: [ 
+		startNode := self builStartNode ]
 ]
 
 { #category : 'accessing' }
@@ -150,11 +135,11 @@ HOPRouteMatcher >> uriSpace: anAGUriSpace [
 { #category : 'accessing' }
 HOPRouteMatcher >> valueAt: aString [ 
 	| segment |
-	currentNode := self startNode.
+	currentSegment := self startSegment.
 	currentIndex := 0.
 	[ self atEnd ] whileFalse: [
 		segment := self nextSegment.
-		currentNode := currentNode detectSegmentNamed: segment routeMatch: routeMatch.
-		(currentNode name = aString) ifTrue: [ ^ segment  ] ].
+		currentSegment := currentSegment detectSegmentNamed: segment routeMatch: routeMatch.
+		(currentSegment name = aString) ifTrue: [ ^ segment  ] ].
 	^ nil 
 ]

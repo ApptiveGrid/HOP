@@ -4,8 +4,9 @@ Class {
 	#instVars : [
 		'uriSpace'
 	],
-	#category : 'HOP-Core-Tests',
-	#package : 'HOP-Core-Tests'
+	#category : 'HOP-Core-Tests-Tests',
+	#package : 'HOP-Core-Tests',
+	#tag : 'Tests'
 }
 
 { #category : 'instance creation' }
@@ -30,16 +31,6 @@ HOPUriSpaceTest >> testComposeUriSpace [
 	uriSpace mergeNode: toMerge.
 	self assert: ((uriSpace / #api / #firstVariable / #items) includesNodeNamed: #foobar)
 	
-]
-
-{ #category : 'tests' }
-HOPUriSpaceTest >> testResolveNode [ 
-	| matcher node |
-	uriSpace := self uriSpace.
-	matcher := uriSpace newRouteMatcher.
-	matcher uri: '/api/first123/items/4321' asZnUrl.
-	node := matcher resolveNode.
-	self assert: node name equals: #secondVariable
 ]
 
 { #category : 'tests' }

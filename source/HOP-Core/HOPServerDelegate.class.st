@@ -19,12 +19,12 @@ HOPServerDelegate >> handleRequest: request [
 	fit the URI space. We create a dedicated route handler object to 
 	enable complex operations. This delegate is shared between all 
 	processes so concurrency needs to be handled in a method cascade"
-	^ self handleRouteMatch: routeMatch
+	^ self handleRoute: routeMatch
 	
 ]
 
 { #category : 'as yet unclassified' }
-HOPServerDelegate >> handleRouteMatch: routeMatch [
+HOPServerDelegate >> handleRoute: routeMatch [
 	^ routeMatch handle  
 	
 ]

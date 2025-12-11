@@ -72,6 +72,11 @@ HOPSpaceZone >> initialize [
 ]
 
 { #category : 'testing' }
+HOPSpaceZone >> isSpaceZone [ 
+	^ true 
+]
+
+{ #category : 'testing' }
 HOPSpaceZone >> matches: segment [ 
 	^ name = segment  
 ]

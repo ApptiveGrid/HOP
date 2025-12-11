@@ -1,6 +1,6 @@
 Class {
 	#name : 'HOPReadEvalPrintCall',
-	#superclass : 'HOPCall',
+	#superclass : 'AnObsoleteHOPCall',
 	#category : 'HOP-Extra',
 	#package : 'HOP-Extra'
 }
@@ -26,7 +26,7 @@ HOPReadEvalPrintCall >> execute [
 ]
 
 { #category : 'execution' }
-HOPReadEvalPrintCall >> handleRouteMatch: aRouteMatch [  
+HOPReadEvalPrintCall >> handleRoute: aRouteMatch [  
 	^ ZnResponse ok: (ZnEntity text: (self evaluate: aRouteMatch request entity contents)) 
 	
 ]

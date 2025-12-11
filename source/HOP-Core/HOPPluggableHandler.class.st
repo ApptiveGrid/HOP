@@ -31,6 +31,6 @@ HOPPluggableHandler >> handleRequest: request [
 ]
 
 { #category : 'public' }
-HOPPluggableHandler >> handleRouteMatch: routeMatch [ 
+HOPPluggableHandler >> handleRoute: routeMatch [ 
 	^ block value: routeMatch
 ]
