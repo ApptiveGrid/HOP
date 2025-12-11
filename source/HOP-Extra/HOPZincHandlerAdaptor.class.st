@@ -1,6 +1,6 @@
 Class {
 	#name : 'HOPZincHandlerAdaptor',
-	#superclass : 'AnObsoleteHOPCatchAllSegment',
+	#superclass : 'HOPCatchAllSegment',
 	#instVars : [
 		'routeMatch',
 		'handlerClass'

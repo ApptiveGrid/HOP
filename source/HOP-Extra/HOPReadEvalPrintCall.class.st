@@ -1,6 +1,6 @@
 Class {
 	#name : 'HOPReadEvalPrintCall',
-	#superclass : 'AnObsoleteHOPCall',
+	#superclass : 'HOPCall',
 	#category : 'HOP-Extra',
 	#package : 'HOP-Extra'
 }
