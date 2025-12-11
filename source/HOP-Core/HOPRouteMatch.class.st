@@ -177,12 +177,6 @@ HOPRouteMatch >> resetExtraPath [
 ]
 
 { #category : 'as yet unclassified' }
-HOPRouteMatch >> resolveSegments: aCollection [ 
-	^ self receiver 
-		resolveSegments: aCollection routeMatch: self 
-]
-
-{ #category : 'as yet unclassified' }
 HOPRouteMatch >> resourceOfNode: aNode [ 
 	^ self variableAt: aNode name
 ]

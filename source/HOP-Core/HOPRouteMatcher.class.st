@@ -93,10 +93,7 @@ HOPRouteMatcher >> path: aString [
 HOPRouteMatcher >> realNode [
 	^ routeMatch hasExtraPath 
 		ifTrue: [ 
-			routeMatch 
-				receiver: routeMatch receiver scope yourself;
-				resolveSegments: routeMatch extraPath;
-				receiverNode.
+			routeMatch matchExtraPath routeMatch receiverNode.
 			 ]
 		ifFalse: [ routeMatch receiverNode ]
 ]
