@@ -9,7 +9,7 @@ Class {
 }
 
 { #category : 'instance creation' }
-HOPUriSpaceTest >> newUriResolver [
+HOPUriSpaceTest >> newRouteMatcher [
 	^ HOPRouteMatcher new 
 		uriSpace: self uriSpace;
 		yourself 
@@ -34,18 +34,18 @@ HOPUriSpaceTest >> testComposeUriSpace [
 
 { #category : 'tests' }
 HOPUriSpaceTest >> testResolveNode [ 
-	| resolver node |
+	| matcher node |
 	uriSpace := self uriSpace.
-	resolver := uriSpace newUriResolver.
-	resolver uri: '/api/first123/items/4321' asZnUrl.
-	node := resolver resolveNode.
+	matcher := uriSpace newRouteMatcher.
+	matcher uri: '/api/first123/items/4321' asZnUrl.
+	node := matcher resolveNode.
 	self assert: node name equals: #secondVariable
 ]
 
 { #category : 'tests' }
 HOPUriSpaceTest >> testVariableSegment [ 
 	| matcher value uri |
-	matcher := self newUriResolver.
+	matcher := self newRouteMatcher.
 	uri := '/api/first123/items/4321' asZnUrl.
 	matcher uri: uri.
 	value := matcher valueAt: #firstVariable.

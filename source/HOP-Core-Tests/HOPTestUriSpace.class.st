@@ -38,13 +38,6 @@ HOPTestUriSpace >> newRouteMatch [
 HOPTestUriSpace >> newRouteMatcher [
 	^ HOPRouteMatcher new 
 		uriSpace: self;
-		yourself.
-]
-
-{ #category : 'instance creation' }
-HOPTestUriSpace >> newUriResolver [
-	^ HOPRouteMatcher new 
-		uriSpace: self;
 		yourself 
 ]
 
