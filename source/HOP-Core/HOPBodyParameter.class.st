@@ -9,6 +9,6 @@ Class {
 HOPBodyParameter >> readFromRequest: aRequest [
 
 	aRequest hasEntity ifFalse: [ 
-		AGHTTPConstraintsError signal: 'request has no body'  ].
+		HOPParameterConstraintsError signal: 'request has no body'  ].
 	^ aRequest contents
 ]
