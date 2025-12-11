@@ -38,7 +38,7 @@ HOPUriSpaceTest >> testVariableSegment [
 	| matcher value uri |
 	matcher := self newRouteMatcher.
 	uri := '/api/first123/items/4321' asZnUrl.
-	matcher uri: uri.
+	matcher matchUri: uri.
 	value := matcher valueAt: #firstVariable.
 	self assert: value equals: 'first123'.
 	value := matcher valueAt: #secondVariable.
