@@ -106,10 +106,35 @@ HOPRouteMatch >> matchExtraPath [
 		yourself 
 ]
 
+{ #category : 'as yet unclassified' }
+HOPRouteMatch >> matchNested: aBlock [ 
+	aBlock value: self matchExtraPath routeMatch
+	
+]
+
 { #category : 'testing' }
 HOPRouteMatch >> matchesScope: aResource [
 	receiverNode ifNil: [ ^ false ].
 	^ aResource matchesScopeOf: self receiver.
+]
+
+{ #category : 'actions' }
+HOPRouteMatch >> merge: aRouteMatch [ 
+	variables addAll: aRouteMatch variables.
+	receiverNode := aRouteMatch receiverNode.
+	operation := aRouteMatch operation.
+
+]
+
+{ #category : 'actions' }
+HOPRouteMatch >> mergeInto: aRouteMatch [ 
+	aRouteMatch merge: self 
+]
+
+{ #category : 'instance creation' }
+HOPRouteMatch >> newHttpCall [
+	^ self operation newHttpCall 
+		routeMatch: self 
 ]
 
 { #category : 'accessing' }
@@ -186,6 +211,11 @@ HOPRouteMatch >> resourceOfNode: aNode [
 	^ self variableAt: aNode name
 ]
 
+{ #category : 'initialization' }
+HOPRouteMatch >> setOperation: aString [ 
+	operation := self lastSegment atMethod: aString  
+]
+
 { #category : 'as yet unclassified' }
 HOPRouteMatch >> startReceiver: aResource [
 	receiverNode := uriSpace nodeForResource: aResource.
@@ -222,4 +252,9 @@ HOPRouteMatch >> variableAt: key put: anObject [
 	^ variables 
 		at: key 
 		put: anObject 
+]
+
+{ #category : 'accessing' }
+HOPRouteMatch >> variables [
+	^ variables
 ]
