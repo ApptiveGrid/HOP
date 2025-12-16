@@ -76,7 +76,7 @@ HOPRouteMatcher >> matchSegments: aCollection [
 
 { #category : 'as yet unclassified' }
 HOPRouteMatcher >> matchUri: aUri [
-	^ self matchSegments: aUri segments
+	^ self matchSegments: aUri pathSegments
 ]
 
 { #category : 'accessing' }
