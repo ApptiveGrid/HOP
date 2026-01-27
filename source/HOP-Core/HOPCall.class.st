@@ -33,6 +33,18 @@ HOPCall >> execute [
 	self subclassResponsibility 
 ]
 
+{ #category : 'public' }
+HOPCall >> handleRoute: aRouteMatch [ 
+	routeMatch := aRouteMatch.
+	
+	^ self execute 
+]
+
+{ #category : 'accessing' }
+HOPCall >> request [
+	^ routeMatch request 
+]
+
 { #category : 'accessing' }
 HOPCall >> routeMatch [
 
