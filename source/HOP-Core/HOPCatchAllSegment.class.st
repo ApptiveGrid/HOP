@@ -33,6 +33,11 @@ HOPCatchAllSegment >> matches: aString [
 	^ true
 ]
 
+{ #category : 'testing' }
+HOPCatchAllSegment >> matchesNode: aHOPSpaceZone [ 
+	^ false
+]
+
 { #category : 'printing' }
 HOPCatchAllSegment >> nodeLabel [
 	^ '*'

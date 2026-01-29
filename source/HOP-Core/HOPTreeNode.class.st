@@ -148,6 +148,12 @@ HOPTreeNode >> inspectionSegments: aBuilder [
 			evaluated: [:each | each printString   ])
 ]
 
+{ #category : 'actions' }
+HOPTreeNode >> mergeInto: aNode [
+	nodes do: [ :each | 
+		aNode addNode: each ].
+]
+
 { #category : 'as yet unclassified' }
 HOPTreeNode >> mergeNode: aNode [ 
 	| childNode | 

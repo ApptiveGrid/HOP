@@ -82,6 +82,12 @@ HOPSpaceZone >> matches: segment [
 ]
 
 { #category : 'testing' }
+HOPSpaceZone >> matchesNode: aHOPNode [
+	(aHOPNode class == self class) ifFalse: [ ^ false ].
+	^ aHOPNode name = name 
+]
+
+{ #category : 'testing' }
 HOPSpaceZone >> matchesScope: aResource in: requestContext [
 	^ false
 ]

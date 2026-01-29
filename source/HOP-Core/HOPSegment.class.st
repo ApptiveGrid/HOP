@@ -81,8 +81,7 @@ HOPSegment >> initializePresenter [
 
 { #category : 'as yet unclassified' }
 HOPSegment >> mergeInto: aNode [
-	nodes do: [ :each | 
-		aNode addNode: each ].
+	super mergeInto: aNode.
 	methods ifNotEmpty: [ Error signal: 'There should not be empty methods in PathTreeNode' ]
 ]
 
