@@ -11,7 +11,7 @@ HOPSnapshotRouteHandler >> handleRoute: aRoute [
 	'/data/logs' asFileReference exists 
 		ifTrue: [  
 			id := DateAndTime now printString.
-			stream := ('/data/logs' asFileReference / id) writeStream.
+			stream := ('/data/logs' asFileReference / ('SCIM-', id)) writeStream.
 			stream 
 				nextPutAll: 'REQUEST';
 				nextPutAll: String crlf.
