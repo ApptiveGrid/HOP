@@ -35,7 +35,7 @@ HOPErrorHandlerWrapper >> handleException: exception request: request [
 HOPErrorHandlerWrapper >> handleRoute: aRouteMatch [
 	^ [ super handleRoute: aRouteMatch ]
 		on: Error
-		do: [ :exception | exception pass.
+		do: [ :exception | 
 			self 
 				handleException: exception 
 				request: aRouteMatch request ]
