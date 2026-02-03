@@ -29,7 +29,9 @@ HOPSnapshotRouteHandler >> handleRoute: aRoute [
 						err pass ]
 			]
 			on: Error 
-			do: [ :error | error signalerContext printDebugStackOn: stream  ]
+			do: [ :error | 
+				error signalerContext printDebugStackOn: stream.
+				error pass  ]
 		]
 		ensure: [ 
 			response ifNotNil: [  
