@@ -9,6 +9,11 @@ Class {
 	#package : 'HOP-Core'
 }
 
+{ #category : 'public' }
+HOPRouteRetryHandler >> delay [
+	^ (100 + 100 atRandom) milliSeconds
+]
+
 { #category : 'accessing' }
 HOPRouteRetryHandler >> errors: anObject [
 
@@ -55,7 +60,7 @@ HOPRouteRetryHandler >> retriesExceededForRequest: request withError: error [
 
 { #category : 'public' }
 HOPRouteRetryHandler >> waitBeforeRetrying [
-	(100 + 100 atRandom) milliSeconds wait
+	self delay wait
 ]
 
 { #category : 'error handling' }

@@ -16,6 +16,15 @@ HOPRouteHanderWrapperTest >> setUp [
 ]
 
 { #category : 'tests' }
+HOPRouteHanderWrapperTest >> testConflictHandler [
+	uriSpace / #first @@ (#GET -> (HOPPluggableHandler new block: [:req | SoilObjectHasConcurrentChange new objectId: SoilObjectId root; signal  ])).
+	uriSpace addHandler: AGConflictLogHandler.
+	self 
+		should: [ uriSpace asZincDelegate handleRequest: (ZnRequest get: #first) ]
+		raise: SoilObjectHasConcurrentChange 
+]
+
+{ #category : 'tests' }
 HOPRouteHanderWrapperTest >> testErrorHandler [
 	| response |
 	uriSpace / #first @@ (#GET -> (HOPPluggableHandler new block: [:req | Error signal ])).
