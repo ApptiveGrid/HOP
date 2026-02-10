@@ -31,17 +31,14 @@ HOPSnapshotRouteHandler >> handleRoute: aRoute [
 			on: Error 
 			do: [ :error | 
 				error signalerContext printDebugStackOn: stream.
+				stream flush.
 				error pass  ]
 		]
 		ensure: [ 
 			response ifNotNil: [  
-				response writeOn: stream ] ] ].
+				response writeOn: stream.
+				stream flush ] ] ].
 	^ response 
-]
-
-{ #category : 'as yet unclassified' }
-HOPSnapshotRouteHandler >> loggingEnabled [ 
-	^ self path exists
 ]
 
 { #category : 'as yet unclassified' }
