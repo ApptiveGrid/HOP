@@ -27,6 +27,11 @@ HOPNode >> label [
 ]
 
 { #category : 'accessing' }
+HOPNode >> methods [ 
+	^ Dictionary new
+]
+
+{ #category : 'accessing' }
 HOPNode >> name [
 
 	^ name

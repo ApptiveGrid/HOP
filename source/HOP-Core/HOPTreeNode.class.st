@@ -143,9 +143,11 @@ HOPTreeNode >> inspectionSegments: aBuilder [
 	^ aBuilder newTable
 		items: nodes;
 		addColumn: (SpStringTableColumn new
-			title: 'key'";
-			width: 30";
-			evaluated: [:each | each printString   ])
+			title: 'name';
+			evaluated: [:each | each printString   ]);
+		addColumn: (SpStringTableColumn new
+			title: 'methods';
+			evaluated: [:each | $, join: (each methods associations collect: [ :assoc | assoc key asSymbol -> assoc value printString  ]) ])
 ]
 
 { #category : 'actions' }
