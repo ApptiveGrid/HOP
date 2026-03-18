@@ -20,6 +20,7 @@ HOPErrorHandlerWrapper >> errorResponse: request code: code message: message [
 
 { #category : 'public' }
 HOPErrorHandlerWrapper >> handleException: exception request: request [
+exception pass.
 	request server 
 		ifNotNil: [ :server |
 			request server debugMode
