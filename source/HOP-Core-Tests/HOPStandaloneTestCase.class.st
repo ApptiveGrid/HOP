@@ -8,6 +8,11 @@ Class {
 	#package : 'HOP-Core-Tests'
 }
 
+{ #category : 'testing' }
+HOPStandaloneTestCase class >> isAbstract [ 
+	^ self == HOPStandaloneTestCase 
+]
+
 { #category : 'as yet unclassified' }
 HOPStandaloneTestCase >> debugMode [ 
 	^ debugMode ifNil: [ true ]
