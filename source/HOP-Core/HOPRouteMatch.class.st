@@ -9,7 +9,8 @@ Class {
 		'operation',
 		'request',
 		'handlers',
-		'variables'
+		'variables',
+		'receiver'
 	],
 	#category : 'HOP-Core',
 	#package : 'HOP-Core'
@@ -120,6 +121,7 @@ HOPRouteMatch >> matchesScope: aResource [
 
 { #category : 'actions' }
 HOPRouteMatch >> merge: aRouteMatch [ 
+	receiver := aRouteMatch receiver.
 	variables addAll: aRouteMatch variables.
 	receiverNode := aRouteMatch receiverNode.
 	operation := aRouteMatch operation.
@@ -154,11 +156,18 @@ HOPRouteMatch >> operation: aString [
 
 { #category : 'accessing' }
 HOPRouteMatch >> receiver [
-	^ self resourceOfNode: self receiverNode
+	self flag: #todo.
+	"clarify the role of the receiver. This is super confusing as there is 
+	a start receiver and a receiver which seems to be two things"
+	^ receiver ifNil: [ 
+		receiver := self resourceOfNode: self receiverNode ]
 ]
 
 { #category : 'accessing' }
 HOPRouteMatch >> receiver: aResource [ 
+	self flag: #todo.
+	"why do we put the resource in the variables?? This breaks the 
+	difference in role between a uri part and a resolved object"
 	receiverNode := uriSpace nodeForResource: aResource.
 	variables 
 		at: receiverNode name
