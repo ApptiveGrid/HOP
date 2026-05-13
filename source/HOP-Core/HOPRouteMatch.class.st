@@ -192,7 +192,7 @@ HOPRouteMatch >> receiverUriPrefix [
 	is the URI of the receiver we copy up all segments to the receiverNode we
 	already have"
 	^ ((nodes copyUpThrough: receiverNode) 
-		collect: [ :each | each segmentIn: self ]) copyWithFirst: #/
+		collect: [ :each | each segmentIn: self ]) "copyWithFirst: #/"
 ]
 
 { #category : 'accessing' }
