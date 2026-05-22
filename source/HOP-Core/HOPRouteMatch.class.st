@@ -10,7 +10,8 @@ Class {
 		'request',
 		'handlers',
 		'variables',
-		'receiver'
+		'receiver',
+		'handlerChain'
 	],
 	#category : 'HOP-Core',
 	#package : 'HOP-Core'
@@ -24,13 +25,7 @@ HOPRouteMatch >> addExtraPath: aString [
 
 { #category : 'adding' }
 HOPRouteMatch >> addHandler: aHOPRequestHandler [ 
-	| handler |
-	handler := aHOPRequestHandler asHOPRouteHandler.
-	(handler == aHOPRequestHandler ) 
-		ifTrue: [ handler := handler copy ].
-	handlers ifNotEmpty: [ 
-		handlers last next: handler ].
-	handlers add: handler
+	handlers add: aHOPRequestHandler
 ]
 
 { #category : 'adding' }
@@ -63,21 +58,9 @@ HOPRouteMatch >> firstHandler [
 
 { #category : 'as yet unclassified' }
 HOPRouteMatch >> handle [
-	self addHandler: (operation asHOPRouteHandler).
-	^ handlers first handleRoute: self
-]
-
-{ #category : 'as yet unclassified' }
-HOPRouteMatch >> handleRequest [
-	^ handlers first handleRequest: request 
-]
-
-{ #category : 'accessing' }
-HOPRouteMatch >> handler [
-	^ handlers 
-		inject: operation asHOPRouteHandler
-		into: [ :next :handler |
-			handler next: next  ]
+self halt.
+	handlerChain := handlers readStream.
+	^ self proceed.
 ]
 
 { #category : 'testing' }
@@ -152,6 +135,15 @@ HOPRouteMatch >> operation [
 { #category : 'accessing' }
 HOPRouteMatch >> operation: aString [ 
 	operation := aString 
+]
+
+{ #category : 'as yet unclassified' }
+HOPRouteMatch >> proceed [
+
+	handlerChain atEnd  
+		ifFalse: [ 
+			^ handlerChain next asHOPRouteHandler handleRoute: self ].
+	 ^ operation asHOPRouteHandler handleRoute: self
 ]
 
 { #category : 'accessing' }

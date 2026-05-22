@@ -1,9 +1,6 @@
 Class {
 	#name : 'HOPRouteHandlerWrapper',
 	#superclass : 'Object',
-	#instVars : [
-		'next'
-	],
 	#category : 'HOP-Core',
 	#package : 'HOP-Core'
 }
@@ -20,23 +17,5 @@ HOPRouteHandlerWrapper >> asHOPRouteHandler [
 
 { #category : 'as yet unclassified' }
 HOPRouteHandlerWrapper >> handleRoute: aMatch [ 
-	^ next handleRoute: aMatch 
-]
-
-{ #category : 'accessing' }
-HOPRouteHandlerWrapper >> next [
-
-	^ next
-]
-
-{ #category : 'accessing' }
-HOPRouteHandlerWrapper >> next: aHOPHandler [ 
-	next ifNotNil: [ 
-		^ next next: aHOPHandler ].
-	next := aHOPHandler
-]
-
-{ #category : 'copying' }
-HOPRouteHandlerWrapper >> postCopy [ 
-	next := nil 
+	^ aMatch proceed 
 ]
