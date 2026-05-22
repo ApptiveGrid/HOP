@@ -58,7 +58,6 @@ HOPRouteMatch >> firstHandler [
 
 { #category : 'as yet unclassified' }
 HOPRouteMatch >> handle [
-self halt.
 	handlerChain := handlers readStream.
 	^ self proceed.
 ]
