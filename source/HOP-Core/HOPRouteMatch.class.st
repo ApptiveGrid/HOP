@@ -136,6 +136,16 @@ HOPRouteMatch >> operation: aString [
 	operation := aString 
 ]
 
+{ #category : 'accessing' }
+HOPRouteMatch >> position [
+	^ handlerChain position
+]
+
+{ #category : 'accessing' }
+HOPRouteMatch >> position: anInteger [ 
+	handlerChain position: anInteger 
+]
+
 { #category : 'as yet unclassified' }
 HOPRouteMatch >> proceed [
 

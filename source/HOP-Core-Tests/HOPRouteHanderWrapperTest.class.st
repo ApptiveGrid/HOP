@@ -39,7 +39,8 @@ HOPRouteHanderWrapperTest >> testRetryHandlerExceeded [
 	uriSpace / #first @@ (#GET -> (HOPPluggableHandler new block: [:req | 1/0 ])).
 	uriSpace addHandler: (HOPRouteRetryHandler new	
 		numberOfRetries: 2;
-		errors: ZeroDivide).
+		errors: ZeroDivide);
+		addHandler: HOPNoOpHandlerWrapper .
 	self 
 		should: [ uriSpace asZincDelegate handleRequest: (ZnRequest get: #first) ]
 		raise: HOPMaximumRetriesExceeded 

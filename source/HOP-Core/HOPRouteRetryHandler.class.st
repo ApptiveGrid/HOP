@@ -27,11 +27,12 @@ HOPRouteRetryHandler >> handleRoute: aRouteMatch [
 
 { #category : 'public' }
 HOPRouteRetryHandler >> handleRouteMatchWithRetries: aRouteMatch [
-	| counter |
+	| counter position |
 	"execute request with retries. Conflicts are a timing problem. If we get a 
 	conflict error we can retry a bit later and see if the request can succeed
 	the next time. But just try numberOfRetriess times and then give up"
 	counter := 1.
+	position := aRouteMatch position.
 	[ counter <= numberOfRetries ] whileTrue: [  
 		[ ^ super handleRoute: aRouteMatch ]
 			on: errors 
@@ -40,6 +41,7 @@ HOPRouteRetryHandler >> handleRouteMatchWithRetries: aRouteMatch [
 					^ self retriesExceededForRequest: aRouteMatch withError: error ].
 				self logConflict: counter. 
 				counter := counter + 1.
+				aRouteMatch position: position.
 				self waitBeforeRetrying ] ]
 ]
 
