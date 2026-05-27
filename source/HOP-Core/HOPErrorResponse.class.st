@@ -10,6 +10,14 @@ Class {
 	#package : 'HOP-Core'
 }
 
+{ #category : 'converting' }
+HOPErrorResponse >> asZnResponse [ 
+	^ ZnResponse new 
+		statusLine: (ZnStatusLine code: statusCode);
+		headers: ZnHeaders defaultResponseHeaders;
+		yourself
+]
+
 { #category : 'accessing' }
 HOPErrorResponse >> exception [
 

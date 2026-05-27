@@ -64,9 +64,12 @@ HOPExceptionHandlerWrapper >> handleException: exception routeMatch: aRouteMatch
 		checkDebugModeFor: exception 
 		routeMatch: aRouteMatch.
 	errorResponse := self exceptionMapper map: exception.
-	^ (self httpErrorResponse: errorResponse)
-		entity: (self formatter format: errorResponse);
-		yourself 
+	^ (errorResponse class == ZnResponse)
+		ifTrue: [ errorResponse ]
+		ifFalse: [ 
+			errorResponse asZnResponse
+				entity: (self formatter format: errorResponse);
+				yourself ]
 ]
 
 { #category : 'as yet unclassified' }
@@ -77,14 +80,6 @@ HOPExceptionHandlerWrapper >> handleRoute: aRouteMatch [
 			self 
 				handleException: exception 
 				routeMatch: aRouteMatch ]
-]
-
-{ #category : 'as yet unclassified' }
-HOPExceptionHandlerWrapper >> httpErrorResponse: responseObject [ 
-	^ ZnResponse new 
-		statusLine: (ZnStatusLine code: responseObject statusCode);
-		headers: ZnHeaders defaultResponseHeaders;
-		yourself
 ]
 
 { #category : 'as yet unclassified' }
