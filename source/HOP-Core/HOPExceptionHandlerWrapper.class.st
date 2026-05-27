@@ -40,9 +40,21 @@ HOPExceptionHandlerWrapper >> exceptionMapper [
 ]
 
 { #category : 'accessing' }
+HOPExceptionHandlerWrapper >> exceptionMapper: anObject [
+
+	exceptionMapper := anObject
+]
+
+{ #category : 'accessing' }
 HOPExceptionHandlerWrapper >> formatter [ 
 	^ formatter ifNil: [ 
 		formatter := self defaultFormatter  ]
+]
+
+{ #category : 'accessing' }
+HOPExceptionHandlerWrapper >> formatter: anObject [
+
+	formatter := anObject
 ]
 
 { #category : 'as yet unclassified' }
