@@ -41,7 +41,9 @@ HOPRouteRetryHandler >> handleRouteMatchWithRetries: aRouteMatch [
 					^ self retriesExceededForRequest: aRouteMatch withError: error ].
 				self logConflict: counter. 
 				counter := counter + 1.
-				aRouteMatch position: position.
+				aRouteMatch 
+					position: position;
+					reset.
 				self waitBeforeRetrying ] ]
 ]
 

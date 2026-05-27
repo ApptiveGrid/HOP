@@ -51,11 +51,6 @@ HOPRouteMatch >> extraPath [
 	^ extraPath
 ]
 
-{ #category : 'accessing' }
-HOPRouteMatch >> firstHandler [
-	^ handlers first 
-]
-
 { #category : 'as yet unclassified' }
 HOPRouteMatch >> handle [
 	handlerChain := handlers readStream.
@@ -204,6 +199,13 @@ HOPRouteMatch >> request [
 { #category : 'accessing' }
 HOPRouteMatch >> request: aZnRequest [ 
 	request := aZnRequest 
+]
+
+{ #category : 'initialization' }
+HOPRouteMatch >> reset [ 
+	receiver := nil.
+	receiverNode ifNotNil: [  
+		variables removeKey: receiverNode name ifAbsent: [  ] ]
 ]
 
 { #category : 'initialization' }
