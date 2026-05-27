@@ -19,7 +19,7 @@ HOPRouteHanderWrapperTest >> setUp [
 HOPRouteHanderWrapperTest >> testErrorHandler [
 	| response |
 	uriSpace / #first @@ (#GET -> (HOPPluggableHandler new block: [:req | Error signal ])).
-	uriSpace addHandler: HOPErrorHandlerWrapper new .
+	uriSpace addHandler: HOPExceptionHandlerWrapper new .
 	response := uriSpace asZincDelegate handleRequest: (ZnRequest get: #first).
 	self assert: response status equals: 500
 ]
