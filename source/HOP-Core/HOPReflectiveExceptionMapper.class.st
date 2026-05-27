@@ -6,6 +6,16 @@ Class {
 }
 
 { #category : 'visiting' }
+HOPReflectiveExceptionMapper >> badRequest: anException [ 
+
+	^ HOPErrorResponse new 
+		statusCode: 400;
+		exception: anException
+		
+
+]
+
+{ #category : 'visiting' }
 HOPReflectiveExceptionMapper >> map: anObject [ 
 	| clazz selector |
 	clazz := anObject class.
@@ -18,6 +28,27 @@ HOPReflectiveExceptionMapper >> map: anObject [
 ]
 
 { #category : 'visiting' }
-HOPReflectiveExceptionMapper >> mapObject: anObject [ 
-	anObject pass 
+HOPReflectiveExceptionMapper >> mapObject: exception [ 
+
+	^ (self unhandledException: exception) 
+		exceptionType: 'unspecifiedException';
+		yourself 
+]
+
+{ #category : 'visiting' }
+HOPReflectiveExceptionMapper >> mapUnhandledException: exception [ 
+
+	^ (self unhandledException: exception) 
+		exceptionType: 'unhandledException';
+		yourself 
+]
+
+{ #category : 'visiting' }
+HOPReflectiveExceptionMapper >> unhandledException: anException [ 
+
+	^ HOPErrorResponse new 
+		statusCode: 500;
+		exception: anException
+		
+
 ]
