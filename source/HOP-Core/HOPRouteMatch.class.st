@@ -76,7 +76,7 @@ HOPRouteMatch >> lastSegment [
 
 { #category : 'as yet unclassified' }
 HOPRouteMatch >> matchExtraPath [ 
-self halt.
+
 	^ HOPRouteMatcher new 
 		uriSpace: uriSpace;
 		startReceiver: self receiver scope yourself;

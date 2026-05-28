@@ -4,11 +4,10 @@ Class {
 	#instVars : [
 		'uriSpace',
 		'segments',
-		'startNode',
-		'startReceiver',
 		'currentIndex',
 		'routeMatch',
-		'currentSegment'
+		'currentSegment',
+		'startSegment'
 	],
 	#category : 'HOP-Core',
 	#package : 'HOP-Core'
@@ -17,19 +16,6 @@ Class {
 { #category : 'accessing' }
 HOPRouteMatcher >> atEnd [
 	^ currentIndex >= segments size
-]
-
-{ #category : 'as yet unclassified' }
-HOPRouteMatcher >> builStartNode [
-	| n |
-	^ startReceiver isNil 
-		ifTrue: [ uriSpace ]
-		ifFalse: [ 
-			n := uriSpace nodeForResource: startReceiver.
-			routeMatch 
-				receiverNode: n;
-				receiver: startReceiver.
-			n ]
 ]
 
 { #category : 'navigating' }
@@ -85,19 +71,15 @@ HOPRouteMatcher >> nextSegment [
 ]
 
 { #category : 'accessing' }
-HOPRouteMatcher >> path: aString [ 
-	self uri: aString asZnUrl 
-]
-
-{ #category : 'accessing' }
 HOPRouteMatcher >> realNode [
 	^ routeMatch hasExtraPath 
-		ifTrue: [ routeMatch matchExtraPath routeMatch receiverNode ]
+		ifTrue: [ self halt. routeMatch matchExtraPath routeMatch receiverNode ]
 		ifFalse: [ routeMatch receiverNode ]
 ]
 
 { #category : 'resolving' }
 HOPRouteMatcher >> resource [
+self halt.
 	^ routeMatch hasExtraPath 
 		ifTrue: [ routeMatch matchExtraPath routeMatch resource ]
 		ifFalse: [ routeMatch resource ]
@@ -116,14 +98,14 @@ HOPRouteMatcher >> routeMatch: aRouteMatch [
 
 { #category : 'as yet unclassified' }
 HOPRouteMatcher >> startReceiver: aResource [ 
-	routeMatch startReceiver: aResource.
-	startReceiver := aResource
+
+	startSegment := uriSpace nodeForResource: aResource
 ]
 
 { #category : 'as yet unclassified' }
 HOPRouteMatcher >> startSegment [
-	^ startNode ifNil: [ 
-		startNode := self builStartNode ]
+	^ startSegment ifNil: [ 
+		startSegment := uriSpace ]
 ]
 
 { #category : 'accessing' }
@@ -135,6 +117,7 @@ HOPRouteMatcher >> uriSpace: anAGUriSpace [
 { #category : 'accessing' }
 HOPRouteMatcher >> valueAt: aString [ 
 	| segment |
+	self halt.
 	currentSegment := self startSegment.
 	currentIndex := 0.
 	[ self atEnd ] whileFalse: [
