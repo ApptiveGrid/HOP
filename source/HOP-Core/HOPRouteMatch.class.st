@@ -204,8 +204,10 @@ HOPRouteMatch >> request: aZnRequest [
 { #category : 'initialization' }
 HOPRouteMatch >> reset [ 
 	receiver := nil.
-	receiverNode ifNotNil: [  
-		variables removeKey: receiverNode name ifAbsent: [  ] ]
+	receiverNode ifNotNil: [ | id |
+		id := variables at: receiverNode name ifAbsent: [ ^ self  ].
+		id isString ifFalse: [  
+			variables removeKey: receiverNode name ifAbsent: [  ] ] ]
 ]
 
 { #category : 'initialization' }
