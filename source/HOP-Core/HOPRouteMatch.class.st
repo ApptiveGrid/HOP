@@ -10,7 +10,6 @@ Class {
 		'request',
 		'handlers',
 		'variables',
-		'receiver',
 		'handlerChain'
 	],
 	#category : 'HOP-Core',
@@ -77,6 +76,7 @@ HOPRouteMatch >> lastSegment [
 
 { #category : 'as yet unclassified' }
 HOPRouteMatch >> matchExtraPath [ 
+self halt.
 	^ HOPRouteMatcher new 
 		uriSpace: uriSpace;
 		startReceiver: self receiver scope yourself;
@@ -98,7 +98,6 @@ HOPRouteMatch >> matchesScope: aResource [
 
 { #category : 'actions' }
 HOPRouteMatch >> merge: aRouteMatch [ 
-	receiver := aRouteMatch receiver.
 	variables addAll: aRouteMatch variables.
 	receiverNode := aRouteMatch receiverNode.
 	operation := aRouteMatch operation.
@@ -151,17 +150,9 @@ HOPRouteMatch >> proceed [
 ]
 
 { #category : 'accessing' }
-HOPRouteMatch >> receiver [
-	self flag: #todo.
-	"clarify the role of the receiver. This is super confusing as there is 
-	a start receiver and a receiver which seems to be two things"
-	^ receiver ifNil: [ 
-		receiver := self resourceOfNode: self receiverNode ]
-]
-
-{ #category : 'accessing' }
 HOPRouteMatch >> receiver: aResource [ 
 	self flag: #todo.
+	self halt.
 	"why do we put the resource in the variables?? This breaks the 
 	difference in role between a uri part and a resolved object"
 	receiverNode := uriSpace nodeForResource: aResource.
@@ -202,26 +193,19 @@ HOPRouteMatch >> request: aZnRequest [
 ]
 
 { #category : 'initialization' }
-HOPRouteMatch >> reset [ 
-	receiver := nil.
-	receiverNode ifNotNil: [ | id |
-		id := variables at: receiverNode name ifAbsent: [ ^ self  ].
-		id isString ifFalse: [  
-			variables removeKey: receiverNode name ifAbsent: [  ] ] ]
-]
-
-{ #category : 'initialization' }
 HOPRouteMatch >> resetExtraPath [
 	extraPath := nil
 ]
 
 { #category : 'accessing' }
 HOPRouteMatch >> resource [ 
+self halt.
 	^ receiverNode valueIn: self 
 ]
 
 { #category : 'as yet unclassified' }
 HOPRouteMatch >> resourceOfNode: aNode [ 
+self halt.
 	^ self variableAt: aNode name
 ]
 
@@ -232,6 +216,7 @@ HOPRouteMatch >> setOperation: aString [
 
 { #category : 'as yet unclassified' }
 HOPRouteMatch >> startReceiver: aResource [
+self halt.
 	receiverNode := uriSpace nodeForResource: aResource.
 	self receiver: aResource.
 ]
