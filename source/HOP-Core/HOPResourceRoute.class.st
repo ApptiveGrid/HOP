@@ -14,10 +14,38 @@ HOPResourceRoute >> asResourceRoute [
 	^ self 
 ]
 
+{ #category : 'as yet unclassified' }
+HOPResourceRoute >> nodeMatchingScope: aResource [
+
+	(aResource isKindOf: AGUser) ifTrue: [ "we try to match any resource 'below' the root user.
+		if it comes to the user resource itself, we do not match existing node and rebuild the full uri instead.
+		because we dont want to generate uris in the shape /a/userid/spaces/space/id/..."
+		^ nil ].
+	routeMatch nodes reverse do: [ :eachNode |
+		(eachNode matchesScope: aResource in: self) ifTrue: [^ eachNode].
+		 ].
+	^ nil
+]
+
+{ #category : 'accessing' }
+HOPResourceRoute >> nodes [
+	^ routeMatch nodes 
+]
+
 { #category : 'accessing' }
 HOPResourceRoute >> receiver [
 	^ receiver ifNil: [ 
 		receiver := self resourceOfNode: routeMatch receiverNode ]
+]
+
+{ #category : 'accessing' }
+HOPResourceRoute >> receiverNode [
+	^ routeMatch receiverNode
+]
+
+{ #category : 'accessing' }
+HOPResourceRoute >> resource [ 
+	^ self receiverNode valueIn: self
 ]
 
 { #category : 'as yet unclassified' }

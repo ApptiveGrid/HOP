@@ -150,6 +150,11 @@ HOPRouteMatch >> proceed [
 ]
 
 { #category : 'accessing' }
+HOPRouteMatch >> receiver [
+	^ self asResourceRoute receiver 
+]
+
+{ #category : 'accessing' }
 HOPRouteMatch >> receiver: aResource [ 
 	self flag: #todo.
 	self halt.
@@ -199,8 +204,8 @@ HOPRouteMatch >> resetExtraPath [
 
 { #category : 'accessing' }
 HOPRouteMatch >> resource [ 
-self halt.
-	^ receiverNode valueIn: self 
+
+	^ self asResourceRoute resource
 ]
 
 { #category : 'as yet unclassified' }

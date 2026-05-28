@@ -103,9 +103,9 @@ HOPSpaceZone >> priority [
 ]
 
 { #category : 'as yet unclassified' }
-HOPSpaceZone >> uriFor: aResource requestContext: requestContext [
+HOPSpaceZone >> uriFor: aResource routeMatch: requestContext [
 	| path |
-	path := super uriFor: aResource requestContext: requestContext.
+	path := super uriFor: aResource routeMatch: requestContext.
 	parent ifNotNil: [  
 		path add: name ].
 	^ path
