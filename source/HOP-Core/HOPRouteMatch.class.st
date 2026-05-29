@@ -205,12 +205,6 @@ HOPRouteMatch >> resource [
 	^ self asResourceRoute resource
 ]
 
-{ #category : 'as yet unclassified' }
-HOPRouteMatch >> resourceOfNode: aNode [ 
-self halt.
-	^ self variableAt: aNode name
-]
-
 { #category : 'initialization' }
 HOPRouteMatch >> setOperation: aString [ 
 	operation := self lastSegment atMethod: aString
@@ -248,7 +242,6 @@ HOPRouteMatch >> variableAt: key ifAbsent: aBlock [
 
 { #category : 'accessing' }
 HOPRouteMatch >> variableAt: key put: anObject [
-	key isString ifFalse: [ self halt ].
 	^ variables 
 		at: key 
 		put: anObject 

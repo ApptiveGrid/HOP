@@ -12,9 +12,9 @@ Class {
 }
 
 { #category : 'testing' }
-HOPVariableSegment >> addSegment: key routeMatch: requestContext [. 
-	super addSegment: key routeMatch: requestContext. 
-	requestContext 
+HOPVariableSegment >> addSegment: key routeMatch: routeMatch [. 
+	super addSegment: key routeMatch: routeMatch. 
+	routeMatch 
 		lastVariableSegment: self;
 		variableAt: self name put: key
 ]

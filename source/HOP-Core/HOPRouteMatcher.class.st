@@ -70,22 +70,6 @@ HOPRouteMatcher >> nextSegment [
 ]
 
 { #category : 'accessing' }
-HOPRouteMatcher >> realNode [
-	^ self routeMatch hasExtraPath 
-		ifTrue: [ self halt. self routeMatch matchExtraPath routeMatch receiverNode ]
-		ifFalse: [ self routeMatch receiverNode ]
-]
-
-{ #category : 'resolving' }
-HOPRouteMatcher >> resource [
-self halt.
-	^ routeMatch hasExtraPath 
-		ifTrue: [ routeMatch matchExtraPath routeMatch resource ]
-		ifFalse: [ routeMatch resource ]
-
-]
-
-{ #category : 'accessing' }
 HOPRouteMatcher >> routeMatch [
 	^ routeMatch
 ]
@@ -111,17 +95,4 @@ HOPRouteMatcher >> startSegment [
 HOPRouteMatcher >> uriSpace: anAGUriSpace [ 
 	uriSpace := anAGUriSpace.
 	routeMatch := uriSpace newRouteMatch.
-]
-
-{ #category : 'accessing' }
-HOPRouteMatcher >> valueAt: aString [ 
-	| segment |
-	self halt.
-	currentSegment := self startSegment.
-	currentIndex := 0.
-	[ self atEnd ] whileFalse: [
-		segment := self nextSegment.
-		currentSegment := currentSegment detectSegmentNamed: segment routeMatch: routeMatch.
-		(currentSegment name = aString) ifTrue: [ ^ segment  ] ].
-	^ nil 
 ]
