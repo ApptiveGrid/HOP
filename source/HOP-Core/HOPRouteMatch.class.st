@@ -74,6 +74,11 @@ HOPRouteMatch >> lastSegment [
 ]
 
 { #category : 'accessing' }
+HOPRouteMatch >> lastVariableSegment [
+	^ lastVariableSegment
+]
+
+{ #category : 'accessing' }
 HOPRouteMatch >> lastVariableSegment: anObject [
 
 	lastVariableSegment := anObject

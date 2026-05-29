@@ -14,6 +14,12 @@ HOPResourceRoute >> asResourceRoute [
 	^ self 
 ]
 
+{ #category : 'testing' }
+HOPResourceRoute >> matchesScope: aResource [
+	routeMatch lastVariableSegment ifNil: [ ^ false ].
+	^ aResource matchesScopeOf: self receiver.
+]
+
 { #category : 'as yet unclassified' }
 HOPResourceRoute >> nodeMatchingScope: aResource [
 
