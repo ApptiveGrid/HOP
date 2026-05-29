@@ -12,10 +12,10 @@ Class {
 }
 
 { #category : 'testing' }
-HOPVariableSegment >> addSegment: key routeMatch: requestContext [. 
-	super addSegment: key routeMatch: requestContext. 
-	requestContext 
-		receiverNode: self;
+HOPVariableSegment >> addSegment: key routeMatch: routeMatch [. 
+	super addSegment: key routeMatch: routeMatch. 
+	routeMatch 
+		lastVariableSegment: self;
 		variableAt: self name put: key
 ]
 
@@ -77,10 +77,10 @@ HOPVariableSegment >> matchesNode: aHOPNode [
 ]
 
 { #category : 'services' }
-HOPVariableSegment >> matchesScope: aResource in: requestContext [
+HOPVariableSegment >> matchesScope: aResource in: routeMatch [
 
 
-	^ (aResource matchesScopeOf: (self valueIn: requestContext)).
+	^ (aResource matchesScopeOf: (self valueIn: routeMatch)).
 ]
 
 { #category : 'printing' }
@@ -134,15 +134,15 @@ HOPVariableSegment >> segmentIn: anAGRequestContext [
 ]
 
 { #category : 'as yet unclassified' }
-HOPVariableSegment >> uriFor: aResource requestContext: requestContext [
+HOPVariableSegment >> uriFor: aResource routeMatch: routeMatch [
 
-	(requestContext nodeMatchingScope: aResource) ifNotNil: [:aNode |
+	(routeMatch nodeMatchingScope: aResource) ifNotNil: [:aNode |
 		"it could be that the current request uri has a segment matching the resource for wich we want to build the uri.
 		in particular, in case of a external link nested request,  we want to preserve the link prefix part and append the specific segments after. "
-		^ ((requestContext nodes  copyUpThrough: aNode) 
-		collect: [ :each | each segmentIn: requestContext ])
+		^ ((routeMatch nodes  copyUpThrough: aNode) 
+		collect: [ :each | each segmentIn: routeMatch ])
 		].
-	^ (super uriFor: aResource container requestContext: requestContext)
+	^ (super uriFor: aResource container routeMatch: routeMatch)
 		add: aResource id asApptiveExternalId;
 		yourself 
 ]

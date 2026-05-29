@@ -49,8 +49,8 @@ HOPNamedSegment >> priority [
 ]
 
 { #category : 'as yet unclassified' }
-HOPNamedSegment >> uriFor: aResource requestContext: requestContext [
-	^ (super uriFor: aResource requestContext: requestContext)
+HOPNamedSegment >> uriFor: aResource routeMatch: requestContext [
+	^ (super uriFor: aResource routeMatch: requestContext)
 		add: name;
 		yourself 
 		

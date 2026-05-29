@@ -35,13 +35,6 @@ HOPTreeNode >> /+ aSegment [
 ]
 
 { #category : 'adding' }
-HOPTreeNode >> addNode: aNode [ 
-	^ self 
-		addNode: aNode 
-		merging: false
-]
-
-{ #category : 'adding' }
 HOPTreeNode >> addNode: aNode merging: aBoolean [  
 
 	 | presentNode |
@@ -55,6 +48,13 @@ HOPTreeNode >> addNode: aNode merging: aBoolean [
 		ifTrue: [  aNode mergeInto: presentNode ]
 		ifFalse: [ HOPNodeExists signal: 'a node with name ', aNode name asString, ' already exists' ]
 
+]
+
+{ #category : 'adding' }
+HOPTreeNode >> addSegment: aNode [ 
+	^ self 
+		addNode: aNode 
+		merging: false
 ]
 
 { #category : 'enumerating' }
@@ -153,7 +153,7 @@ HOPTreeNode >> inspectionSegments: aBuilder [
 { #category : 'actions' }
 HOPTreeNode >> mergeInto: aNode [
 	nodes do: [ :each | 
-		aNode addNode: each ].
+		aNode addSegment: each ].
 ]
 
 { #category : 'as yet unclassified' }
@@ -163,7 +163,7 @@ HOPTreeNode >> mergeNode: aNode [
 		childNode := nodes 
 			detect: [ :each | each matchesNode: node ]
 			ifFound: [ :each | each mergeNode: node ]
-			ifNone: [ self addNode: node ] ]
+			ifNone: [ self addSegment: node ] ]
 ]
 
 { #category : 'accessing' }

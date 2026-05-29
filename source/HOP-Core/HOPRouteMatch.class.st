@@ -2,16 +2,15 @@ Class {
 	#name : 'HOPRouteMatch',
 	#superclass : 'Object',
 	#instVars : [
-		'nodes',
-		'receiverNode',
 		'extraPath',
 		'uriSpace',
-		'operation',
 		'request',
 		'handlers',
 		'variables',
-		'receiver',
-		'handlerChain'
+		'handlerChain',
+		'lastVariableSegment',
+		'segments',
+		'operation'
 	],
 	#category : 'HOP-Core',
 	#package : 'HOP-Core'
@@ -35,13 +34,13 @@ HOPRouteMatch >> addHandlers: aCollection [
 ]
 
 { #category : 'accessing' }
-HOPRouteMatch >> addNode: aTreeNode [ 
-	nodes add: aTreeNode 
+HOPRouteMatch >> addSegment: aTreeNode [ 
+	segments add: aTreeNode 
 ]
 
 { #category : 'accessing' }
 HOPRouteMatch >> call [ 
-	^ operation asHOPRouteHandler
+	^ self operation asHOPRouteHandler
 		routeMatch: self;
 		yourself 
 ]
@@ -66,41 +65,54 @@ HOPRouteMatch >> hasExtraPath [
 HOPRouteMatch >> initialize [ 
 	super initialize.
 	variables := Dictionary new.
-	nodes := OrderedCollection new.
+	segments := OrderedCollection new.
 	handlers := OrderedCollection new 
 ]
 
 { #category : 'as yet unclassified' }
 HOPRouteMatch >> lastSegment [
-	^ nodes last
+	^ segments 
+		ifNotEmpty: [ segments last ]
+		ifEmpty: [ uriSpace ]
+]
+
+{ #category : 'accessing' }
+HOPRouteMatch >> lastVariableSegment [
+	^ lastVariableSegment
+]
+
+{ #category : 'accessing' }
+HOPRouteMatch >> lastVariableSegment: anObject [
+
+	lastVariableSegment := anObject
 ]
 
 { #category : 'as yet unclassified' }
 HOPRouteMatch >> matchExtraPath [ 
-	^ HOPRouteMatcher new 
+| receiver routeMatch resourceRoute |
+	receiver := self receiver scope.
+	routeMatch := (HOPRouteMatcher new 
 		uriSpace: uriSpace;
-		startReceiver: self receiver scope yourself;
-		matchSegments: extraPath;
-		yourself 
-]
-
-{ #category : 'as yet unclassified' }
-HOPRouteMatch >> matchNested: aBlock [ 
-	aBlock value: self matchExtraPath routeMatch
-	
+		startReceiver: receiver yourself;
+		matchSegments: extraPath).
+	resourceRoute := routeMatch 
+		request: request;
+		asResourceRoute. 
+	^ resourceRoute
+			resourceAt: receiver resourceLabel put: receiver;
+			yourself
 ]
 
 { #category : 'testing' }
 HOPRouteMatch >> matchesScope: aResource [
-	receiverNode ifNil: [ ^ false ].
+	lastVariableSegment ifNil: [ ^ false ].
 	^ aResource matchesScopeOf: self receiver.
 ]
 
 { #category : 'actions' }
 HOPRouteMatch >> merge: aRouteMatch [ 
-	receiver := aRouteMatch receiver.
 	variables addAll: aRouteMatch variables.
-	receiverNode := aRouteMatch receiverNode.
+	lastVariableSegment := aRouteMatch receiverNode.
 	operation := aRouteMatch operation.
 
 ]
@@ -118,17 +130,19 @@ HOPRouteMatch >> newHttpCall [
 
 { #category : 'accessing' }
 HOPRouteMatch >> nodes [
-	^ nodes
+	^ segments
 ]
 
 { #category : 'accessing' }
 HOPRouteMatch >> operation [
-	^ operation
+	^ operation ifNil: [ 
+		 operation := self lastSegment atMethod: request method ]
 ]
 
 { #category : 'accessing' }
-HOPRouteMatch >> operation: aString [ 
-	operation := aString 
+HOPRouteMatch >> operation: anObject [
+
+	operation := anObject
 ]
 
 { #category : 'accessing' }
@@ -147,39 +161,18 @@ HOPRouteMatch >> proceed [
 	handlerChain atEnd  
 		ifFalse: [ 
 			^ handlerChain next asHOPRouteHandler handleRoute: self ].
-	 ^ operation asHOPRouteHandler handleRoute: self
+	 ^ self operation asHOPRouteHandler handleRoute: self
 ]
 
 { #category : 'accessing' }
 HOPRouteMatch >> receiver [
-	self flag: #todo.
-	"clarify the role of the receiver. This is super confusing as there is 
-	a start receiver and a receiver which seems to be two things"
-	^ receiver ifNil: [ 
-		receiver := self resourceOfNode: self receiverNode ]
-]
-
-{ #category : 'accessing' }
-HOPRouteMatch >> receiver: aResource [ 
-	self flag: #todo.
-	"why do we put the resource in the variables?? This breaks the 
-	difference in role between a uri part and a resolved object"
-	receiverNode := uriSpace nodeForResource: aResource.
-	variables 
-		at: receiverNode name
-		put: aResource
+	^ self asResourceRoute receiver 
 ]
 
 { #category : 'accessing' }
 HOPRouteMatch >> receiverNode [
 
-	^ receiverNode
-]
-
-{ #category : 'accessing' }
-HOPRouteMatch >> receiverNode: anObject [
-
-	receiverNode := anObject
+	^ lastVariableSegment
 ]
 
 { #category : 'as yet unclassified' }
@@ -187,7 +180,7 @@ HOPRouteMatch >> receiverUriPrefix [
 	"a request context reflects the whole URI path. When we want to know which 
 	is the URI of the receiver we copy up all segments to the receiverNode we
 	already have"
-	^ ((nodes copyUpThrough: receiverNode) 
+	^ ((segments copyUpThrough: lastVariableSegment) 
 		collect: [ :each | each segmentIn: self ]) "copyWithFirst: #/"
 ]
 
@@ -202,38 +195,24 @@ HOPRouteMatch >> request: aZnRequest [
 ]
 
 { #category : 'initialization' }
-HOPRouteMatch >> reset [ 
-	receiver := nil.
-	receiverNode ifNotNil: [ | id |
-		id := variables at: receiverNode name ifAbsent: [ ^ self  ].
-		id isString ifFalse: [  
-			variables removeKey: receiverNode name ifAbsent: [  ] ] ]
-]
-
-{ #category : 'initialization' }
 HOPRouteMatch >> resetExtraPath [
 	extraPath := nil
 ]
 
 { #category : 'accessing' }
 HOPRouteMatch >> resource [ 
-	^ receiverNode valueIn: self 
-]
 
-{ #category : 'as yet unclassified' }
-HOPRouteMatch >> resourceOfNode: aNode [ 
-	^ self variableAt: aNode name
+	^ self asResourceRoute resource
 ]
 
 { #category : 'initialization' }
 HOPRouteMatch >> setOperation: aString [ 
-	operation := self lastSegment atMethod: aString  
+	operation := self lastSegment atMethod: aString
 ]
 
 { #category : 'as yet unclassified' }
 HOPRouteMatch >> startReceiver: aResource [
-	receiverNode := uriSpace nodeForResource: aResource.
-	self receiver: aResource.
+	lastVariableSegment := uriSpace nodeForResource: aResource
 ]
 
 { #category : 'accessing' }
