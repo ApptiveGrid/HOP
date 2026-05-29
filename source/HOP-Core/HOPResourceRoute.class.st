@@ -27,6 +27,12 @@ HOPResourceRoute >> matchesScope: aResource [
 	^ aResource matchesScopeOf: self receiver.
 ]
 
+{ #category : 'instance creation' }
+HOPResourceRoute >> newHttpCall [ 
+	^ routeMatch newHttpCall 
+		routeMatch: self 
+]
+
 { #category : 'as yet unclassified' }
 HOPResourceRoute >> nodeMatchingScope: aResource [
 
@@ -57,6 +63,11 @@ HOPResourceRoute >> receiverNode [
 ]
 
 { #category : 'accessing' }
+HOPResourceRoute >> request [
+	^ routeMatch request 
+]
+
+{ #category : 'accessing' }
 HOPResourceRoute >> resource [ 
 	^ self receiverNode valueIn: self
 ]
@@ -81,8 +92,18 @@ HOPResourceRoute >> resourceOfNode: node [
 ]
 
 { #category : 'accessing' }
+HOPResourceRoute >> routeMatch [
+	^ routeMatch
+]
+
+{ #category : 'accessing' }
 HOPResourceRoute >> routeMatch: anAGBaseRouteMatch [ 
 	routeMatch := anAGBaseRouteMatch
+]
+
+{ #category : 'initialization' }
+HOPResourceRoute >> setOperation: aString [ 
+	routeMatch setOperation: aString 
 ]
 
 { #category : 'accessing' }

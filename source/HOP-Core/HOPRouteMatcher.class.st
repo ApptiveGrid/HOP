@@ -31,9 +31,8 @@ HOPRouteMatcher >> matchPath: aString [
 
 { #category : 'as yet unclassified' }
 HOPRouteMatcher >> matchRequest: aZnRequest [ 
-	| segment |
-	segment := self matchUri: aZnRequest uri.
-	"routeMatch operation: (segment atMethod: aZnRequest method)."
+	self matchUri: aZnRequest uri.
+	routeMatch operation: (currentSegment atMethod: aZnRequest method).
 	^ self routeMatch 
 		request: aZnRequest;
 		yourself

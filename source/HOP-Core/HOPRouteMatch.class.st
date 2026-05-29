@@ -9,7 +9,8 @@ Class {
 		'variables',
 		'handlerChain',
 		'lastVariableSegment',
-		'segments'
+		'segments',
+		'operation'
 	],
 	#category : 'HOP-Core',
 	#package : 'HOP-Core'
@@ -88,20 +89,18 @@ HOPRouteMatch >> lastVariableSegment: anObject [
 
 { #category : 'as yet unclassified' }
 HOPRouteMatch >> matchExtraPath [ 
-| receiver |
+| receiver routeMatch resourceRoute |
 	receiver := self receiver scope.
-	^ (HOPRouteMatcher new 
+	routeMatch := (HOPRouteMatcher new 
 		uriSpace: uriSpace;
 		startReceiver: receiver yourself;
-		matchSegments: extraPath) asResourceRoute 
+		matchSegments: extraPath).
+	resourceRoute := routeMatch 
+		request: request;
+		asResourceRoute. 
+	^ resourceRoute
 			resourceAt: receiver resourceLabel put: receiver;
 			yourself
-]
-
-{ #category : 'as yet unclassified' }
-HOPRouteMatch >> matchNested: aBlock [ 
-	aBlock value: self matchExtraPath routeMatch
-	
 ]
 
 { #category : 'testing' }
@@ -114,7 +113,7 @@ HOPRouteMatch >> matchesScope: aResource [
 HOPRouteMatch >> merge: aRouteMatch [ 
 	variables addAll: aRouteMatch variables.
 	lastVariableSegment := aRouteMatch receiverNode.
-	"operation := aRouteMatch operation."
+	operation := aRouteMatch operation.
 
 ]
 
@@ -136,7 +135,14 @@ HOPRouteMatch >> nodes [
 
 { #category : 'accessing' }
 HOPRouteMatch >> operation [
-	^ self lastSegment atMethod: request method
+	^ operation ifNil: [ 
+		 operation := self lastSegment atMethod: request method ]
+]
+
+{ #category : 'accessing' }
+HOPRouteMatch >> operation: anObject [
+
+	operation := anObject
 ]
 
 { #category : 'accessing' }
@@ -203,6 +209,11 @@ HOPRouteMatch >> resource [
 HOPRouteMatch >> resourceOfNode: aNode [ 
 self halt.
 	^ self variableAt: aNode name
+]
+
+{ #category : 'initialization' }
+HOPRouteMatch >> setOperation: aString [ 
+	operation := self lastSegment atMethod: aString
 ]
 
 { #category : 'as yet unclassified' }
