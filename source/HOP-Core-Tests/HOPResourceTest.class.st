@@ -11,11 +11,11 @@ Class {
 
 { #category : 'tests' }
 HOPResourceTest >> testMatchRoute [ 
-	| matcher node |
+	| matcher node match |
 	self uriSpace.
 	matcher := self uriSpace newRouteMatcher.
-	node := matcher matchUri: '/api/first123/items/4321' asZnUrl.
-	self assert: node name equals: #secondVariable
+	match := matcher matchUri: '/api/first123/items/4321' asZnUrl.
+	self assert: match receiverNode name equals: #secondVariable
 ]
 
 { #category : 'accessing' }
