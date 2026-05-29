@@ -70,7 +70,9 @@ HOPRouteMatch >> initialize [
 
 { #category : 'as yet unclassified' }
 HOPRouteMatch >> lastSegment [
-	^ segments last
+	^ segments 
+		ifNotEmpty: [ segments last ]
+		ifEmpty: [ uriSpace ]
 ]
 
 { #category : 'accessing' }
@@ -86,12 +88,14 @@ HOPRouteMatch >> lastVariableSegment: anObject [
 
 { #category : 'as yet unclassified' }
 HOPRouteMatch >> matchExtraPath [ 
-
-	^ HOPRouteMatcher new 
+| receiver |
+	receiver := self receiver scope.
+	^ (HOPRouteMatcher new 
 		uriSpace: uriSpace;
-		startReceiver: self receiver scope yourself;
-		matchSegments: extraPath;
-		yourself 
+		startReceiver: receiver yourself;
+		matchSegments: extraPath) asResourceRoute 
+			resourceAt: receiver resourceLabel put: receiver;
+			yourself
 ]
 
 { #category : 'as yet unclassified' }
@@ -132,7 +136,7 @@ HOPRouteMatch >> nodes [
 
 { #category : 'accessing' }
 HOPRouteMatch >> operation [
-	^ segments last atMethod: request method
+	^ self lastSegment atMethod: request method
 ]
 
 { #category : 'accessing' }

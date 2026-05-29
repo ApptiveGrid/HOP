@@ -3,7 +3,8 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'routeMatch',
-		'receiver'
+		'receiver',
+		'resources'
 	],
 	#category : 'HOP-Core',
 	#package : 'HOP-Core'
@@ -12,6 +13,12 @@ Class {
 { #category : 'converting' }
 HOPResourceRoute >> asResourceRoute [ 
 	^ self 
+]
+
+{ #category : 'initialization' }
+HOPResourceRoute >> initialize [ 
+	super initialize.
+	resources := Dictionary new
 ]
 
 { #category : 'testing' }
@@ -52,6 +59,20 @@ HOPResourceRoute >> receiverNode [
 { #category : 'accessing' }
 HOPResourceRoute >> resource [ 
 	^ self receiverNode valueIn: self
+]
+
+{ #category : 'accessing' }
+HOPResourceRoute >> resourceAt: aString ifAbsentPut: aBlock [
+	^ resources 
+		at: aString 
+		ifAbsentPut: aBlock 
+]
+
+{ #category : 'accessing' }
+HOPResourceRoute >> resourceAt: aString put: anObject [
+	resources 
+		at: aString 
+		put: anObject 
 ]
 
 { #category : 'as yet unclassified' }
