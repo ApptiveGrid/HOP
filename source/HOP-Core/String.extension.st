@@ -7,7 +7,7 @@ String >> /+ anObject [
 
 { #category : '*HOP-Core' }
 String >> addToHOPNode: aNode [ 
-	^ aNode addNode: self asHOPSegment
+	^ aNode addSegment: self asHOPSegment
 ]
 
 { #category : '*HOP-Core' }

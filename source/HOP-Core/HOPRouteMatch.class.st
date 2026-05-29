@@ -2,15 +2,14 @@ Class {
 	#name : 'HOPRouteMatch',
 	#superclass : 'Object',
 	#instVars : [
-		'nodes',
-		'receiverNode',
 		'extraPath',
 		'uriSpace',
-		'operation',
 		'request',
 		'handlers',
 		'variables',
-		'handlerChain'
+		'handlerChain',
+		'lastVariableSegment',
+		'segments'
 	],
 	#category : 'HOP-Core',
 	#package : 'HOP-Core'
@@ -34,13 +33,13 @@ HOPRouteMatch >> addHandlers: aCollection [
 ]
 
 { #category : 'accessing' }
-HOPRouteMatch >> addNode: aTreeNode [ 
-	nodes add: aTreeNode 
+HOPRouteMatch >> addSegment: aTreeNode [ 
+	segments add: aTreeNode 
 ]
 
 { #category : 'accessing' }
 HOPRouteMatch >> call [ 
-	^ operation asHOPRouteHandler
+	^ self operation asHOPRouteHandler
 		routeMatch: self;
 		yourself 
 ]
@@ -65,13 +64,19 @@ HOPRouteMatch >> hasExtraPath [
 HOPRouteMatch >> initialize [ 
 	super initialize.
 	variables := Dictionary new.
-	nodes := OrderedCollection new.
+	segments := OrderedCollection new.
 	handlers := OrderedCollection new 
 ]
 
 { #category : 'as yet unclassified' }
 HOPRouteMatch >> lastSegment [
-	^ nodes last
+	^ segments last
+]
+
+{ #category : 'accessing' }
+HOPRouteMatch >> lastVariableSegment: anObject [
+
+	lastVariableSegment := anObject
 ]
 
 { #category : 'as yet unclassified' }
@@ -92,15 +97,15 @@ HOPRouteMatch >> matchNested: aBlock [
 
 { #category : 'testing' }
 HOPRouteMatch >> matchesScope: aResource [
-	receiverNode ifNil: [ ^ false ].
+	lastVariableSegment ifNil: [ ^ false ].
 	^ aResource matchesScopeOf: self receiver.
 ]
 
 { #category : 'actions' }
 HOPRouteMatch >> merge: aRouteMatch [ 
 	variables addAll: aRouteMatch variables.
-	receiverNode := aRouteMatch receiverNode.
-	operation := aRouteMatch operation.
+	lastVariableSegment := aRouteMatch receiverNode.
+	"operation := aRouteMatch operation."
 
 ]
 
@@ -117,17 +122,12 @@ HOPRouteMatch >> newHttpCall [
 
 { #category : 'accessing' }
 HOPRouteMatch >> nodes [
-	^ nodes
+	^ segments
 ]
 
 { #category : 'accessing' }
 HOPRouteMatch >> operation [
-	^ operation
-]
-
-{ #category : 'accessing' }
-HOPRouteMatch >> operation: aString [ 
-	operation := aString 
+	^ segments last atMethod: request method
 ]
 
 { #category : 'accessing' }
@@ -146,7 +146,7 @@ HOPRouteMatch >> proceed [
 	handlerChain atEnd  
 		ifFalse: [ 
 			^ handlerChain next asHOPRouteHandler handleRoute: self ].
-	 ^ operation asHOPRouteHandler handleRoute: self
+	 ^ self operation asHOPRouteHandler handleRoute: self
 ]
 
 { #category : 'accessing' }
@@ -155,27 +155,9 @@ HOPRouteMatch >> receiver [
 ]
 
 { #category : 'accessing' }
-HOPRouteMatch >> receiver: aResource [ 
-	self flag: #todo.
-	self halt.
-	"why do we put the resource in the variables?? This breaks the 
-	difference in role between a uri part and a resolved object"
-	receiverNode := uriSpace nodeForResource: aResource.
-	variables 
-		at: receiverNode name
-		put: aResource
-]
-
-{ #category : 'accessing' }
 HOPRouteMatch >> receiverNode [
 
-	^ receiverNode
-]
-
-{ #category : 'accessing' }
-HOPRouteMatch >> receiverNode: anObject [
-
-	receiverNode := anObject
+	^ lastVariableSegment
 ]
 
 { #category : 'as yet unclassified' }
@@ -183,7 +165,7 @@ HOPRouteMatch >> receiverUriPrefix [
 	"a request context reflects the whole URI path. When we want to know which 
 	is the URI of the receiver we copy up all segments to the receiverNode we
 	already have"
-	^ ((nodes copyUpThrough: receiverNode) 
+	^ ((segments copyUpThrough: lastVariableSegment) 
 		collect: [ :each | each segmentIn: self ]) "copyWithFirst: #/"
 ]
 
@@ -214,16 +196,9 @@ self halt.
 	^ self variableAt: aNode name
 ]
 
-{ #category : 'initialization' }
-HOPRouteMatch >> setOperation: aString [ 
-	operation := self lastSegment atMethod: aString  
-]
-
 { #category : 'as yet unclassified' }
 HOPRouteMatch >> startReceiver: aResource [
-self halt.
-	receiverNode := uriSpace nodeForResource: aResource.
-	self receiver: aResource.
+	lastVariableSegment := uriSpace nodeForResource: aResource
 ]
 
 { #category : 'accessing' }
@@ -253,6 +228,7 @@ HOPRouteMatch >> variableAt: key ifAbsent: aBlock [
 
 { #category : 'accessing' }
 HOPRouteMatch >> variableAt: key put: anObject [
+	key isString ifFalse: [ self halt ].
 	^ variables 
 		at: key 
 		put: anObject 

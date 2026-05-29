@@ -15,7 +15,7 @@ Class {
 HOPVariableSegment >> addSegment: key routeMatch: requestContext [. 
 	super addSegment: key routeMatch: requestContext. 
 	requestContext 
-		receiverNode: self;
+		lastVariableSegment: self;
 		variableAt: self name put: key
 ]
 

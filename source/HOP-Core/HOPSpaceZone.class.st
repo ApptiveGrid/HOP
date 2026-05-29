@@ -28,7 +28,7 @@ HOPSpaceZone >> addHandler: aHandler [
 
 { #category : 'testing' }
 HOPSpaceZone >> addSegment: segment routeMatch: routeMatch [. 
-	routeMatch addNode: self.
+	routeMatch addSegment: self.
 	
 	handlers ifNotNil: [ 
 		routeMatch addHandlers: handlers ]

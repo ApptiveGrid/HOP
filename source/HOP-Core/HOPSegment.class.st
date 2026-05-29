@@ -20,12 +20,12 @@ HOPSegment >> @@ anAssociation [
 
 { #category : 'services' }
 HOPSegment >> addSegment: key routeMatch: routeMatch [
-	^ routeMatch addNode: self
+	^ routeMatch addSegment: self
 ]
 
 { #category : 'adding' }
 HOPSegment >> addToHOPNode: aTreeNode [ 
-	^ aTreeNode addNode: self 
+	^ aTreeNode addSegment: self 
 ]
 
 { #category : 'converting' }
@@ -37,7 +37,7 @@ HOPSegment >> asHOPSegment [
 HOPSegment >> asHOPUriSpace [
 	^ HOPUriSpace new
 "		name: name; 
-"		addNode: self root;
+"		addSegment: self root;
 		yourself 
 ]
 

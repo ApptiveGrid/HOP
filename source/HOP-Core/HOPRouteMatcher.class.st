@@ -18,21 +18,6 @@ HOPRouteMatcher >> atEnd [
 	^ currentIndex >= segments size
 ]
 
-{ #category : 'navigating' }
-HOPRouteMatcher >> findRoute [ 
-	currentSegment ifNil: [  
-		currentSegment := self startSegment ].
-
-	currentSegment isSpaceZone ifTrue: [  
-		routeMatch addHandlers: currentSegment handlers ].
-	
-	[ self atEnd ] whileFalse: [
-		currentSegment := currentSegment 
-			detectSegmentNamed: self nextSegment 
-			routeMatch: routeMatch ].
-	^ currentSegment
-]
-
 { #category : 'initialization' }
 HOPRouteMatcher >> initialize [ 
 	super initialize.
@@ -48,16 +33,31 @@ HOPRouteMatcher >> matchPath: aString [
 HOPRouteMatcher >> matchRequest: aZnRequest [ 
 	| segment |
 	segment := self matchUri: aZnRequest uri.
-	routeMatch operation: (segment atMethod: aZnRequest method).
-	^ routeMatch 
+	"routeMatch operation: (segment atMethod: aZnRequest method)."
+	^ self routeMatch 
 		request: aZnRequest;
 		yourself
+]
+
+{ #category : 'navigating' }
+HOPRouteMatcher >> matchRoute [ 
+	currentSegment ifNil: [  
+		currentSegment := self startSegment ].
+
+	currentSegment isSpaceZone ifTrue: [  
+		self routeMatch addHandlers: currentSegment handlers ].
+	
+	[ self atEnd ] whileFalse: [
+		currentSegment := currentSegment 
+			detectSegmentNamed: self nextSegment 
+			routeMatch: self routeMatch ].
+	^ routeMatch 
 ]
 
 { #category : 'as yet unclassified' }
 HOPRouteMatcher >> matchSegments: aCollection [
 	segments := aCollection.
-	^ self findRoute
+	^ self matchRoute
 ]
 
 { #category : 'as yet unclassified' }
@@ -72,9 +72,9 @@ HOPRouteMatcher >> nextSegment [
 
 { #category : 'accessing' }
 HOPRouteMatcher >> realNode [
-	^ routeMatch hasExtraPath 
-		ifTrue: [ self halt. routeMatch matchExtraPath routeMatch receiverNode ]
-		ifFalse: [ routeMatch receiverNode ]
+	^ self routeMatch hasExtraPath 
+		ifTrue: [ self halt. self routeMatch matchExtraPath routeMatch receiverNode ]
+		ifFalse: [ self routeMatch receiverNode ]
 ]
 
 { #category : 'resolving' }
