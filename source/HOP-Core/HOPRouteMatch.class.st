@@ -38,6 +38,12 @@ HOPRouteMatch >> addSegment: aTreeNode [
 	segments add: aTreeNode 
 ]
 
+{ #category : 'converting' }
+HOPRouteMatch >> asResolvedRouteMatch [
+	^ AGBaseResourceRoute new 
+		routeMatch: self 
+]
+
 { #category : 'accessing' }
 HOPRouteMatch >> call [ 
 	^ self operation asHOPRouteHandler
@@ -88,19 +94,14 @@ HOPRouteMatch >> lastVariableSegment: anObject [
 ]
 
 { #category : 'as yet unclassified' }
-HOPRouteMatch >> matchExtraPath [ 
-| receiver routeMatch resourceRoute |
-	receiver := self receiver scope.
-	routeMatch := (HOPRouteMatcher new 
+HOPRouteMatch >> matchExtraPathIn: receiver [
+
+	^ (HOPRouteMatcher new 
 		uriSpace: uriSpace;
-		startReceiver: receiver yourself;
-		matchSegments: extraPath).
-	resourceRoute := routeMatch 
-		request: request;
-		asResourceRoute. 
-	^ resourceRoute
-			resourceAt: receiver resourceLabel put: receiver;
-			yourself
+		startReceiver: receiver;
+		matchSegments: extraPath)
+			request: request;
+			yourself 
 ]
 
 { #category : 'testing' }

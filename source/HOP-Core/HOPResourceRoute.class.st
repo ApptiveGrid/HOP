@@ -21,6 +21,16 @@ HOPResourceRoute >> initialize [
 	resources := Dictionary new
 ]
 
+{ #category : 'as yet unclassified' }
+HOPResourceRoute >> matchExtraPath [ 
+	| scopedReceiver |
+	
+	scopedReceiver := self receiver scope.
+	^ (routeMatch matchExtraPathIn: scopedReceiver) asResourceRoute
+			resourceAt: scopedReceiver resourceLabel put: scopedReceiver;
+			yourself
+]
+
 { #category : 'testing' }
 HOPResourceRoute >> matchesScope: aResource [
 	routeMatch lastVariableSegment ifNil: [ ^ false ].
@@ -89,11 +99,6 @@ HOPResourceRoute >> resourceAt: aString put: anObject [
 { #category : 'as yet unclassified' }
 HOPResourceRoute >> resourceOfNode: node [ 
 	^ self perform: node resourceSelector 
-]
-
-{ #category : 'accessing' }
-HOPResourceRoute >> routeMatch [
-	^ routeMatch
 ]
 
 { #category : 'accessing' }
