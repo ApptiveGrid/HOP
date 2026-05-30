@@ -112,6 +112,11 @@ HOPResourceRoute >> setOperation: aString [
 ]
 
 { #category : 'accessing' }
+HOPResourceRoute >> uriSpace [
+	^ routeMatch uriSpace 
+]
+
+{ #category : 'accessing' }
 HOPResourceRoute >> variableAt: key [ 
 	^ routeMatch variableAt: key 
 ]
