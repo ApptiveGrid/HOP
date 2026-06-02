@@ -28,5 +28,6 @@ HOPTestCall >> handleRoute: aRouteMatch [
 
 { #category : 'options' }
 HOPTestCall >> routeMatch: aHOPRoute [ 
+
 	routeMatch := aHOPRoute request 
 ]

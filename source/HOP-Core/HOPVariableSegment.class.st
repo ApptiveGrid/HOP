@@ -135,13 +135,17 @@ HOPVariableSegment >> segmentIn: anAGRequestContext [
 
 { #category : 'as yet unclassified' }
 HOPVariableSegment >> uriFor: aResource routeMatch: routeMatch [
-
-	(routeMatch nodeMatchingScope: aResource) ifNotNil: [:aNode |
-		"it could be that the current request uri has a segment matching the resource for wich we want to build the uri.
-		in particular, in case of a external link nested request,  we want to preserve the link prefix part and append the specific segments after. "
-		^ ((routeMatch nodes  copyUpThrough: aNode) 
-		collect: [ :each | each segmentIn: routeMatch ])
-		].
+	| effectiveRoute |
+	effectiveRoute := routeMatch previous ifNil: [ routeMatch ].
+	(aResource isIdenticalTo: effectiveRoute receiver scope) ifTrue: [ 
+		^ (effectiveRoute nodes collect: [ :each | each segmentIn: effectiveRoute ])].
+	"(routeMatch nodeMatchingScope: aResource) ifNotNil: [:aNode | | effectiveRoute |
+		""it could be that the current request uri has a segment matching the resource for wich we want to build the uri.
+		in particular, in case of a external link nested request,  we want to preserve the link prefix part and append the specific segments after. ""
+		effectiveRoute := routeMatch previous ifNil: [ routeMatch ].
+		^ ((effectiveRoute nodes copyUpThrough: aNode) 
+		collect: [ :each | each segmentIn: effectiveRoute ])
+		]."
 	^ (super uriFor: aResource container routeMatch: routeMatch)
 		add: aResource id asApptiveExternalId;
 		yourself 

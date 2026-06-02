@@ -21,7 +21,7 @@ HOPReadEvalPrintCall >> evaluate: expression [
 
 { #category : 'execution' }
 HOPReadEvalPrintCall >> execute [ 
-	^ ZnResponse ok: (ZnEntity text: (self evaluate: routeMatch request entity contents)) 
+	^ ZnResponse ok: (ZnEntity text: (self evaluate: resourceRoute request entity contents)) 
 	
 ]
 
