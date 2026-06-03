@@ -46,19 +46,13 @@ HOPCall >> request [
 ]
 
 { #category : 'accessing' }
-HOPCall >> resourceRoute: anObject [
-
-	resourceRoute := anObject
-]
-
-{ #category : 'accessing' }
-HOPCall >> routeMatch [
+HOPCall >> resourceRoute [
 
 	^ resourceRoute
 ]
 
 { #category : 'accessing' }
-HOPCall >> routeMatch: anObject [
-self halt.
+HOPCall >> resourceRoute: anObject [
+
 	resourceRoute := anObject
 ]
