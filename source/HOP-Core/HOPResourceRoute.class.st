@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'routeMatch',
 		'receiver',
-		'resources'
+		'resources',
+		'previous'
 	],
 	#category : 'HOP-Core',
 	#package : 'HOP-Core'
@@ -13,6 +14,12 @@ Class {
 { #category : 'converting' }
 HOPResourceRoute >> asResourceRoute [ 
 	^ self 
+]
+
+{ #category : 'accessing' }
+HOPResourceRoute >> call [
+	^ routeMatch call 
+		resourceRoute: self 
 ]
 
 { #category : 'initialization' }
@@ -27,8 +34,9 @@ HOPResourceRoute >> matchExtraPath [
 	
 	scopedReceiver := self receiver scope.
 	^ (routeMatch matchExtraPathIn: scopedReceiver) asResourceRoute
-			resourceAt: scopedReceiver resourceLabel put: scopedReceiver;
-			yourself
+		previous: self;
+		resourceAt: scopedReceiver resourceLabel put: scopedReceiver;
+		yourself
 ]
 
 { #category : 'testing' }
@@ -40,7 +48,7 @@ HOPResourceRoute >> matchesScope: aResource [
 { #category : 'instance creation' }
 HOPResourceRoute >> newHttpCall [ 
 	^ routeMatch newHttpCall 
-		routeMatch: self 
+		resourceRoute: self 
 ]
 
 { #category : 'as yet unclassified' }
@@ -62,6 +70,16 @@ HOPResourceRoute >> nodes [
 ]
 
 { #category : 'accessing' }
+HOPResourceRoute >> previous [
+	^ previous
+]
+
+{ #category : 'accessing' }
+HOPResourceRoute >> previous: aResourceRoute [ 
+	previous := aResourceRoute 
+]
+
+{ #category : 'accessing' }
 HOPResourceRoute >> receiver [
 	^ receiver ifNil: [ 
 		receiver := self resourceOfNode: routeMatch receiverNode ]
@@ -70,6 +88,16 @@ HOPResourceRoute >> receiver [
 { #category : 'accessing' }
 HOPResourceRoute >> receiverNode [
 	^ routeMatch receiverNode
+]
+
+{ #category : 'as yet unclassified' }
+HOPResourceRoute >> receiverSegments [
+	^ routeMatch receiverSegments 
+]
+
+{ #category : 'as yet unclassified' }
+HOPResourceRoute >> receiverUriPrefix [
+	^ routeMatch receiverUriPrefix 
 ]
 
 { #category : 'accessing' }
@@ -102,8 +130,16 @@ HOPResourceRoute >> resourceOfNode: node [
 ]
 
 { #category : 'accessing' }
-HOPResourceRoute >> routeMatch: anAGBaseRouteMatch [ 
-	routeMatch := anAGBaseRouteMatch
+HOPResourceRoute >> routeMatch: aRouteMatch [ 
+	
+	routeMatch := aRouteMatch
+]
+
+{ #category : 'initialization' }
+HOPResourceRoute >> scopeNodes [
+	^ previous 
+		ifNotNil: [ previous nodes ]
+		ifNil: [ routeMatch nodes ]
 ]
 
 { #category : 'initialization' }

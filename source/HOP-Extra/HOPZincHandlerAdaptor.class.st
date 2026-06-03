@@ -46,5 +46,6 @@ HOPZincHandlerAdaptor >> matches: aString [
 
 { #category : 'options' }
 HOPZincHandlerAdaptor >> routeMatch: aHOPRouteMatch [ 
+
 	routeMatch := aHOPRouteMatch 
 ]

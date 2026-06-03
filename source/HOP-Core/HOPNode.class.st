@@ -73,8 +73,8 @@ HOPNode >> root [
 ]
 
 { #category : 'as yet unclassified' }
-HOPNode >> uriFor: aResource routeMatch: requestContext [
+HOPNode >> uriFor: aResource resourceRoute: resourceRoute [
 	^ parent 
-		ifNotNil: [ parent uriFor: aResource routeMatch: requestContext ] 
+		ifNotNil: [ parent uriFor: aResource resourceRoute: resourceRoute ] 
 		ifNil: [ OrderedCollection new ]
 ]

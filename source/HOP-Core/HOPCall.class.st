@@ -2,7 +2,7 @@ Class {
 	#name : 'HOPCall',
 	#superclass : 'Object',
 	#instVars : [
-		'routeMatch'
+		'resourceRoute'
 	],
 	#category : 'HOP-Core',
 	#package : 'HOP-Core'
@@ -35,24 +35,24 @@ HOPCall >> execute [
 
 { #category : 'public' }
 HOPCall >> handleRoute: aRouteMatch [ 
-	routeMatch := aRouteMatch.
+	resourceRoute := aRouteMatch.
 	
 	^ self execute 
 ]
 
 { #category : 'accessing' }
 HOPCall >> request [
-	^ routeMatch request 
+	^ resourceRoute request 
 ]
 
 { #category : 'accessing' }
-HOPCall >> routeMatch [
+HOPCall >> resourceRoute [
 
-	^ routeMatch
+	^ resourceRoute
 ]
 
 { #category : 'accessing' }
-HOPCall >> routeMatch: anObject [
+HOPCall >> resourceRoute: anObject [
 
-	routeMatch := anObject
+	resourceRoute := anObject
 ]

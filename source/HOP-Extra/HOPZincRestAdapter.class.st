@@ -42,5 +42,6 @@ HOPZincRestAdapter >> restClass: aClass [
 
 { #category : 'options' }
 HOPZincRestAdapter >> routeMatch: aHOPRouteMatch [ 
+
 	routeMatch := aHOPRouteMatch 
 ]

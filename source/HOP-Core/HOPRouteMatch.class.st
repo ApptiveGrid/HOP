@@ -39,16 +39,14 @@ HOPRouteMatch >> addSegment: aTreeNode [
 ]
 
 { #category : 'converting' }
-HOPRouteMatch >> asResolvedRouteMatch [
-	^ AGBaseResourceRoute new 
+HOPRouteMatch >> asResourceRoute [
+	^ HOPResourceRoute new 
 		routeMatch: self 
 ]
 
 { #category : 'accessing' }
 HOPRouteMatch >> call [ 
 	^ self operation asHOPRouteHandler
-		routeMatch: self;
-		yourself 
 ]
 
 { #category : 'accessing' }
@@ -125,8 +123,7 @@ HOPRouteMatch >> mergeInto: aRouteMatch [
 
 { #category : 'instance creation' }
 HOPRouteMatch >> newHttpCall [
-	^ self operation newHttpCall 
-		routeMatch: self 
+	^ self operation newHttpCall
 ]
 
 { #category : 'accessing' }
@@ -166,14 +163,14 @@ HOPRouteMatch >> proceed [
 ]
 
 { #category : 'accessing' }
-HOPRouteMatch >> receiver [
-	^ self asResourceRoute receiver 
-]
-
-{ #category : 'accessing' }
 HOPRouteMatch >> receiverNode [
 
 	^ lastVariableSegment
+]
+
+{ #category : 'nodes' }
+HOPRouteMatch >> receiverSegments [
+	^ segments copyUpThrough: self receiverNode
 ]
 
 { #category : 'as yet unclassified' }
@@ -198,12 +195,6 @@ HOPRouteMatch >> request: aZnRequest [
 { #category : 'initialization' }
 HOPRouteMatch >> resetExtraPath [
 	extraPath := nil
-]
-
-{ #category : 'accessing' }
-HOPRouteMatch >> resource [ 
-
-	^ self asResourceRoute resource
 ]
 
 { #category : 'initialization' }
