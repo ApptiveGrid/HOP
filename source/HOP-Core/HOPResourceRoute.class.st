@@ -130,6 +130,12 @@ HOPResourceRoute >> resourceOfNode: node [
 ]
 
 { #category : 'accessing' }
+HOPResourceRoute >> routeMatch [
+	
+	^ routeMatch 
+]
+
+{ #category : 'accessing' }
 HOPResourceRoute >> routeMatch: aRouteMatch [ 
 	
 	routeMatch := aRouteMatch
