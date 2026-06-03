@@ -1,5 +1,5 @@
 Class {
-	#name : 'HOPTreeNodeTest',
+	#name : 'HOPNodeTest',
 	#superclass : 'TestCase',
 	#category : 'HOP-Core-Tests-Tests',
 	#package : 'HOP-Core-Tests',
@@ -7,7 +7,7 @@ Class {
 }
 
 { #category : 'tests' }
-HOPTreeNodeTest >> testAddCollection [
+HOPNodeTest >> testAddCollection [
 	| node |
 	node := #root /+ { #bar . #foo }.
 	self assert: node nodes size equals: 2.
@@ -15,7 +15,7 @@ HOPTreeNodeTest >> testAddCollection [
 ]
 
 { #category : 'tests' }
-HOPTreeNodeTest >> testAddNameNode [ 
+HOPNodeTest >> testAddNameNode [ 
 	| node |
 	node := #root /+ #bar.
 	self assert: node name equals: #bar.
@@ -24,7 +24,7 @@ HOPTreeNodeTest >> testAddNameNode [
 ]
 
 { #category : 'tests' }
-HOPTreeNodeTest >> testAddNameNodeCascading [
+HOPNodeTest >> testAddNameNodeCascading [
 	| node |
 	node := #root /+ #foo /+ #bar.
 	self assert: node name equals: #bar.
@@ -33,7 +33,7 @@ HOPTreeNodeTest >> testAddNameNodeCascading [
 ]
 
 { #category : 'tests' }
-HOPTreeNodeTest >> testAddNodeWithBlock [
+HOPNodeTest >> testAddNodeWithBlock [
 	| root last | 
 	root := #/ asHOPSegment.
 	last := root /+ [:x| ].
@@ -41,7 +41,7 @@ HOPTreeNodeTest >> testAddNodeWithBlock [
 ]
 
 { #category : 'tests' }
-HOPTreeNodeTest >> testAddSubTree [
+HOPNodeTest >> testAddSubTree [
 	| node1 node2 |
 	node1 := (#root1 /+ #foo /+ #bar) root.
 	node2 := (#root2 /+ #one /+ #two) root.
@@ -52,7 +52,7 @@ HOPTreeNodeTest >> testAddSubTree [
 ]
 
 { #category : 'tests' }
-HOPTreeNodeTest >> testAddUriSpace [ 
+HOPNodeTest >> testAddUriSpace [ 
 	| node |
 	node := (#root /+ (HOPTestUriSpaceApi named: #api)) root.
 	self assert: node nodes size equals: 1.
@@ -61,7 +61,7 @@ HOPTreeNodeTest >> testAddUriSpace [
 ]
 
 { #category : 'tests' }
-HOPTreeNodeTest >> testAddVariableNode [ 
+HOPNodeTest >> testAddVariableNode [ 
 	| node |
 	node := #root /+ [ :foo| ].
 	self assert: node name equals: #foo.
@@ -70,7 +70,7 @@ HOPTreeNodeTest >> testAddVariableNode [
 ]
 
 { #category : 'tests' }
-HOPTreeNodeTest >> testCatchAllConsumesAllOfPath [
+HOPNodeTest >> testCatchAllConsumesAllOfPath [
 	| root catchall |
 	root := (#root /+ (HOPCatchAllSegment named: #onelevel)) root.
 	catchall := root / #onelevel / #one / #two / #three.
@@ -80,14 +80,14 @@ HOPTreeNodeTest >> testCatchAllConsumesAllOfPath [
 ]
 
 { #category : 'tests' }
-HOPTreeNodeTest >> testConversionBlock [
+HOPNodeTest >> testConversionBlock [
 	| node |
 	node := [ :foo| #foo asHOPSegment ] asHOPSegment.
 	self assert: node class equals: HOPPluggableSegment 
 ]
 
 { #category : 'tests' }
-HOPTreeNodeTest >> testConversionSymbol [
+HOPNodeTest >> testConversionSymbol [
 	| node |
 	node := #foo asHOPSegment.
 	self assert: node class equals: HOPNamedSegment.
@@ -95,7 +95,7 @@ HOPTreeNodeTest >> testConversionSymbol [
 ]
 
 { #category : 'tests' }
-HOPTreeNodeTest >> testLookupMatchesNameBeforeVariable [
+HOPNodeTest >> testLookupMatchesNameBeforeVariable [
 	| root |
 	root := (#root /+ {  
 		(HOPVariableSegment new name: #notfoo ).
@@ -106,7 +106,7 @@ HOPTreeNodeTest >> testLookupMatchesNameBeforeVariable [
 ]
 
 { #category : 'tests' }
-HOPTreeNodeTest >> testLookupNameNode [
+HOPNodeTest >> testLookupNameNode [
 	| node |
 	node := (#root /+ #foo /+ #bar) root.
 	self assert: (node / #foo) name  equals: #foo.

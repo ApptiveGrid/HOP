@@ -1,5 +1,5 @@
 Class {
-	#name : 'HOPResourceTest',
+	#name : 'HOPRouteMatcherTest',
 	#superclass : 'TestCase',
 	#instVars : [
 		'uriSpace'
@@ -10,7 +10,7 @@ Class {
 }
 
 { #category : 'tests' }
-HOPResourceTest >> testMatchRoute [ 
+HOPRouteMatcherTest >> testMatchRoute [ 
 	| matcher match |
 	self uriSpace.
 	matcher := self uriSpace newRouteMatcher.
@@ -19,7 +19,7 @@ HOPResourceTest >> testMatchRoute [
 ]
 
 { #category : 'accessing' }
-HOPResourceTest >> uriSpace [ 
+HOPRouteMatcherTest >> uriSpace [ 
 	^ uriSpace ifNil: [
 		uriSpace := HOPTestUriSpace new build ]
 ]

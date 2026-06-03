@@ -31,6 +31,11 @@ HOPNode >> /+ aSegment [
 
 ]
 
+{ #category : 'visiting' }
+HOPNode >> acceptHOP: aHOPVisitor [
+	self subclassResponsibility 
+]
+
 { #category : 'adding' }
 HOPNode >> addNode: aNode merging: aBoolean [  
 
@@ -152,6 +157,11 @@ HOPNode >> inspectionSegments: aBuilder [
 		addColumn: (SpStringTableColumn new
 			title: 'methods';
 			evaluated: [:each | $, join: (each methods associations collect: [ :assoc | assoc key asSymbol -> assoc value printString  ]) ])
+]
+
+{ #category : 'testing' }
+HOPNode >> isRoot [ 
+	^ parent isNil 
 ]
 
 { #category : 'testing' }

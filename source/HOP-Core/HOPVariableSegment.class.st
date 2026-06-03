@@ -2,13 +2,20 @@ Class {
 	#name : 'HOPVariableSegment',
 	#superclass : 'HOPSegment',
 	#instVars : [
-		'resolveClass',
 		'canonical',
-		'resourceSelector'
+		'resourceRouteSelector',
+		'resourceClass',
+		'segmentNameSelector',
+		'containerSelector'
 	],
 	#category : 'HOP-Core',
 	#package : 'HOP-Core'
 }
+
+{ #category : 'visiting' }
+HOPVariableSegment >> acceptHOP: aHOPVisitor [
+	^ aHOPVisitor visitVariableSegment: self 
+]
 
 { #category : 'testing' }
 HOPVariableSegment >> addSegment: key routeMatch: routeMatch [. 
@@ -33,10 +40,24 @@ HOPVariableSegment >> canonicalUriFor: aResource [
 		yourself 
 ]
 
+{ #category : 'accessing' }
+HOPVariableSegment >> containerSelector [
+
+	^ containerSelector
+]
+
+{ #category : 'accessing' }
+HOPVariableSegment >> containerSelector: anObject [
+
+	containerSelector := anObject
+]
+
 { #category : 'initialization' }
 HOPVariableSegment >> initialize [ 
 	super initialize .
-	canonical := false
+	canonical := false.
+	segmentNameSelector := #id.
+	containerSelector := #container
 ]
 
 { #category : 'as yet unclassified' }
@@ -56,7 +77,7 @@ HOPVariableSegment >> initializePresenter [
 { #category : 'accessing' }
 HOPVariableSegment >> instanceMapClasses [
 
-	^ resolveClass presentedClasses
+	^ resourceClass presentedClasses
 ]
 
 { #category : 'testing' }
@@ -90,7 +111,7 @@ HOPVariableSegment >> nodeLabel [
 { #category : 'accessing' }
 HOPVariableSegment >> presenterClasses [
 
-	^ resolveClass presenterClasses
+	^ resourceClass presenterClasses
 ]
 
 { #category : 'accessing' }
@@ -101,29 +122,41 @@ HOPVariableSegment >> priority [
 { #category : 'accessing' }
 HOPVariableSegment >> resolveClass [
 
-	^ resolveClass
+	^ resourceClass
 ]
 
 { #category : 'accessing' }
 HOPVariableSegment >> resolveClass: anObject [
 
-	resolveClass := anObject
+	resourceClass := anObject
 ]
 
 { #category : 'as yet unclassified' }
 HOPVariableSegment >> resourceSelector [
-	^ resourceSelector 
+	^ resourceRouteSelector 
 ]
 
 { #category : 'accessing' }
 HOPVariableSegment >> resourceSelector: anObject [
 
-	resourceSelector := anObject
+	resourceRouteSelector := anObject
 ]
 
 { #category : 'as yet unclassified' }
 HOPVariableSegment >> segmentIn: aResourceRoute [ 
 	^ (aResourceRoute variableAt: self name) 
+]
+
+{ #category : 'accessing' }
+HOPVariableSegment >> segmentNameSelector [
+
+	^ segmentNameSelector
+]
+
+{ #category : 'accessing' }
+HOPVariableSegment >> segmentNameSelector: anObject [
+
+	segmentNameSelector := anObject
 ]
 
 { #category : 'as yet unclassified' }

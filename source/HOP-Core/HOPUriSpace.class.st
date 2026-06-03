@@ -10,6 +10,11 @@ HOPUriSpace class >> /+ aSegment [
 	^ self new /+ aSegment 
 ]
 
+{ #category : 'visiting' }
+HOPUriSpace >> acceptHOP: aHOPVisitor [
+	^ aHOPVisitor visitUriSpace: self 
+]
+
 { #category : 'converting' }
 HOPUriSpace >> asZincDelegate [
 	^ self zincServerDelegate	
@@ -20,6 +25,14 @@ HOPUriSpace >> asZincDelegate [
 { #category : 'accessing' }
 HOPUriSpace >> build [
 	self subclassResponsibility 
+]
+
+{ #category : 'accessing' }
+HOPUriSpace >> buildUriForResource: anObject startingAt: aHOPSegment [
+	^ self uriBuilderClass new
+		resource: anObject;
+		visit: aHOPSegment;
+		build
 ]
 
 { #category : 'initialization' }
@@ -51,6 +64,11 @@ HOPUriSpace >> newRouteMatcher [
 		yourself.
 ]
 
+{ #category : 'accessing' }
+HOPUriSpace >> newUriBuilder [
+	^ self uriBuilderClass new
+]
+
 { #category : 'printing' }
 HOPUriSpace >> nodeLabel [ 
 	^ 'uri space'
@@ -73,6 +91,11 @@ HOPUriSpace >> routeMatchClass [
 { #category : 'instance creation' }
 HOPUriSpace >> routeMatcherClass [
 	^ HOPRouteMatcher
+]
+
+{ #category : 'accessing' }
+HOPUriSpace >> uriBuilderClass [
+	^ HOPUriBuilder
 ]
 
 { #category : 'as yet unclassified' }
