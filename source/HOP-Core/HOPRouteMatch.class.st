@@ -168,6 +168,11 @@ HOPRouteMatch >> receiverNode [
 	^ lastVariableSegment
 ]
 
+{ #category : 'nodes' }
+HOPRouteMatch >> receiverSegments [
+	^ segments copyUpThrough: self receiverNode
+]
+
 { #category : 'as yet unclassified' }
 HOPRouteMatch >> receiverUriPrefix [
 	"a request context reflects the whole URI path. When we want to know which 

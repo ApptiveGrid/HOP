@@ -90,6 +90,11 @@ HOPResourceRoute >> receiverNode [
 	^ routeMatch receiverNode
 ]
 
+{ #category : 'as yet unclassified' }
+HOPResourceRoute >> receiverSegments [
+	^ routeMatch receiverSegments 
+]
+
 { #category : 'accessing' }
 HOPResourceRoute >> request [
 	^ routeMatch request 
