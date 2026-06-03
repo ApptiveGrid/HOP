@@ -135,12 +135,17 @@ HOPVariableSegment >> segmentIn: anAGRequestContext [
 
 { #category : 'as yet unclassified' }
 HOPVariableSegment >> uriFor: aResource resourceRoute: resourceRoute [
-	| effectiveRoute n |
+	| effectiveRoute |
 	effectiveRoute := resourceRoute previous ifNil: [ resourceRoute ].
 	(aResource isIdenticalTo: effectiveRoute receiver scope) ifTrue: [ 
-		n := (effectiveRoute nodes collect: [ :each | each segmentIn: effectiveRoute ]).
-		((n select: [:each| each = #blocks]) size = 2) ifTrue: [self halt].
-		^ n ].
+				^ effectiveRoute nodes collect: [ :each | each segmentIn: effectiveRoute ] ].
+	"resourceRoute previous 
+		ifNotNil: [
+			(aResource isIdenticalTo: resourceRoute previous receiver scope) ifTrue: [ 
+				^ resourceRoute previous nodes collect: [ :each | each segmentIn: resourceRoute previous ] ]]
+		ifNil: [ (aResource isIdenticalTo: resourceRoute receiver scope) ifTrue: [ 
+				^ resourceRoute nodes collect: [ :each | each segmentIn: resourceRoute ] ] ].
+"
 	"(routeMatch nodeMatchingScope: aResource) ifNotNil: [:aNode | | effectiveRoute |
 		""it could be that the current request uri has a segment matching the resource for wich we want to build the uri.
 		in particular, in case of a external link nested request,  we want to preserve the link prefix part and append the specific segments after. ""
