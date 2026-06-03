@@ -2,7 +2,6 @@ Class {
 	#name : 'HOPVariableSegment',
 	#superclass : 'HOPSegment',
 	#instVars : [
-		'resolveBlock',
 		'resolveClass',
 		'canonical',
 		'resourceSelector'
@@ -97,12 +96,6 @@ HOPVariableSegment >> presenterClasses [
 { #category : 'accessing' }
 HOPVariableSegment >> priority [ 
 	^ 2
-]
-
-{ #category : 'accessing' }
-HOPVariableSegment >> resolveBlock: anObject [
-
-	resolveBlock := anObject
 ]
 
 { #category : 'accessing' }

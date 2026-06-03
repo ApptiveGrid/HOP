@@ -1,6 +1,6 @@
 Class {
 	#name : 'HOPSpaceZone',
-	#superclass : 'HOPTreeNode',
+	#superclass : 'HOPNode',
 	#instVars : [
 		'handlers'
 	],
@@ -13,12 +13,6 @@ HOPSpaceZone class >> asHOPSegment [
 	^ self new 
 		build;
 		asHOPSegment 
-]
-
-{ #category : 'instance creation' }
-HOPSpaceZone class >> named: aString [ 
-	^ self new 
-		name: aString 
 ]
 
 { #category : 'adding' }
