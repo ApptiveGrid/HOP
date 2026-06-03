@@ -40,7 +40,7 @@ HOPRouteMatch >> addSegment: aTreeNode [
 
 { #category : 'converting' }
 HOPRouteMatch >> asResourceRoute [
-	^ AGBaseResourceRoute new 
+	^ HOPResourceRoute new 
 		routeMatch: self 
 ]
 
