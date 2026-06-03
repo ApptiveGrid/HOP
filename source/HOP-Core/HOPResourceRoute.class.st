@@ -95,6 +95,11 @@ HOPResourceRoute >> receiverSegments [
 	^ routeMatch receiverSegments 
 ]
 
+{ #category : 'as yet unclassified' }
+HOPResourceRoute >> receiverUriPrefix [
+	^ routeMatch receiverUriPrefix 
+]
+
 { #category : 'accessing' }
 HOPResourceRoute >> request [
 	^ routeMatch request 
