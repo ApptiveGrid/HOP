@@ -63,9 +63,10 @@ HOPUriSpace >> buildOperationSegments [
 	self root recursiveDo: [ :node | 
 		node hasMethods ifTrue: [ 
 			node methods keysAndValuesDo: [ :method :operationMapping |   
+				(operationMapping respondsTo: #operation) ifTrue: [  
 					self 
-						atOperation: operationMapping operation 
-						put: node ] ] ]
+						atOperation: operationMapping operation
+						put: node ] ] ] ]
 ]
 
 { #category : 'as yet unclassified' }
