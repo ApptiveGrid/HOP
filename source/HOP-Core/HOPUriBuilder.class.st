@@ -67,7 +67,8 @@ HOPUriBuilder >> visitSegment: aHOPSegment [
 
 { #category : 'visiting' }
 HOPUriBuilder >> visitSpaceZone: aSpaceZone [ 
-	segments add: aSpaceZone name.
+	aSpaceZone hasParent ifTrue: [  
+		segments add: aSpaceZone name ].
 	super visitSpaceZone: aSpaceZone
 ]
 

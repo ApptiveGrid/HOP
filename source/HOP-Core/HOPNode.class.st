@@ -132,6 +132,11 @@ HOPNode >> detectSegmentNamed: segment routeMatch: routeMatch [
 ]
 
 { #category : 'testing' }
+HOPNode >> hasParent [ 
+	^ parent notNil 
+]
+
+{ #category : 'testing' }
 HOPNode >> includesNodeNamed: aString [ 
 	self 
 		atName: aString 
