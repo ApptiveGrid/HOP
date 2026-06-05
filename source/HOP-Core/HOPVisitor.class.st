@@ -1,9 +1,17 @@
 Class {
 	#name : 'HOPVisitor',
 	#superclass : 'Object',
+	#instVars : [
+		'uriSpace'
+	],
 	#category : 'HOP-Core',
 	#package : 'HOP-Core'
 }
+
+{ #category : 'accessing' }
+HOPVisitor >> uriSpace: aHOPUriSpace [ 
+	uriSpace := aHOPUriSpace 
+]
 
 { #category : 'visiting' }
 HOPVisitor >> visit: anObject [ 

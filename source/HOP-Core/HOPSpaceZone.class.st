@@ -15,6 +15,11 @@ HOPSpaceZone class >> asHOPSegment [
 		asHOPSegment 
 ]
 
+{ #category : 'visiting' }
+HOPSpaceZone >> acceptHOP: aHOPVisitor [
+	aHOPVisitor visitSpaceZone: self 
+]
+
 { #category : 'adding' }
 HOPSpaceZone >> addHandler: aHandler [ 
 	handlers add: aHandler 

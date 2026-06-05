@@ -3,7 +3,8 @@ Class {
 	#superclass : 'HOPVisitor',
 	#instVars : [
 		'segments',
-		'resource'
+		'resource',
+		'operation'
 	],
 	#category : 'HOP-Core',
 	#package : 'HOP-Core'
@@ -11,6 +12,11 @@ Class {
 
 { #category : 'building' }
 HOPUriBuilder >> build [
+	| startSegment |
+	startSegment := operation 
+		ifNotNil: [ uriSpace segmentForResource: resource andOperation: operation ]
+		ifNil: [ uriSpace segmentForResource: resource ].
+	self visit: startSegment.
 	^ ($/ join: segments reversed) copyWithFirst: $/ 
 ]
 
@@ -23,6 +29,11 @@ HOPUriBuilder >> containerOf: aHOPSegment [
 HOPUriBuilder >> initialize [ 
 	super initialize.
 	segments := OrderedCollection new 
+]
+
+{ #category : 'accessing' }
+HOPUriBuilder >> operation: aClass [ 
+	operation := aClass 
 ]
 
 { #category : 'accessing' }
@@ -46,6 +57,17 @@ HOPUriBuilder >> visitNamedSegment: aNamedSegment [
 HOPUriBuilder >> visitSegment: aHOPSegment [ 
 	aHOPSegment isRoot ifFalse: [
 		self visit: aHOPSegment parent  ]
+]
+
+{ #category : 'visiting' }
+HOPUriBuilder >> visitSpaceZone: aSpaceZone [ 
+	segments add: aSpaceZone name.
+	super visitSpaceZone: aSpaceZone
+]
+
+{ #category : 'visiting' }
+HOPUriBuilder >> visitUriSpace: aUriSpace [ 
+	
 ]
 
 { #category : 'visiting' }

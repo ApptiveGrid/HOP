@@ -66,16 +66,16 @@ HOPUriSpace >> buildUriForOperation: aClass resource: anObject [
 
 	| resourceRoot |
 	resourceRoot := behaviorSegments at: anObject class.
-	^ self uriBuilderClass new
+	^ self newUriBuilder 
 		  resource: anObject;
 		  visit:
-			  (self segmentForResource: resourceRoot andOperation: aClass);
+			  (self segmentForResourceRoot: resourceRoot andOperation: aClass);
 		  build
 ]
 
 { #category : 'as yet unclassified' }
 HOPUriSpace >> buildUriForResource: anObject [ 
-	^ self uriBuilderClass new
+	^ self newUriBuilder 
 		resource: anObject;
 		visit: (self segmentForResource: anObject);
 		build
@@ -132,6 +132,8 @@ HOPUriSpace >> newRouteMatcher [
 { #category : 'accessing' }
 HOPUriSpace >> newUriBuilder [
 	^ self uriBuilderClass new
+		uriSpace: self;
+		yourself 
 ]
 
 { #category : 'printing' }
@@ -180,7 +182,14 @@ HOPUriSpace >> segmentForResource: aResource [
 ]
 
 { #category : 'as yet unclassified' }
-HOPUriSpace >> segmentForResource: resourceRoot andOperation: anOperation [
+HOPUriSpace >> segmentForResource: resource andOperation: anOperation [
+	| resourceRoot |
+	resourceRoot := self segmentForResource: resource.
+	^ operationSegments at: { resourceRoot . anOperation } 
+]
+
+{ #category : 'as yet unclassified' }
+HOPUriSpace >> segmentForResourceRoot: resourceRoot andOperation: anOperation [
 	^ operationSegments at: { resourceRoot. anOperation } 
 ]
 
@@ -192,32 +201,13 @@ HOPUriSpace >> segmentForResourceType: aClass [
 { #category : 'as yet unclassified' }
 HOPUriSpace >> segmentForResourceType: resourceClass andOperation: anOperation [
 	| resourceRoot |
-	resourceRoot := behaviorSegments at: resourceClass .
+	resourceRoot := self segmentForResourceType: resourceClass.
 	^ operationSegments at: { resourceRoot . anOperation } 
 ]
 
 { #category : 'accessing' }
 HOPUriSpace >> uriBuilderClass [
 	^ HOPUriBuilder
-]
-
-{ #category : 'as yet unclassified' }
-HOPUriSpace >> uriForOperation: operation resource: resource resourceRoute: resourceRoute [
-	| node uri |
-	node := operationSegments at: operation.
-	uri := '/', ($/ join: (node uriFor: resource resourceRoute: resourceRoute)).
-	^ uri
-	
-]
-
-{ #category : 'as yet unclassified' }
-HOPUriSpace >> uriForResource: resource resourceRoute: resourceRoute [
-	| instanceNode uri |
-	instanceNode := behaviorSegments 
-		at: resource class
-		ifAbsent: [ AGCallNotFound signal: 'no instance node for ', resource asString ].
-	uri := '/', ($/ join: (instanceNode uriFor: resource resourceRoute: resourceRoute)).
-	^ uri
 ]
 
 { #category : 'as yet unclassified' }
