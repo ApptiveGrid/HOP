@@ -1,9 +1,9 @@
 Class {
 	#name : 'HOPUriBuildChildObject',
 	#superclass : 'HOPUriObject',
-	#category : 'HOP-Core-Tests-Tests',
+	#category : 'HOP-Core-Tests-TestData',
 	#package : 'HOP-Core-Tests',
-	#tag : 'Tests'
+	#tag : 'TestData'
 }
 
 { #category : 'accessing' }

@@ -1,22 +1,17 @@
 Class {
-	#name : 'HOPUriObject',
+	#name : 'HOPTestOperationMapping',
 	#superclass : 'Object',
-	#instVars : [
-		'container'
-	],
 	#category : 'HOP-Core-Tests-TestData',
 	#package : 'HOP-Core-Tests',
 	#tag : 'TestData'
 }
 
 { #category : 'accessing' }
-HOPUriObject >> container [
-
-	^ container
+HOPTestOperationMapping class >> operation [ 
+	^ self 
 ]
 
 { #category : 'accessing' }
-HOPUriObject >> container: anObject [
-
-	container := anObject
+HOPTestOperationMapping >> operation [ 
+	^ self 
 ]

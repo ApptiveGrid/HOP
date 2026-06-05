@@ -12,6 +12,11 @@ Class {
 	#package : 'HOP-Core'
 }
 
+{ #category : 'associating' }
+HOPVariableSegment >> --> aClass [ 
+	self root register: self forClass: aClass 
+]
+
 { #category : 'visiting' }
 HOPVariableSegment >> acceptHOP: aHOPVisitor [
 	^ aHOPVisitor visitVariableSegment: self 
@@ -76,8 +81,8 @@ HOPVariableSegment >> initializePresenter [
 
 { #category : 'accessing' }
 HOPVariableSegment >> instanceMapClasses [
-
-	^ resourceClass presentedClasses
+	resourceClass ifNil: [ ^ nil ].
+	^ resourceClass hopExposedClasses
 ]
 
 { #category : 'testing' }
