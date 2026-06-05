@@ -14,7 +14,7 @@ Class {
 
 { #category : 'associating' }
 HOPVariableSegment >> --> aClass [ 
-	self root register: self forClass: aClass 
+	self root registerSegment: self forResourceType: aClass 
 ]
 
 { #category : 'visiting' }
@@ -106,6 +106,11 @@ HOPVariableSegment >> matchesScope: aResource in: routeMatch [
 
 
 	^ (aResource matchesScopeOf: (self valueIn: routeMatch)).
+]
+
+{ #category : 'as yet unclassified' }
+HOPVariableSegment >> nearestResourceNode [ 
+	^ self 
 ]
 
 { #category : 'printing' }

@@ -26,17 +26,6 @@ HOPUriSpace >> asZincDelegate [
 		yourself 
 ]
 
-{ #category : 'as yet unclassified' }
-HOPUriSpace >> atOperation: operation put: node [
-	^ operationSegments 
-		at: operation 
-		ifPresent: [ Error signal: 'trying to register operation ', operation asString, ' twice' ]
-		ifAbsent: [ 
-			operationSegments 
-				at: operation 
-				put: node ]
-]
-
 { #category : 'accessing' }
 HOPUriSpace >> build [
 	self subclassResponsibility 
@@ -60,28 +49,35 @@ HOPUriSpace >> buildInstanceMap [
 
 { #category : 'as yet unclassified' }
 HOPUriSpace >> buildOperationSegments [
+	| resourceRoot |
 	self root recursiveDo: [ :node | 
-		node hasMethods ifTrue: [ 
+		node hasMethods ifTrue: [
+			resourceRoot := node nearestResourceNode. 
 			node methods keysAndValuesDo: [ :method :operationMapping |   
 				(operationMapping respondsTo: #operation) ifTrue: [  
 					self 
-						atOperation: operationMapping operation
-						put: node ] ] ] ]
+						registerSegment: node 
+						forResourceRoot: resourceRoot 
+						andOperation: operationMapping operation ] ] ] ]
 ]
 
 { #category : 'as yet unclassified' }
-HOPUriSpace >> buildUriForOperation: aClass resource: anObject [ 
+HOPUriSpace >> buildUriForOperation: aClass resource: anObject [
+
+	| resourceRoot |
+	resourceRoot := behaviorSegments at: anObject class.
 	^ self uriBuilderClass new
-		resource: anObject;
-		visit: (self segmentOfOperation: aClass);
-		build
+		  resource: anObject;
+		  visit:
+			  (self segmentForResource: resourceRoot andOperation: aClass);
+		  build
 ]
 
 { #category : 'as yet unclassified' }
 HOPUriSpace >> buildUriForResource: anObject [ 
 	^ self uriBuilderClass new
 		resource: anObject;
-		visit: (self segmentOfResource: anObject);
+		visit: (self segmentForResource: anObject);
 		build
 ]
 
@@ -138,11 +134,6 @@ HOPUriSpace >> newUriBuilder [
 	^ self uriBuilderClass new
 ]
 
-{ #category : 'as yet unclassified' }
-HOPUriSpace >> nodeForResource: aResource [ 	
-	^ behaviorSegments at: aResource yourself class
-]
-
 { #category : 'printing' }
 HOPUriSpace >> nodeLabel [ 
 	^ 'uri space'
@@ -158,7 +149,14 @@ HOPUriSpace >> printOn: aStream [
 ]
 
 { #category : 'as yet unclassified' }
-HOPUriSpace >> register: segment  forClass: aClass [ 
+HOPUriSpace >> registerSegment: segment forResourceRoot: resourceRoot andOperation: aClass [ 
+	operationSegments 
+		at: { resourceRoot . aClass }
+		put: segment 
+]
+
+{ #category : 'as yet unclassified' }
+HOPUriSpace >> registerSegment: segment  forResourceType: aClass [ 
 	aClass hopExposedClasses do: [ :behavior | 
 		behaviorSegments 
 			at: behavior 
@@ -177,13 +175,25 @@ HOPUriSpace >> routeMatcherClass [
 ]
 
 { #category : 'as yet unclassified' }
-HOPUriSpace >> segmentOfOperation: anOperation [
-	^ operationSegments at: anOperation 
+HOPUriSpace >> segmentForResource: aResource [ 	
+	^ self segmentForResourceType: aResource yourself class
 ]
 
 { #category : 'as yet unclassified' }
-HOPUriSpace >> segmentOfResource: aResource [
-	^ behaviorSegments at: aResource class 
+HOPUriSpace >> segmentForResource: resourceRoot andOperation: anOperation [
+	^ operationSegments at: { resourceRoot. anOperation } 
+]
+
+{ #category : 'as yet unclassified' }
+HOPUriSpace >> segmentForResourceType: aClass [ 	
+	^ behaviorSegments at: aClass
+]
+
+{ #category : 'as yet unclassified' }
+HOPUriSpace >> segmentForResourceType: resourceClass andOperation: anOperation [
+	| resourceRoot |
+	resourceRoot := behaviorSegments at: resourceClass .
+	^ operationSegments at: { resourceRoot . anOperation } 
 ]
 
 { #category : 'accessing' }

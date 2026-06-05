@@ -83,7 +83,7 @@ HOPRouteMatcher >> routeMatch: aRouteMatch [
 { #category : 'as yet unclassified' }
 HOPRouteMatcher >> startReceiver: aResource [ 
 
-	startSegment := uriSpace nodeForResource: aResource
+	startSegment := uriSpace segmentForResource: aResource
 ]
 
 { #category : 'as yet unclassified' }

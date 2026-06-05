@@ -204,7 +204,7 @@ HOPRouteMatch >> setOperation: aString [
 
 { #category : 'as yet unclassified' }
 HOPRouteMatch >> startReceiver: aResource [
-	lastVariableSegment := uriSpace nodeForResource: aResource
+	lastVariableSegment := uriSpace segmentForResource: aResource
 ]
 
 { #category : 'accessing' }

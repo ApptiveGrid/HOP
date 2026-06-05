@@ -207,6 +207,12 @@ HOPNode >> name: anObject [
 	name := anObject
 ]
 
+{ #category : 'as yet unclassified' }
+HOPNode >> nearestResourceNode [
+	parent ifNil: [ ^ nil ].
+	^ parent nearestResourceNode 
+]
+
 { #category : 'printing' }
 HOPNode >> nodeLabel [
 	self subclassResponsibility 
