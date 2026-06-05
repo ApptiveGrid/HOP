@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'segments',
 		'resource',
-		'operation'
+		'operation',
+		'resourceRoute'
 	],
 	#category : 'HOP-Core',
 	#package : 'HOP-Core'
@@ -39,6 +40,11 @@ HOPUriBuilder >> operation: aClass [
 { #category : 'accessing' }
 HOPUriBuilder >> resource: anObject [ 
 	resource := anObject 
+]
+
+{ #category : 'accessing' }
+HOPUriBuilder >> resourceRoute: aHOPResourceRoute [ 
+	resourceRoute := aHOPResourceRoute 
 ]
 
 { #category : 'services' }
