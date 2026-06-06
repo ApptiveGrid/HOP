@@ -68,8 +68,6 @@ HOPUriSpace >> buildUriForOperation: aClass resource: anObject [
 	resourceRoot := behaviorSegments at: anObject class.
 	^ self newUriBuilder 
 		  resource: anObject;
-		  visit:
-			  (self segmentForResourceRoot: resourceRoot andOperation: aClass);
 		  build
 ]
 
@@ -77,26 +75,19 @@ HOPUriSpace >> buildUriForOperation: aClass resource: anObject [
 HOPUriSpace >> buildUriForResource: anObject [ 
 	^ self newUriBuilder 
 		resource: anObject;
-		visit: (self segmentForResource: anObject);
 		build
 ]
 
 { #category : 'as yet unclassified' }
 HOPUriSpace >> canonicalUriForResource: resource [
-	| instanceNode |
 
-	instanceNode := behaviorSegments 
-		at: resource yourself class
-		ifAbsent: [ AGCallNotFound signal: 'no instance node for ', resource asString ].
-	^ '/', ($/ join: (instanceNode canonicalUriFor: resource))
+	^ self buildUriForResource: resource
 ]
 
 { #category : 'as yet unclassified' }
 HOPUriSpace >> canonicalUriForResource: resource operation: operation [
 	
-	| node |
-	node := operationSegments at: operation.
-	^ '/', ($/ join: (node canonicalUriFor:  resource ))
+	^ self buildUriForOperation: operation resource: resource
 ]
 
 { #category : 'initialization' }
