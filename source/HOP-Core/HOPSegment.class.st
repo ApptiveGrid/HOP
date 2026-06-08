@@ -1,6 +1,6 @@
 Class {
 	#name : 'HOPSegment',
-	#superclass : 'HOPTreeNode',
+	#superclass : 'HOPNode',
 	#instVars : [
 		'methods'
 	],

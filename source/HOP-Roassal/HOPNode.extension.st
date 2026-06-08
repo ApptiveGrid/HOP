@@ -1,16 +1,16 @@
-Extension { #name : 'HOPTreeNode' }
+Extension { #name : 'HOPNode' }
 
 { #category : '*HOP-Roassal' }
-HOPTreeNode >> children [
+HOPNode >> children [
 	^ nodes
 ]
 
 { #category : '*HOP-Roassal' }
-HOPTreeNode >> displayLabel [
+HOPNode >> displayLabel [
 	^ self name 
 ]
 
 { #category : '*HOP-Roassal' }
-HOPTreeNode >> numberOfChildren [
+HOPNode >> numberOfChildren [
 	^ nodes size 
 ]

@@ -1,6 +1,6 @@
 Class {
 	#name : 'HOPSpaceZone',
-	#superclass : 'HOPTreeNode',
+	#superclass : 'HOPNode',
 	#instVars : [
 		'handlers'
 	],
@@ -15,10 +15,9 @@ HOPSpaceZone class >> asHOPSegment [
 		asHOPSegment 
 ]
 
-{ #category : 'instance creation' }
-HOPSpaceZone class >> named: aString [ 
-	^ self new 
-		name: aString 
+{ #category : 'visiting' }
+HOPSpaceZone >> acceptHOP: aHOPVisitor [
+	aHOPVisitor visitSpaceZone: self 
 ]
 
 { #category : 'adding' }

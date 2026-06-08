@@ -2,14 +2,25 @@ Class {
 	#name : 'HOPVariableSegment',
 	#superclass : 'HOPSegment',
 	#instVars : [
-		'resolveBlock',
-		'resolveClass',
 		'canonical',
-		'resourceSelector'
+		'resourceRouteSelector',
+		'resourceClass',
+		'segmentNameSelector',
+		'containerSelector'
 	],
 	#category : 'HOP-Core',
 	#package : 'HOP-Core'
 }
+
+{ #category : 'associating' }
+HOPVariableSegment >> --> aClass [ 
+	self root registerSegment: self forResourceType: aClass 
+]
+
+{ #category : 'visiting' }
+HOPVariableSegment >> acceptHOP: aHOPVisitor [
+	^ aHOPVisitor visitVariableSegment: self 
+]
 
 { #category : 'testing' }
 HOPVariableSegment >> addSegment: key routeMatch: routeMatch [. 
@@ -34,10 +45,24 @@ HOPVariableSegment >> canonicalUriFor: aResource [
 		yourself 
 ]
 
+{ #category : 'accessing' }
+HOPVariableSegment >> containerSelector [
+
+	^ containerSelector
+]
+
+{ #category : 'accessing' }
+HOPVariableSegment >> containerSelector: anObject [
+
+	containerSelector := anObject
+]
+
 { #category : 'initialization' }
 HOPVariableSegment >> initialize [ 
 	super initialize .
-	canonical := false
+	canonical := false.
+	segmentNameSelector := #id.
+	containerSelector := #container
 ]
 
 { #category : 'as yet unclassified' }
@@ -56,8 +81,8 @@ HOPVariableSegment >> initializePresenter [
 
 { #category : 'accessing' }
 HOPVariableSegment >> instanceMapClasses [
-
-	^ resolveClass presentedClasses
+	resourceClass ifNil: [ ^ nil ].
+	^ resourceClass hopExposedClasses
 ]
 
 { #category : 'testing' }
@@ -83,6 +108,11 @@ HOPVariableSegment >> matchesScope: aResource in: routeMatch [
 	^ (aResource matchesScopeOf: (self valueIn: routeMatch)).
 ]
 
+{ #category : 'as yet unclassified' }
+HOPVariableSegment >> nearestResourceNode [ 
+	^ self 
+]
+
 { #category : 'printing' }
 HOPVariableSegment >> nodeLabel [
 	^ 'variable'
@@ -91,7 +121,7 @@ HOPVariableSegment >> nodeLabel [
 { #category : 'accessing' }
 HOPVariableSegment >> presenterClasses [
 
-	^ resolveClass presenterClasses
+	^ resourceClass presenterClasses
 ]
 
 { #category : 'accessing' }
@@ -100,37 +130,43 @@ HOPVariableSegment >> priority [
 ]
 
 { #category : 'accessing' }
-HOPVariableSegment >> resolveBlock: anObject [
-
-	resolveBlock := anObject
-]
-
-{ #category : 'accessing' }
 HOPVariableSegment >> resolveClass [
 
-	^ resolveClass
+	^ resourceClass
 ]
 
 { #category : 'accessing' }
 HOPVariableSegment >> resolveClass: anObject [
 
-	resolveClass := anObject
+	resourceClass := anObject
 ]
 
 { #category : 'as yet unclassified' }
 HOPVariableSegment >> resourceSelector [
-	^ resourceSelector 
+	^ resourceRouteSelector 
 ]
 
 { #category : 'accessing' }
 HOPVariableSegment >> resourceSelector: anObject [
 
-	resourceSelector := anObject
+	resourceRouteSelector := anObject
 ]
 
 { #category : 'as yet unclassified' }
 HOPVariableSegment >> segmentIn: aResourceRoute [ 
 	^ (aResourceRoute variableAt: self name) 
+]
+
+{ #category : 'accessing' }
+HOPVariableSegment >> segmentNameSelector [
+
+	^ segmentNameSelector
+]
+
+{ #category : 'accessing' }
+HOPVariableSegment >> segmentNameSelector: anObject [
+
+	segmentNameSelector := anObject
 ]
 
 { #category : 'as yet unclassified' }

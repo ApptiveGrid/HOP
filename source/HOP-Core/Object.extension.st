@@ -4,3 +4,9 @@ Extension { #name : 'Object' }
 Object >> addToHOPNode: aNode [ 
 	^ aNode addSegment: self asHOPSegment
 ]
+
+{ #category : '*HOP-Core' }
+Object class >> hopExposedClasses [
+
+	^ self withAllSubclasses
+]

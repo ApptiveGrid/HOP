@@ -5,6 +5,11 @@ Class {
 	#package : 'HOP-Core'
 }
 
+{ #category : 'visiting' }
+HOPNamedSegment >> acceptHOP: aHOPVisitor [
+	^ aHOPVisitor visitNamedSegment: self  
+]
+
 { #category : 'converting' }
 HOPNamedSegment >> asHOPSpaceZone [
 	^ HOPSpaceZone new 
