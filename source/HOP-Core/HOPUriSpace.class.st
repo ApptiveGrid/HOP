@@ -67,8 +67,9 @@ HOPUriSpace >> buildUriForOperation: aClass resource: anObject [
 	| resourceRoot |
 	resourceRoot := behaviorSegments at: anObject class.
 	^ self newUriBuilder 
-		  resource: anObject;
-		  build
+		resource: anObject;
+		operation: aClass;
+		build
 ]
 
 { #category : 'as yet unclassified' }
