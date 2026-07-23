@@ -81,8 +81,10 @@ HOPResourceRoute >> previous: aResourceRoute [
 
 { #category : 'accessing' }
 HOPResourceRoute >> receiver [
-	^ receiver ifNil: [ 
-		receiver := self resourceOfNode: routeMatch receiverNode ]
+	^ receiver ifNil: [
+		receiver := routeMatch receiverNode
+			ifNil: [ previous receiver scope ]
+			ifNotNil: [ :node | self resourceOfNode: node ] ]
 ]
 
 { #category : 'accessing' }
