@@ -29,7 +29,7 @@ BaselineOfHOP >> jsonSchema: spec [
 	
 	spec baseline: 'JSONSchema' with: [ 
 		spec 
-			repository: 'github://zweidenker/JSONSchema:1d2fd5a23b5b6701bba5ce50e2e48e32afc70811/source' ]
+			repository: 'github://ApptiveGrid/JSONSchema:1d2fd5a23b5b6701bba5ce50e2e48e32afc70811/source' ]
 ]
 
 { #category : 'baselines' }
