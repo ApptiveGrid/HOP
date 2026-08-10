@@ -146,7 +146,8 @@ HOPUriSpace >> printOn: aStream [
 HOPUriSpace >> registerSegment: segment forResourceRoot: resourceRoot andOperation: aClass [ 
 	operationSegments 
 		at: { resourceRoot . aClass }
-		put: segment 
+		ifPresent: [ Error signal: 'try to register operation ', aClass asString, ' for resource root ', resourceRoot asString, ' more than once' ]
+		ifAbsent: [ operationSegments at: { resourceRoot . aClass } put: segment ]
 ]
 
 { #category : 'as yet unclassified' }
