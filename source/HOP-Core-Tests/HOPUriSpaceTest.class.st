@@ -34,6 +34,33 @@ HOPUriSpaceTest >> testComposeUriSpace [
 ]
 
 { #category : 'tests' }
+HOPUriSpaceTest >> testRegisterSegmentAllowsDistinctOperationRegistrations [
+    | space segment |
+    space := HOPUriSpace new.
+    segment := #testOp asHOPSegment
+        atMethod: #get put: HOPTestOperationMapping;
+        atMethod: #delete put: HOPTestOperationMapping new;
+        yourself.
+    space /+ segment.
+    self shouldnt: [ space buildOperationSegments ] raise: Error
+]
+
+{ #category : 'tests' }
+HOPUriSpaceTest >> testRegisterSegmentSignalsOnDuplicateOperationRegistration [
+    "registerSegment:forResourceRoot:andOperation: used to silently overwrite a collision in
+    operationSegments (last-registered node wins, order-dependent) - it should signal instead,
+    analogous to the existing behaviorSegments collision check in buildInstanceMap."
+    | space segment |
+    space := HOPUriSpace new.
+    segment := #testOp asHOPSegment
+        atMethod: #get put: HOPTestOperationMapping;
+        atMethod: #post put: HOPTestOperationMapping;
+        yourself.
+    space /+ segment.
+    self should: [ space buildOperationSegments ] raise: Error
+]
+
+{ #category : 'tests' }
 HOPUriSpaceTest >> testVariableSegment [ 
 	| matcher value uri match |
 	matcher := self newRouteMatcher.
