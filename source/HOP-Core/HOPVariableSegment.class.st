@@ -72,8 +72,10 @@ HOPVariableSegment >> initializePresenter [
 	self presenterClasses do: [ :presenterClass | 
 		"each instance class can have a number of possible presenters. From an instance
 		class we get the base presenter class"
-		"we collect all links pragma for the base class and all its subclasses"
-		presenterClass allLinksPragmas do: [ :pragma | 
+		"routes must cover every operation any specialisation below the base class may
+		expose, so this asks the reachability question and not what the base presenter
+		itself offers - see AGObjectPresenter class>>reachableLinkPragmas"
+		presenterClass reachableLinkPragmas do: [ :pragma | 
 			self registerOperationFor: pragma presenter: presenterClass  ] ].
 	
 			
