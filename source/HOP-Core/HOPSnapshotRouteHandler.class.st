@@ -15,10 +15,10 @@ HOPSnapshotRouteHandler >> handleRoute: aRoute [
 	| response |
 	(self loggingEnabled: aRoute) ifFalse: [ ^ super handleRoute: aRoute ].
 
-	self withStreamDo: [ :stream |.
+	self withStreamDo: [ :stream |
 		aRoute request writeOn: stream.
 		stream 
-			nextPutAll: String crlf;
+			nextPutAll: String crlf utf8Encoded;
 			flush.
 		[
 			[
@@ -30,7 +30,8 @@ HOPSnapshotRouteHandler >> handleRoute: aRoute [
 			]
 			on: Error 
 			do: [ :error | 
-				error signalerContext printDebugStackOn: stream.
+				stream nextPutAll: (String streamContents: [ :out |
+					error signalerContext printDebugStackOn: out ]) utf8Encoded.
 				stream flush.
 				error pass  ]
 		]
@@ -54,8 +55,12 @@ HOPSnapshotRouteHandler >> path [
 
 { #category : 'as yet unclassified' }
 HOPSnapshotRouteHandler >> withStreamDo: aBlock [ 
+	"Ein Byte-Strom, denn ZnMessage>>writeOn: schreibt Bytes. Auf einem
+	Zeichen-Strom kodiert der UTF-8-Encoder jedes Byte ueber 127 ein zweites
+	Mal: aus C3 9F wird C3 83 C2 9F, aus 'Faassen' wird 'FaaAYen'. Der
+	Mitschnitt wuerde dann laenger als sein eigenes Content-Length."
 	| stream |
-	stream := self filename writeStream.
+	stream := self filename binaryWriteStream.
 	[ aBlock value: stream ]
 		ensure: [ 
 			stream 
