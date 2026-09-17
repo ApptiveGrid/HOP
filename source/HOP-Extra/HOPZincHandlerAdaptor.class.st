@@ -3,7 +3,8 @@ Class {
 	#superclass : 'HOPCatchAllSegment',
 	#instVars : [
 		'routeMatch',
-		'handlerClass'
+		'handlerClass',
+		'handler'
 	],
 	#category : 'HOP-Extra',
 	#package : 'HOP-Extra'
@@ -26,12 +27,26 @@ HOPZincHandlerAdaptor >> atMethod: aString ifAbsent: aBlock [
 
 { #category : 'execution' }
 HOPZincHandlerAdaptor >> execute [
-	^ handlerClass new handleRequest: routeMatch request 
+	^ self handler handleRequest: routeMatch request
+]
+
+{ #category : 'accessing' }
+HOPZincHandlerAdaptor >> handler [
+	"A handler given as an object is used as it is; given as a class, a fresh one per request."
+	^ handler ifNil: [ handlerClass new ]
+]
+
+{ #category : 'accessing' }
+HOPZincHandlerAdaptor >> handler: anObject [
+	"Anything that answers handleRequest: with a ZnResponse. Naming the class instead leaves
+	nobody a moment to configure it - the object is born inside execute and used in the same
+	line, so a handler that has to be told something cannot be told anything."
+	handler := anObject
 ]
 
 { #category : 'public' }
 HOPZincHandlerAdaptor >> handleRoute: aRouteMatch [ 
-	^ handlerClass new handleRequest: aRouteMatch request 
+	^ self handler handleRequest: aRouteMatch request
 ]
 
 { #category : 'accessing' }
