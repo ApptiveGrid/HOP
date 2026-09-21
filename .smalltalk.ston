@@ -4,6 +4,7 @@ SmalltalkCISpec {
       #baseline : 'HOP',
       #platforms : [ #pharo ],
       #directory : 'source',
+      #load : [ 'All' ],
       #onConflict : #useIncoming
     }
   ]
