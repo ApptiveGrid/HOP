@@ -20,6 +20,8 @@ BaselineOfHOP >> baseline: spec [
 				spec requires: #('HOP-Core') ];
 			package: 'HOP-Extra' with: [ 
 				spec requires: #('HOP-Core') ];
+			package: 'HOP-Extra-Tests' with: [ 
+				spec requires: #('HOP-Extra') ];
 			package: 'HOP-Roassal' with: [ 
 				spec requires: #('HOP-Core') ] ]
 ]
