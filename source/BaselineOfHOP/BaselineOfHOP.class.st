@@ -7,6 +7,23 @@ Class {
 
 { #category : 'baselines' }
 BaselineOfHOP >> baseline: spec [
+	"Groups, so that an image loads what it serves. Without any, Metacello's default group is
+	every package there is, and apptive-common asks for this baseline without naming one - so
+	HOP-Core-Tests, HOP-Extra-Tests and HOP-Roassal travelled into apptive-base,
+	apptive-account and apptive-metabase, which serve none of them.
+
+	Test classes in a deployed image are not idle: AGTestRunnerHandler hangs under #health in
+	two of those servers and runs the whole suite of any TestCase class it is asked for.
+	HOP-Roassal does not even belong there twice over - it names Roassal classes this baseline
+	never loads, so it has been compiling against undeclared variables wherever it landed.
+
+	'All' is what CI loads and is the package set this baseline had before the groups; nothing
+	about the test run changes.
+
+	The two projects belong in a group as much as the packages do. Without any group they came
+	along because the default group is everything the baseline mentions; named groups are a
+	list, and a list that leaves them out leaves them out - HOP-Core reaches for JSONSchema in
+	HOPRequestParameter and for Zinc all over, so Core names both."
 	<baseline>
 	spec for: #'common' do: [
 		self 
@@ -23,7 +40,14 @@ BaselineOfHOP >> baseline: spec [
 			package: 'HOP-Extra-Tests' with: [ 
 				spec requires: #('HOP-Extra') ];
 			package: 'HOP-Roassal' with: [ 
-				spec requires: #('HOP-Core') ] ]
+				spec requires: #('HOP-Core') ].
+
+		spec
+			group: 'Core' with: #('JSONSchema' 'ZincHTTPComponents' 'HOP-Core' 'HOP-Extra');
+			group: 'Tests' with: #('HOP-Core-Tests' 'HOP-Extra-Tests');
+			group: 'Roassal' with: #('HOP-Roassal');
+			group: 'All' with: #('Core' 'Tests' 'Roassal');
+			group: 'default' with: #('Core') ]
 ]
 
 { #category : 'as yet unclassified' }

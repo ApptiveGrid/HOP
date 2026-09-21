@@ -58,6 +58,7 @@ HOPCodeTest >> validDependentPackages [
 			'JSONSchema-Core'
 			'Kernel'
 			'Kernel-CodeModel'
+			'STON-Core'
 			"spec is a dependency because of the inspections"
 			'Spec2-Core'
 			'Zinc-HTTP'
