@@ -18,7 +18,12 @@ BaselineOfHOP >> baseline: spec [
 	never loads, so it has been compiling against undeclared variables wherever it landed.
 
 	'All' is what CI loads and is the package set this baseline had before the groups; nothing
-	about the test run changes."
+	about the test run changes.
+
+	The two projects belong in a group as much as the packages do. Without any group they came
+	along because the default group is everything the baseline mentions; named groups are a
+	list, and a list that leaves them out leaves them out - HOP-Core reaches for JSONSchema in
+	HOPRequestParameter and for Zinc all over, so Core names both."
 	<baseline>
 	spec for: #'common' do: [
 		self 
@@ -38,7 +43,7 @@ BaselineOfHOP >> baseline: spec [
 				spec requires: #('HOP-Core') ].
 
 		spec
-			group: 'Core' with: #('HOP-Core' 'HOP-Extra');
+			group: 'Core' with: #('JSONSchema' 'ZincHTTPComponents' 'HOP-Core' 'HOP-Extra');
 			group: 'Tests' with: #('HOP-Core-Tests' 'HOP-Extra-Tests');
 			group: 'Roassal' with: #('HOP-Roassal');
 			group: 'All' with: #('Core' 'Tests' 'Roassal');
