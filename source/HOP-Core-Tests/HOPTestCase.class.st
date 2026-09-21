@@ -17,7 +17,7 @@ HOPTestCase >> delegate [
 
 { #category : 'as yet unclassified' }
 HOPTestCase >> parseResponse: aZnResponse [ 
-	^ NeoJSONReader fromString: aZnResponse contents 
+	^ STONJSON fromString: aZnResponse contents 
 ]
 
 { #category : 'tests' }
