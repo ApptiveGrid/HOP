@@ -10,14 +10,6 @@ HOPNamedSegment >> acceptHOP: aHOPVisitor [
 	^ aHOPVisitor visitNamedSegment: self  
 ]
 
-{ #category : 'converting' }
-HOPNamedSegment >> asHOPSpaceZone [
-	^ HOPSpaceZone new 
-		name: name;
-		mergeNode: self root;
-		yourself 
-]
-
 { #category : 'as yet unclassified' }
 HOPNamedSegment >> canonicalUriFor: aResource [
 	^ (super canonicalUriFor: aResource)

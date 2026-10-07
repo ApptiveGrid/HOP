@@ -36,3 +36,23 @@ HOPUriBuilderTest >> testBuildUriForResource [
 	uri := uriSpace buildUriForResource: object. 
 	self assert: uri equals: '/api/objects/1/children/2'
 ]
+
+{ #category : 'tests' }
+HOPUriBuilderTest >> testBuildUriForResourceInAMountedUriSpace [
+	"a uri space mounted under a name is a named segment of the space it hangs in"
+	| uriSpace mounted objectSegment childSegment object uri |
+	objectSegment := HOPVariableSegment new
+		name: #objectId;
+		segmentNameSelector: #id.
+	childSegment := HOPVariableSegment new
+		name: #childId;
+		segmentNameSelector: #id.
+	mounted := HOPUriSpace new
+		name: #mounted;
+		yourself.
+	uriSpace := (HOPUriSpace /+ mounted) root.
+	mounted /+ #objects /+ objectSegment --> HOPUriBuildObject /+ #children /+ childSegment --> HOPUriBuildChildObject.
+	object := HOPUriBuildChildObject new container: HOPUriBuildObject new.
+	uri := uriSpace buildUriForResource: object.
+	self assert: uri equals: '/mounted/objects/1/children/2'
+]

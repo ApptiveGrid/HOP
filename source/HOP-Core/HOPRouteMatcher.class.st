@@ -43,8 +43,7 @@ HOPRouteMatcher >> matchRoute [
 	currentSegment ifNil: [  
 		currentSegment := self startSegment ].
 
-	currentSegment isSpaceZone ifTrue: [  
-		self routeMatch addHandlers: currentSegment handlers ].
+	self routeMatch addHandlers: currentSegment handlers.
 	
 	[ self atEnd ] whileFalse: [
 		currentSegment := currentSegment 

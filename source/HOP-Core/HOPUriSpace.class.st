@@ -1,6 +1,6 @@
 Class {
 	#name : 'HOPUriSpace',
-	#superclass : 'HOPSpaceZone',
+	#superclass : 'HOPNamedSegment',
 	#instVars : [
 		'operationSegments',
 		'behaviorSegments'
@@ -12,6 +12,14 @@ Class {
 { #category : 'arithmetic' }
 HOPUriSpace class >> /+ aSegment [
 	^ self new /+ aSegment 
+]
+
+{ #category : 'converting' }
+HOPUriSpace class >> asHOPSegment [
+	"a uri space class mounted under a name, as in #auth -> OIDCUriSpace"
+	^ self new 
+		build;
+		asHOPSegment 
 ]
 
 { #category : 'visiting' }
@@ -77,6 +85,13 @@ HOPUriSpace >> buildUriForResource: anObject [
 	^ self newUriBuilder 
 		resource: anObject;
 		build
+]
+
+{ #category : 'as yet unclassified' }
+HOPUriSpace >> canonicalUriFor: aResource [
+	"the root is the empty path and adds no segment, a mounted space adds its name"
+	self isRoot ifTrue: [ ^ OrderedCollection new ].
+	^ super canonicalUriFor: aResource
 ]
 
 { #category : 'as yet unclassified' }
@@ -201,6 +216,13 @@ HOPUriSpace >> segmentForResourceType: resourceClass andOperation: anOperation [
 { #category : 'accessing' }
 HOPUriSpace >> uriBuilderClass [
 	^ HOPUriBuilder
+]
+
+{ #category : 'as yet unclassified' }
+HOPUriSpace >> uriFor: aResource resourceRoute: resourceRoute [
+	"the root is the empty path and adds no segment, a mounted space adds its name"
+	self isRoot ifTrue: [ ^ OrderedCollection new ].
+	^ super uriFor: aResource resourceRoute: resourceRoute
 ]
 
 { #category : 'as yet unclassified' }

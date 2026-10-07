@@ -29,13 +29,8 @@ HOPVisitor >> visitSegment: aHOPSegment [
 ]
 
 { #category : 'visiting' }
-HOPVisitor >> visitSpaceZone: aHOSpaceZone [
-	self visitSegment: aHOSpaceZone 
-]
-
-{ #category : 'visiting' }
 HOPVisitor >> visitUriSpace: aHOPUriSpace [ 
-	self visitSpaceZone: aHOPUriSpace 
+	self visitNamedSegment: aHOPUriSpace 
 ]
 
 { #category : 'visiting' }
