@@ -10,13 +10,6 @@ HOPNamedSegment >> acceptHOP: aHOPVisitor [
 	^ aHOPVisitor visitNamedSegment: self  
 ]
 
-{ #category : 'converting' }
-HOPNamedSegment >> asHOPSpaceZone [
-	"every segment carries handlers now, so there is nothing left to convert. Kept until
-	the services have stopped sending it"
-	^ self
-]
-
 { #category : 'as yet unclassified' }
 HOPNamedSegment >> canonicalUriFor: aResource [
 	^ (super canonicalUriFor: aResource)

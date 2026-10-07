@@ -34,7 +34,7 @@ HOPCatchAllSegment >> matches: aString [
 ]
 
 { #category : 'testing' }
-HOPCatchAllSegment >> matchesNode: aHOPSpaceZone [ 
+HOPCatchAllSegment >> matchesNode: aHOPNode [ 
 	^ false
 ]
 
