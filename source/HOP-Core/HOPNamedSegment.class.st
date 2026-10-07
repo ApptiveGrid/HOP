@@ -12,10 +12,9 @@ HOPNamedSegment >> acceptHOP: aHOPVisitor [
 
 { #category : 'converting' }
 HOPNamedSegment >> asHOPSpaceZone [
-	^ HOPSpaceZone new 
-		name: name;
-		mergeNode: self root;
-		yourself 
+	"every segment carries handlers now, so there is nothing left to convert. Kept until
+	the services have stopped sending it"
+	^ self
 ]
 
 { #category : 'as yet unclassified' }

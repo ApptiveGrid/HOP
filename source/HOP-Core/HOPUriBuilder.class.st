@@ -66,15 +66,11 @@ HOPUriBuilder >> visitSegment: aHOPSegment [
 ]
 
 { #category : 'visiting' }
-HOPUriBuilder >> visitSpaceZone: aSpaceZone [ 
-	aSpaceZone hasParent ifTrue: [  
-		segments add: aSpaceZone name ].
-	super visitSpaceZone: aSpaceZone
-]
-
-{ #category : 'visiting' }
 HOPUriBuilder >> visitUriSpace: aUriSpace [ 
-	
+	"the root is the empty path and adds nothing. A space mounted under a name is a
+	named segment of the space it is mounted in"
+	aUriSpace isRoot ifFalse: [ 
+		self visitNamedSegment: aUriSpace ]
 ]
 
 { #category : 'visiting' }

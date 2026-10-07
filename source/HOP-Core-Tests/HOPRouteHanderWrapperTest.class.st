@@ -45,3 +45,34 @@ HOPRouteHanderWrapperTest >> testRetryHandlerExceeded [
 		should: [ uriSpace asZincDelegate handleRequest: (ZnRequest get: #first) ]
 		raise: HOPMaximumRetriesExceeded 
 ]
+
+{ #category : 'tests' }
+HOPRouteHanderWrapperTest >> testHandlerOfASegmentLeavesItsSiblingsAlone [
+	| other |
+	other := uriSpace /+ #other.
+	other @@ (#GET -> (HOPPluggableHandler new block: [ :req | Error signal ])).
+	(uriSpace / #first) addHandler: HOPExceptionHandlerWrapper new.
+	self
+		should: [ uriSpace asZincDelegate handleRequest: (ZnRequest get: #other) ]
+		raise: Error
+]
+
+{ #category : 'tests' }
+HOPRouteHanderWrapperTest >> testHandlerOfASegmentWrapsItsChildren [
+	| response |
+	uriSpace / #first / #second @@ (#GET -> (HOPPluggableHandler new block: [ :req | Error signal ])).
+	(uriSpace / #first) addHandler: HOPExceptionHandlerWrapper new.
+	response := uriSpace asZincDelegate handleRequest: (ZnRequest get: '/first/second').
+	self assert: response status equals: 500
+]
+
+{ #category : 'tests' }
+HOPRouteHanderWrapperTest >> testHandlerOfASegmentWrapsItsOwnMethod [
+	"a segment that carries handlers answers a method on its own path, it is not only a
+	prefix for the segments below it"
+	| response |
+	uriSpace / #first @@ (#GET -> (HOPPluggableHandler new block: [ :req | Error signal ])).
+	(uriSpace / #first) addHandler: HOPExceptionHandlerWrapper new.
+	response := uriSpace asZincDelegate handleRequest: (ZnRequest get: #first).
+	self assert: response status equals: 500
+]

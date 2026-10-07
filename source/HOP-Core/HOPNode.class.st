@@ -169,11 +169,6 @@ HOPNode >> isRoot [
 	^ parent isNil 
 ]
 
-{ #category : 'testing' }
-HOPNode >> isSpaceZone [ 
-	^ false 
-]
-
 { #category : 'accessing' }
 HOPNode >> label [
 	^ self name 

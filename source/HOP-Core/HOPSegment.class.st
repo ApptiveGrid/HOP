@@ -2,7 +2,8 @@ Class {
 	#name : 'HOPSegment',
 	#superclass : 'HOPNode',
 	#instVars : [
-		'methods'
+		'methods',
+		'handlers'
 	],
 	#category : 'HOP-Core',
 	#package : 'HOP-Core'
@@ -18,9 +19,18 @@ HOPSegment >> @@ anAssociation [
 	anAssociation addMethodsTo: self
 ]
 
+{ #category : 'adding' }
+HOPSegment >> addHandler: aHandler [
+	handlers add: aHandler
+]
+
 { #category : 'services' }
 HOPSegment >> addSegment: key routeMatch: routeMatch [
-	^ routeMatch addSegment: self
+	"the handlers of a segment wrap everything that is reached through it, the
+	methods of the segment itself included"
+	routeMatch
+		addSegment: self;
+		addHandlers: handlers
 ]
 
 { #category : 'adding' }
@@ -64,6 +74,16 @@ HOPSegment >> atMethod: aString put: anObject [
 		put: anObject 
 ]
 
+{ #category : 'accessing' }
+HOPSegment >> handlers [
+	^ handlers
+]
+
+{ #category : 'testing' }
+HOPSegment >> hasHandlers [
+	^ handlers notEmpty
+]
+
 { #category : 'testing' }
 HOPSegment >> hasMethods [ 
 	^ methods notEmpty
@@ -72,7 +92,8 @@ HOPSegment >> hasMethods [
 { #category : 'initialization' }
 HOPSegment >> initialize [ 
 	super initialize.
-	methods := Dictionary new
+	methods := Dictionary new.
+	handlers := OrderedCollection new
 ]
 
 { #category : 'as yet unclassified' }
