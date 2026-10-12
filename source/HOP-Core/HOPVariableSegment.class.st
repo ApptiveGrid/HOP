@@ -175,7 +175,7 @@ HOPVariableSegment >> segmentNameSelector: anObject [
 HOPVariableSegment >> uriFor: aResource resourceRoute: resourceRoute [
 	| effectiveRoute |
 	effectiveRoute := resourceRoute previous ifNil: [ resourceRoute ].
-	((aResource isIdenticalTo: effectiveRoute receiver) or: [aResource isIdenticalTo: effectiveRoute receiver scope ]) ifTrue: [ 
+	((aResource isIdenticalTo: effectiveRoute receiver) or: [aResource isIdenticalTo: effectiveRoute receiver extraReceiver ]) ifTrue: [ 
 				^ effectiveRoute receiverSegments collect: [ :each | each segmentIn: effectiveRoute ] ].
 	
 	^ (super uriFor: aResource container resourceRoute: resourceRoute)
