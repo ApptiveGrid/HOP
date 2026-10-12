@@ -30,12 +30,12 @@ HOPResourceRoute >> initialize [
 
 { #category : 'as yet unclassified' }
 HOPResourceRoute >> matchExtraPath [ 
-	| scopedReceiver |
+	| extraReceiver |
 	
-	scopedReceiver := self receiver scope.
-	^ (routeMatch matchExtraPathIn: scopedReceiver) asResourceRoute
+	extraReceiver := self receiver extraReceiver.
+	^ (routeMatch matchExtraPathIn: extraReceiver) asResourceRoute
 		previous: self;
-		resourceAt: scopedReceiver resourceLabel put: scopedReceiver;
+		resourceAt: extraReceiver resourceLabel put: extraReceiver;
 		yourself
 ]
 
@@ -83,7 +83,7 @@ HOPResourceRoute >> previous: aResourceRoute [
 HOPResourceRoute >> receiver [
 	^ receiver ifNil: [
 		receiver := routeMatch receiverNode
-			ifNil: [ previous receiver scope ]
+			ifNil: [ previous receiver extraReceiver ]
 			ifNotNil: [ :node | self resourceOfNode: node ] ]
 ]
 
