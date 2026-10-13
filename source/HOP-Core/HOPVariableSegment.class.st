@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'canonical',
 		'resourceRouteSelector',
-		'resourceClass',
+		'resourceClasses',
 		'segmentNameSelector',
 		'containerSelector'
 	],
@@ -83,8 +83,8 @@ HOPVariableSegment >> initializePresenter [
 
 { #category : 'accessing' }
 HOPVariableSegment >> instanceMapClasses [
-	resourceClass ifNil: [ ^ nil ].
-	^ resourceClass hopExposedClasses
+	resourceClasses ifNil: [ ^ nil ].
+	^ resourceClasses flatCollect: [ :each | each hopExposedClasses ]
 ]
 
 { #category : 'testing' }
@@ -122,8 +122,9 @@ HOPVariableSegment >> nodeLabel [
 
 { #category : 'accessing' }
 HOPVariableSegment >> presenterClasses [
+	"the classes resolved here may share presenters, each is registered once"
 
-	^ resourceClass presenterClasses
+	^ (resourceClasses flatCollect: [ :each | each presenterClasses ]) asOrderedCollection removeDuplicates
 ]
 
 { #category : 'accessing' }
@@ -132,15 +133,23 @@ HOPVariableSegment >> priority [
 ]
 
 { #category : 'accessing' }
-HOPVariableSegment >> resolveClass [
+HOPVariableSegment >> resolveClass: aClass [
+	"short form for a segment that resolves to the instances of one class"
 
-	^ resourceClass
+	self resolveClasses: { aClass }
 ]
 
 { #category : 'accessing' }
-HOPVariableSegment >> resolveClass: anObject [
+HOPVariableSegment >> resolveClasses [
 
-	resourceClass := anObject
+	^ resourceClasses
+]
+
+{ #category : 'accessing' }
+HOPVariableSegment >> resolveClasses: aCollectionOfClasses [
+	"the instances at this segment may be of classes without a common superclass"
+
+	resourceClasses := aCollectionOfClasses
 ]
 
 { #category : 'as yet unclassified' }
