@@ -30,6 +30,15 @@ HOPServerDelegateTest >> testHandleRequest [
 	self assert: response status equals: 200
 ]
 
+{ #category : 'tests' }
+HOPServerDelegateTest >> testTrailingSlashIsNotFound [
+	| request delegate response |
+	request := ZnRequest get: '/api/1234/items/'.
+	delegate := HOPServerDelegate new uriSpace: self uriSpace.
+	response := delegate handleRequest: request.
+	self assert: response status equals: 404
+]
+
 { #category : 'accessing' }
 HOPServerDelegateTest >> uriSpace [ 
 	^ uriSpace ifNil: [
