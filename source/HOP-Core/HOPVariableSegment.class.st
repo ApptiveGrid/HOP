@@ -94,7 +94,10 @@ HOPVariableSegment >> isCanonical [
 
 { #category : 'testing' }
 HOPVariableSegment >> matches: key [ 
-	^ key notNil
+	"a variable takes the text of a path segment. ZnUrl keeps a trailing slash as the
+	character $/ in the last segment; that is no segment, so it binds no variable and
+	the path finds no route"
+	^ key isString
 ]
 
 { #category : 'testing' }
