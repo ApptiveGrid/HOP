@@ -38,13 +38,6 @@ HOPVariableSegment >> beCanonical [
 	canonical := true
 ]
 
-{ #category : 'as yet unclassified' }
-HOPVariableSegment >> canonicalUriFor: aResource [
-	^ (super canonicalUriFor: aResource container)
-		add: aResource id asApptiveExternalId;
-		yourself 
-]
-
 { #category : 'accessing' }
 HOPVariableSegment >> containerSelector [
 
@@ -104,13 +97,6 @@ HOPVariableSegment >> matches: key [
 HOPVariableSegment >> matchesNode: aHOPNode [
 	(aHOPNode class == self class) ifFalse: [ ^ false ].
 	^ aHOPNode name = name 
-]
-
-{ #category : 'services' }
-HOPVariableSegment >> matchesScope: aResource in: routeMatch [
-
-
-	^ (aResource matchesScopeOf: (self valueIn: routeMatch)).
 ]
 
 { #category : 'as yet unclassified' }
@@ -181,18 +167,6 @@ HOPVariableSegment >> segmentNameSelector [
 HOPVariableSegment >> segmentNameSelector: anObject [
 
 	segmentNameSelector := anObject
-]
-
-{ #category : 'as yet unclassified' }
-HOPVariableSegment >> uriFor: aResource resourceRoute: resourceRoute [
-	| effectiveRoute |
-	effectiveRoute := resourceRoute previous ifNil: [ resourceRoute ].
-	((aResource isIdenticalTo: effectiveRoute receiver) or: [aResource isIdenticalTo: effectiveRoute receiver extraReceiver ]) ifTrue: [ 
-				^ effectiveRoute receiverSegments collect: [ :each | each segmentIn: effectiveRoute ] ].
-	
-	^ (super uriFor: aResource container resourceRoute: resourceRoute)
-		add: aResource id asApptiveExternalId;
-		yourself 
 ]
 
 { #category : 'as yet unclassified' }

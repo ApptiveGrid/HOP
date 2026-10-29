@@ -10,14 +10,6 @@ HOPNamedSegment >> acceptHOP: aHOPVisitor [
 	^ aHOPVisitor visitNamedSegment: self  
 ]
 
-{ #category : 'as yet unclassified' }
-HOPNamedSegment >> canonicalUriFor: aResource [
-	^ (super canonicalUriFor: aResource)
-		add: name;
-		yourself 
-		
-]
-
 { #category : 'matching' }
 HOPNamedSegment >> matches: aString [ 
 	^ name = aString 
@@ -29,12 +21,6 @@ HOPNamedSegment >> matchesNode: aHOPNode [
 	^ aHOPNode name = name
 ]
 
-{ #category : 'services' }
-HOPNamedSegment >> matchesScope: aResource in: requestContext [
-
-	^ false
-]
-
 { #category : 'printing' }
 HOPNamedSegment >> nodeLabel [
 	^ 'named'
@@ -43,12 +29,4 @@ HOPNamedSegment >> nodeLabel [
 { #category : 'accessing' }
 HOPNamedSegment >> priority [ 
 	^ 1
-]
-
-{ #category : 'as yet unclassified' }
-HOPNamedSegment >> uriFor: aResource resourceRoute: resourceRoute [
-	^ (super uriFor: aResource resourceRoute: resourceRoute)
-		add: name;
-		yourself 
-		
 ]
