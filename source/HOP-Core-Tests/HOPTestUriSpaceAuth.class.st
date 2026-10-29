@@ -7,6 +7,6 @@ Class {
 }
 
 { #category : 'accessing' }
-HOPTestUriSpaceAuth >> build [
+HOPTestUriSpaceAuth >> buildTree [
 	self /+ #realm asHOPSegment /+ #authorize 
 ]

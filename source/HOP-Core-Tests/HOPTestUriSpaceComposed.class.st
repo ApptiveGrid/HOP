@@ -14,7 +14,7 @@ HOPTestUriSpaceComposed >> apiSpace [
 ]
 
 { #category : 'accessing' }
-HOPTestUriSpaceComposed >> build [
+HOPTestUriSpaceComposed >> buildTree [
 	self /+ {
 		self apiSpace.
 		HOPTestUriSpaceAuth new name: #auth.
