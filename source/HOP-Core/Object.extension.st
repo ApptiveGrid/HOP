@@ -16,6 +16,15 @@ Object >> extraReceiver [
 ]
 
 { #category : '*HOP-Core' }
+Object >> hopOperation [
+	"the operation a method entry of a segment stands for, if any. The uri space registers
+	the segment under it so a uri for that operation can be built back. Any object can be
+	an entry; one that answers an operation here takes part, see HOPOperationMapping"
+
+	^ nil
+]
+
+{ #category : '*HOP-Core' }
 Object class >> hopExposedClasses [
 
 	^ self withAllSubclasses
