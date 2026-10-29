@@ -3,7 +3,8 @@ Class {
 	#superclass : 'HOPNamedSegment',
 	#instVars : [
 		'operationSegments',
-		'behaviorSegments'
+		'behaviorSegments',
+		'operationMethods'
 	],
 	#category : 'HOP-Core',
 	#package : 'HOP-Core'
@@ -65,6 +66,7 @@ HOPUriSpace >> buildOperationSegments [
 				entry hopOperation ifNotNil: [ :operation |  
 					self 
 						registerSegment: node 
+						method: method
 						forResourceRoot: resourceRoot 
 						andOperation: operation ] ] ] ]
 ]
@@ -111,6 +113,7 @@ HOPUriSpace >> initialize [
 	super initialize.
 	behaviorSegments := Dictionary new.
 	operationSegments := Dictionary new. 
+	operationMethods := Dictionary new
 ]
 
 { #category : 'testing' }
@@ -125,6 +128,13 @@ HOPUriSpace >> isResource: anObject inScopeOf: aReceiver [
 { #category : 'printing' }
 HOPUriSpace >> isRoot [
 	^ parent isNil 
+]
+
+{ #category : 'as yet unclassified' }
+HOPUriSpace >> methodForResource: resource andOperation: anOperation [
+	"the http method anOperation is registered under at the segment it hangs at, the way
+	back of what a request reaches it with"
+	^ operationMethods at: { self segmentForResource: resource . anOperation }
 ]
 
 { #category : 'accessing' }
@@ -167,20 +177,24 @@ HOPUriSpace >> printOn: aStream [
 ]
 
 { #category : 'as yet unclassified' }
-HOPUriSpace >> registerSegment: segment forResourceRoot: resourceRoot andOperation: aClass [ 
-	operationSegments 
-		at: { resourceRoot . aClass }
-		ifPresent: [ Error signal: 'try to register operation ', aClass asString, ' for resource root ', resourceRoot asString, ' more than once' ]
-		ifAbsent: [ operationSegments at: { resourceRoot . aClass } put: segment ]
-]
-
-{ #category : 'as yet unclassified' }
 HOPUriSpace >> registerSegment: segment  forResourceType: aClass [ 
 	aClass hopExposedClasses do: [ :behavior | 
 		behaviorSegments 
 			at: behavior 
 			ifPresent: [ Error signal: 'try to register class ', behavior asString, ' more than once ' ]
 			ifAbsent: [ behaviorSegments at: behavior put: segment ] ] 
+]
+
+{ #category : 'as yet unclassified' }
+HOPUriSpace >> registerSegment: segment method: aMethod forResourceRoot: resourceRoot andOperation: aClass [ 
+	| key |
+	key := { resourceRoot . aClass }.
+	operationSegments 
+		at: key
+		ifPresent: [ Error signal: 'try to register operation ', aClass asString, ' for resource root ', resourceRoot asString, ' more than once' ]
+		ifAbsent: [ 
+			operationSegments at: key put: segment.
+			operationMethods at: key put: aMethod ]
 ]
 
 { #category : 'instance creation' }

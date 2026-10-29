@@ -21,6 +21,16 @@ HOPUriBuilder >> build [
 	^ ($/ join: segments reversed) copyWithFirst: $/ 
 ]
 
+{ #category : 'building' }
+HOPUriBuilder >> buildLink [
+	"the uri together with the http method that reaches the operation there. A link to a
+	resource without an operation has no method"
+	| method |
+	method := operation ifNotNil: [ 
+		uriSpace methodForResource: resource andOperation: operation ].
+	^ HOPLink href: self build method: method
+]
+
 { #category : 'as yet unclassified' }
 HOPUriBuilder >> containerOf: aHOPSegment [  
 	^ resource perform: aHOPSegment containerSelector asSymbol 

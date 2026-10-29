@@ -7,6 +7,36 @@ Class {
 }
 
 { #category : 'tests' }
+HOPUriBuilderTest >> testBuildLinkForOperation [
+	"the link carries the method the operation hangs at, the way a request reaches it"
+	| uriSpace objectSegment object link |
+	objectSegment := HOPVariableSegment new
+		name: #objectId;
+		segmentNameSelector: #id.
+	uriSpace := (HOPUriSpace /+ #api asHOPSegment /+ #objects /+ objectSegment --> HOPUriBuildObject /+ #children @@ (#POST -> HOPTestOperationMapping)) root.
+	uriSpace buildOperationSegments.
+	object := HOPUriBuildObject new.
+	link := uriSpace newUriBuilder 
+		resource: object; 
+		operation: HOPTestOperationMapping; 
+		buildLink.
+	self assert: link href equals: '/api/objects/1/children'.
+	self assert: link method equals: #post
+]
+
+{ #category : 'tests' }
+HOPUriBuilderTest >> testBuildLinkForResource [
+	| uriSpace objectSegment link |
+	objectSegment := HOPVariableSegment new
+		name: #objectId;
+		segmentNameSelector: #id.
+	uriSpace := (HOPUriSpace /+ #api asHOPSegment /+ #objects /+ objectSegment --> HOPUriBuildObject) root.
+	link := uriSpace newUriBuilder resource: HOPUriBuildObject new; buildLink.
+	self assert: link href equals: '/api/objects/1'.
+	self assert: link method isNil
+]
+
+{ #category : 'tests' }
 HOPUriBuilderTest >> testBuildUriForOperation [
 	| uriSpace objectSegment uri object childSegment |
 	objectSegment := HOPVariableSegment new
