@@ -113,6 +113,15 @@ HOPUriSpace >> initialize [
 	operationSegments := Dictionary new. 
 ]
 
+{ #category : 'testing' }
+HOPUriSpace >> isResource: anObject inScopeOf: aReceiver [
+	"anObject is in the scope of a route's receiver when it is the receiver or the resource the
+	receiver stands for. A space whose objects can be stand-ins for themselves, like
+	database proxies, compares them its own way"
+
+	^ anObject == aReceiver or: [ anObject == aReceiver extraReceiver ]
+]
+
 { #category : 'printing' }
 HOPUriSpace >> isRoot [
 	^ parent isNil 

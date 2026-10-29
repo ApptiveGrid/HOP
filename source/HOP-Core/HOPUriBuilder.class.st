@@ -74,7 +74,19 @@ HOPUriBuilder >> visitUriSpace: aUriSpace [
 ]
 
 { #category : 'visiting' }
-HOPUriBuilder >> visitVariableSegment: aHOPVariableSegment [ 
+HOPUriBuilder >> visitVariableSegment: aHOPVariableSegment [
+	"walking up from the resource, a resource the current route already stands at takes the
+	rest of its uri from the route instead of the canonical tree. This keeps a link inside
+	whatever the request came through, e.g. an object reached via a stand-in for it (see
+	Object>>extraReceiver). A route continued at another resource looks at the route it
+	continued from"
+	resourceRoute ifNotNil: [
+		| effectiveRoute |
+		effectiveRoute := resourceRoute previous ifNil: [ resourceRoute ].
+		(uriSpace isResource: resource inScopeOf: effectiveRoute receiver) ifTrue: [
+			effectiveRoute receiverSegments reversed
+				do: [ :each | segments add: (each segmentIn: effectiveRoute) ].
+			^ self ] ].
 	segments add: (self valueFor: aHOPVariableSegment) .
 	resource := self containerOf: aHOPVariableSegment .
 	super visitVariableSegment: aHOPVariableSegment 

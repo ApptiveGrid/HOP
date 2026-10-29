@@ -56,3 +56,51 @@ HOPUriBuilderTest >> testBuildUriForResourceInAMountedUriSpace [
 	uri := uriSpace buildUriForResource: object.
 	self assert: uri equals: '/mounted/objects/1/children/2'
 ]
+
+{ #category : 'tests' }
+HOPUriBuilderTest >> testBuildUriForResourceThroughAStandIn [
+	"an object below the resource a stand-in gives access to keeps the stand-in's uri as its
+	prefix when the request came through the stand-in"
+	| uriSpace route object child |
+	uriSpace := self uriSpaceWithStandIn.
+	object := HOPUriBuildObject new.
+	child := HOPUriBuildChildObject new container: object.
+	route := (HOPTestResourceRoute new
+		routeMatch: (uriSpace newRouteMatcher matchUri: '/api/standins/7' asZnUrl);
+		standIn: (HOPUriStandIn new standsFor: object);
+		yourself).
+	self 
+		assert: (uriSpace newUriBuilder resource: child; resourceRoute: route; build)
+		equals: '/api/standins/7/children/2'.
+	self 
+		assert: (uriSpace newUriBuilder resource: child; build)
+		equals: '/api/objects/1/children/2'
+]
+
+{ #category : 'tests' }
+HOPUriBuilderTest >> testBuildUriOutsideTheScopeOfTheRoute [
+	"a resource the stand-in does not lead to is built the canonical way"
+	| uriSpace route child |
+	uriSpace := self uriSpaceWithStandIn.
+	child := HOPUriBuildChildObject new container: HOPUriBuildObject new.
+	route := (HOPTestResourceRoute new
+		routeMatch: (uriSpace newRouteMatcher matchUri: '/api/standins/7' asZnUrl);
+		standIn: (HOPUriStandIn new standsFor: HOPUriBuildObject new);
+		yourself).
+	self 
+		assert: (uriSpace newUriBuilder resource: child; resourceRoute: route; build)
+		equals: '/api/objects/1/children/2'
+]
+
+{ #category : 'running' }
+HOPUriBuilderTest >> uriSpaceWithStandIn [
+	"objects have their canonical place under /api/objects, a stand-in for one of them lives
+	under /api/standins"
+	| api uriSpace |
+	api := #api asHOPSegment.
+	uriSpace := (HOPUriSpace /+ api) root.
+	api /+ #objects /+ (HOPVariableSegment new name: #objectId; segmentNameSelector: #id; yourself) --> HOPUriBuildObject 
+		/+ #children /+ (HOPVariableSegment new name: #childId; segmentNameSelector: #id; yourself) --> HOPUriBuildChildObject.
+	api /+ #standins /+ (HOPVariableSegment new name: #standInId; segmentNameSelector: #id; resourceSelector: #standIn; yourself) --> HOPUriStandIn.
+	^ uriSpace
+]
