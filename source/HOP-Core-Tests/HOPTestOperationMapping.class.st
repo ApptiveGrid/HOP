@@ -7,11 +7,11 @@ Class {
 }
 
 { #category : 'accessing' }
-HOPTestOperationMapping class >> operation [ 
+HOPTestOperationMapping class >> hopOperation [ 
 	^ self 
 ]
 
 { #category : 'accessing' }
-HOPTestOperationMapping >> operation [ 
+HOPTestOperationMapping >> hopOperation [ 
 	^ self 
 ]

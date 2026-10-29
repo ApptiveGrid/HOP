@@ -61,12 +61,12 @@ HOPUriSpace >> buildOperationSegments [
 	self root recursiveDo: [ :node | 
 		node hasMethods ifTrue: [
 			resourceRoot := node nearestResourceNode. 
-			node methods keysAndValuesDo: [ :method :operationMapping |   
-				(operationMapping respondsTo: #operation) ifTrue: [  
+			node methods keysAndValuesDo: [ :method :entry |   
+				entry hopOperation ifNotNil: [ :operation |  
 					self 
 						registerSegment: node 
 						forResourceRoot: resourceRoot 
-						andOperation: operationMapping operation ] ] ] ]
+						andOperation: operation ] ] ] ]
 ]
 
 { #category : 'as yet unclassified' }

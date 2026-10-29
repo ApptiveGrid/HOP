@@ -46,6 +46,26 @@ HOPUriSpaceTest >> testRegisterSegmentAllowsDistinctOperationRegistrations [
 ]
 
 { #category : 'tests' }
+HOPUriSpaceTest >> testRegisterSegmentForAnOperationMapping [
+	"an entry is registered by the operation it answers to hopOperation; an entry without
+	one is left out"
+	| space segment |
+	space := HOPUriSpace new.
+	segment := #testOp asHOPSegment
+		atMethod: #get put: (HOPOperationMapping operation: HOPTestCall);
+		atMethod: #post put: HOPTestMapping new;
+		yourself.
+	space /+ segment.
+	space buildOperationSegments.
+	self 
+		assert: (space segmentForResourceRoot: segment nearestResourceNode andOperation: HOPTestCall)
+		identicalTo: segment.
+	self 
+		should: [ space segmentForResourceRoot: segment nearestResourceNode andOperation: HOPTestMapping ]
+		raise: KeyNotFound
+]
+
+{ #category : 'tests' }
 HOPUriSpaceTest >> testRegisterSegmentSignalsOnDuplicateOperationRegistration [
     "registerSegment:forResourceRoot:andOperation: used to silently overwrite a collision in
     operationSegments (last-registered node wins, order-dependent) - it should signal instead,
