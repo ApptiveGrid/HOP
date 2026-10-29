@@ -2,9 +2,8 @@ Class {
 	#name : 'HOPUriSpace',
 	#superclass : 'HOPNamedSegment',
 	#instVars : [
-		'operationSegments',
-		'behaviorSegments',
-		'operationMethods'
+		'operations',
+		'behaviorSegments'
 	],
 	#category : 'HOP-Core',
 	#package : 'HOP-Core'
@@ -112,8 +111,7 @@ HOPUriSpace >> canonicalUriForResource: resource operation: operation [
 HOPUriSpace >> initialize [ 
 	super initialize.
 	behaviorSegments := Dictionary new.
-	operationSegments := Dictionary new. 
-	operationMethods := Dictionary new
+	operations := Dictionary new
 ]
 
 { #category : 'testing' }
@@ -128,13 +126,6 @@ HOPUriSpace >> isResource: anObject inScopeOf: aReceiver [
 { #category : 'printing' }
 HOPUriSpace >> isRoot [
 	^ parent isNil 
-]
-
-{ #category : 'as yet unclassified' }
-HOPUriSpace >> methodForResource: resource andOperation: anOperation [
-	"the http method anOperation is registered under at the segment it hangs at, the way
-	back of what a request reaches it with"
-	^ operationMethods at: { self segmentForResource: resource . anOperation }
 ]
 
 { #category : 'accessing' }
@@ -187,14 +178,12 @@ HOPUriSpace >> registerSegment: segment  forResourceType: aClass [
 
 { #category : 'as yet unclassified' }
 HOPUriSpace >> registerSegment: segment method: aMethod forResourceRoot: resourceRoot andOperation: aClass [ 
-	| key |
-	key := { resourceRoot . aClass }.
-	operationSegments 
-		at: key
+	"an operation is reached at a segment with an http method; both together are the way
+	back to it"
+	operations 
+		at: { resourceRoot . aClass }
 		ifPresent: [ Error signal: 'try to register operation ', aClass asString, ' for resource root ', resourceRoot asString, ' more than once' ]
-		ifAbsent: [ 
-			operationSegments at: key put: segment.
-			operationMethods at: key put: aMethod ]
+		ifAbsent: [ operations at: { resourceRoot . aClass } put: { segment . aMethod } ]
 ]
 
 { #category : 'instance creation' }
@@ -208,20 +197,24 @@ HOPUriSpace >> routeMatcherClass [
 ]
 
 { #category : 'as yet unclassified' }
+HOPUriSpace >> segmentAndMethodForResource: resource andOperation: anOperation [
+	"the segment anOperation hangs at and the http method it is reached with there"
+	^ operations at: { self segmentForResource: resource . anOperation }
+]
+
+{ #category : 'as yet unclassified' }
 HOPUriSpace >> segmentForResource: aResource [ 	
 	^ self segmentForResourceType: aResource yourself class
 ]
 
 { #category : 'as yet unclassified' }
 HOPUriSpace >> segmentForResource: resource andOperation: anOperation [
-	| resourceRoot |
-	resourceRoot := self segmentForResource: resource.
-	^ operationSegments at: { resourceRoot . anOperation } 
+	^ (self segmentAndMethodForResource: resource andOperation: anOperation) first
 ]
 
 { #category : 'as yet unclassified' }
 HOPUriSpace >> segmentForResourceRoot: resourceRoot andOperation: anOperation [
-	^ operationSegments at: { resourceRoot. anOperation } 
+	^ (operations at: { resourceRoot. anOperation }) first
 ]
 
 { #category : 'as yet unclassified' }
@@ -233,7 +226,7 @@ HOPUriSpace >> segmentForResourceType: aClass [
 HOPUriSpace >> segmentForResourceType: resourceClass andOperation: anOperation [
 	| resourceRoot |
 	resourceRoot := self segmentForResourceType: resourceClass.
-	^ operationSegments at: { resourceRoot . anOperation } 
+	^ (operations at: { resourceRoot . anOperation }) first
 ]
 
 { #category : 'accessing' }

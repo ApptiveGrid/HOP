@@ -68,7 +68,7 @@ HOPUriSpaceTest >> testRegisterSegmentForAnOperationMapping [
 { #category : 'tests' }
 HOPUriSpaceTest >> testRegisterSegmentSignalsOnDuplicateOperationRegistration [
     "registerSegment:forResourceRoot:andOperation: used to silently overwrite a collision in
-    operationSegments (last-registered node wins, order-dependent) - it should signal instead,
+    operations (last-registered node wins, order-dependent) - it should signal instead,
     analogous to the existing behaviorSegments collision check in buildInstanceMap."
     | space segment |
     space := HOPUriSpace new.
