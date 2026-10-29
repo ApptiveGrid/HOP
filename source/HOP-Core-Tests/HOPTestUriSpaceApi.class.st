@@ -7,7 +7,7 @@ Class {
 }
 
 { #category : 'accessing' }
-HOPTestUriSpaceApi >> build [
+HOPTestUriSpaceApi >> buildTree [
 	self /+ { 
 		#objects /+ self objectVariable @@ (#GET -> HOPTestMapping new)
 	} 

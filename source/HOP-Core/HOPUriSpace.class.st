@@ -34,9 +34,14 @@ HOPUriSpace >> asZincDelegate [
 		yourself 
 ]
 
-{ #category : 'accessing' }
+{ #category : 'building' }
 HOPUriSpace >> build [
-	self subclassResponsibility 
+	"a subclass grows the tree, then the space knows its way back: which segment the
+	instances of a class sit at and which segment and method reach an operation"
+	self buildTree.
+	self 
+		buildInstanceMap;
+		buildOperationSegments
 ]
 
 { #category : 'as yet unclassified' }
@@ -68,6 +73,11 @@ HOPUriSpace >> buildOperationSegments [
 						method: method
 						forResourceRoot: resourceRoot 
 						andOperation: operation ] ] ] ]
+]
+
+{ #category : 'building' }
+HOPUriSpace >> buildTree [
+	self subclassResponsibility 
 ]
 
 { #category : 'as yet unclassified' }

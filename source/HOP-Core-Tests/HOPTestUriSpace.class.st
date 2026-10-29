@@ -7,7 +7,7 @@ Class {
 }
 
 { #category : 'building' }
-HOPTestUriSpace >> build [ 
+HOPTestUriSpace >> buildTree [ 
 
 	self /+ #api
 		/+ (self firstVariable)

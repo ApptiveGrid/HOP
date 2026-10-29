@@ -17,6 +17,17 @@ HOPUriSpaceTest >> newRouteMatcher [
 ]
 
 { #category : 'tests' }
+HOPUriSpaceTest >> testBuildKnowsTheWayBackToItsOperations [
+	"a subclass only grows the tree; build itself registers what hangs in it"
+	| space items |
+	space := HOPTestUriSpaceOperations new build.
+	items := space / #api / #items.
+	self 
+		assert: (space segmentForResourceRoot: items nearestResourceNode andOperation: HOPTestOperationMapping)
+		identicalTo: items
+]
+
+{ #category : 'tests' }
 HOPUriSpaceTest >> testBuildUriSpace [ 
 	self 
 		shouldnt: [self uriSpace ]
