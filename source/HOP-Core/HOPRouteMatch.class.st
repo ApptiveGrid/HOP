@@ -102,12 +102,6 @@ HOPRouteMatch >> matchExtraPathIn: receiver [
 			yourself 
 ]
 
-{ #category : 'testing' }
-HOPRouteMatch >> matchesScope: aResource [
-	lastVariableSegment ifNil: [ ^ false ].
-	^ aResource matchesScopeOf: self receiver.
-]
-
 { #category : 'actions' }
 HOPRouteMatch >> merge: aRouteMatch [ 
 	variables addAll: aRouteMatch variables.

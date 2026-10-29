@@ -39,29 +39,10 @@ HOPResourceRoute >> matchExtraPath [
 		yourself
 ]
 
-{ #category : 'testing' }
-HOPResourceRoute >> matchesScope: aResource [
-	routeMatch lastVariableSegment ifNil: [ ^ false ].
-	^ aResource matchesScopeOf: self receiver.
-]
-
 { #category : 'instance creation' }
 HOPResourceRoute >> newHttpCall [ 
 	^ routeMatch newHttpCall 
 		resourceRoute: self 
-]
-
-{ #category : 'as yet unclassified' }
-HOPResourceRoute >> nodeMatchingScope: aResource [
-
-	(aResource isKindOf: AGUser) ifTrue: [ "we try to match any resource 'below' the root user.
-		if it comes to the user resource itself, we do not match existing node and rebuild the full uri instead.
-		because we dont want to generate uris in the shape /a/userid/spaces/space/id/..."
-		^ nil ].
-	routeMatch nodes reverse do: [ :eachNode |
-		(eachNode matchesScope: aResource in: self) ifTrue: [^ eachNode].
-		 ].
-	^ nil
 ]
 
 { #category : 'accessing' }

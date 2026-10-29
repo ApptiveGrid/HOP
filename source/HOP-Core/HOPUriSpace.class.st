@@ -99,13 +99,6 @@ HOPUriSpace >> buildUriForResource: anObject [
 ]
 
 { #category : 'as yet unclassified' }
-HOPUriSpace >> canonicalUriFor: aResource [
-	"the root is the empty path and adds no segment, a mounted space adds its name"
-	self isRoot ifTrue: [ ^ OrderedCollection new ].
-	^ super canonicalUriFor: aResource
-]
-
-{ #category : 'as yet unclassified' }
 HOPUriSpace >> canonicalUriForResource: resource [
 
 	^ self buildUriForResource: resource
@@ -242,13 +235,6 @@ HOPUriSpace >> segmentForResourceType: resourceClass andOperation: anOperation [
 { #category : 'accessing' }
 HOPUriSpace >> uriBuilderClass [
 	^ HOPUriBuilder
-]
-
-{ #category : 'as yet unclassified' }
-HOPUriSpace >> uriFor: aResource resourceRoute: resourceRoute [
-	"the root is the empty path and adds no segment, a mounted space adds its name"
-	self isRoot ifTrue: [ ^ OrderedCollection new ].
-	^ super uriFor: aResource resourceRoute: resourceRoute
 ]
 
 { #category : 'as yet unclassified' }

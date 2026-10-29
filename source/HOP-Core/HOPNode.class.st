@@ -105,13 +105,6 @@ HOPNode >> basicAddNode: aNode [
 	^ aNode
 ]
 
-{ #category : 'as yet unclassified' }
-HOPNode >> canonicalUriFor: aResource [ 
-	^ parent 
-		ifNotNil: [ parent canonicalUriFor: aResource ] 
-		ifNil: [ OrderedCollection new ]
-]
-
 { #category : 'enumerating' }
 HOPNode >> collect: aBlock into: aCollection [ 
 	nodes do: [ :each |
@@ -256,11 +249,4 @@ HOPNode >> root [
 { #category : 'as yet unclassified' }
 HOPNode >> segmentIn: anAGRequestContext [ 
 	^ self name
-]
-
-{ #category : 'as yet unclassified' }
-HOPNode >> uriFor: aResource resourceRoute: resourceRoute [
-	^ parent 
-		ifNotNil: [ parent uriFor: aResource resourceRoute: resourceRoute ] 
-		ifNil: [ OrderedCollection new ]
 ]
