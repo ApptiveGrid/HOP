@@ -13,12 +13,25 @@ Class {
 
 { #category : 'building' }
 HOPUriBuilder >> build [
-	| startSegment |
-	startSegment := operation 
+	^ self buildFrom: (operation 
 		ifNotNil: [ uriSpace segmentForResource: resource andOperation: operation ]
-		ifNil: [ uriSpace segmentForResource: resource ].
-	self visit: startSegment.
+		ifNil: [ uriSpace segmentForResource: resource ])
+]
+
+{ #category : 'building' }
+HOPUriBuilder >> buildFrom: aSegment [
+	self visit: aSegment.
 	^ ($/ join: segments reversed) copyWithFirst: $/ 
+]
+
+{ #category : 'building' }
+HOPUriBuilder >> buildLink [
+	"the uri together with the http method that reaches the operation there. A link to a
+	resource without an operation has no method"
+	| segmentAndMethod |
+	operation ifNil: [ ^ HOPLink href: self build method: nil ].
+	segmentAndMethod := uriSpace segmentAndMethodForResource: resource andOperation: operation.
+	^ HOPLink href: (self buildFrom: segmentAndMethod first) method: segmentAndMethod second
 ]
 
 { #category : 'as yet unclassified' }
