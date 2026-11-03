@@ -10,9 +10,12 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
-HOPExceptionHandlerWrapper >> checkDebugModeFor: exception routeMatch: aRouteMatch [
+HOPExceptionHandlerWrapper >> checkDebugModeFor: exception response: aResponse routeMatch: aRouteMatch [
+	"an exception the mapper answers with a status of its own is an answer to the client, not a
+	failure of the server, so in debug mode only what is left as an internal server error goes
+	to the debugger"
 	aRouteMatch request server ifNotNil: [ :server |
-		server debugMode
+		(server debugMode and: [ aResponse code = ZnStatusLine internalServerError code ])
 			ifTrue: [ self debugModeFor: exception routeMatch: aRouteMatch ]
 			ifFalse: [  self noDebugModeFor: exception routeMatch: aRouteMatch ] ].
 
@@ -59,17 +62,19 @@ HOPExceptionHandlerWrapper >> formatter: anObject [
 
 { #category : 'as yet unclassified' }
 HOPExceptionHandlerWrapper >> handleException: exception routeMatch: aRouteMatch [
-	| errorResponse |
-	self 
-		checkDebugModeFor: exception 
-		routeMatch: aRouteMatch.
+	| errorResponse response |
 	errorResponse := self exceptionMapper map: exception.
-	^ (errorResponse class == ZnResponse)
+	response := (errorResponse class == ZnResponse)
 		ifTrue: [ errorResponse ]
 		ifFalse: [ 
 			errorResponse asZnResponse
 				entity: (self formatter format: errorResponse);
-				yourself ]
+				yourself ].
+	self 
+		checkDebugModeFor: exception 
+		response: response
+		routeMatch: aRouteMatch.
+	^ response
 ]
 
 { #category : 'as yet unclassified' }
