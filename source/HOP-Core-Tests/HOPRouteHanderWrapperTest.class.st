@@ -10,6 +10,16 @@ Class {
 }
 
 { #category : 'running' }
+HOPRouteHanderWrapperTest >> inDebugModeDo: aBlock [
+	"a request in debug mode, as a server started with debugMode: true handles it"
+	^ ZnCurrentServer
+		value: ((ZnServer on: 0)
+			debugMode: true;
+			yourself)
+		during: aBlock
+]
+
+{ #category : 'running' }
 HOPRouteHanderWrapperTest >> setUp [ 
 	super setUp.
 	uriSpace := (HOPUriSpace /+ #first /+ #second) root
@@ -75,4 +85,32 @@ HOPRouteHanderWrapperTest >> testHandlerOfASegmentWrapsItsOwnMethod [
 	(uriSpace / #first) addHandler: HOPExceptionHandlerWrapper new.
 	response := uriSpace asZincDelegate handleRequest: (ZnRequest get: #first).
 	self assert: response status equals: 500
+]
+
+{ #category : 'tests' }
+HOPRouteHanderWrapperTest >> testInDebugModeAMappedExceptionIsAnswered [
+	"an exception with a mapping of its own is an answer to the client, so debug mode answers it
+	as well instead of opening a debugger"
+	| response |
+	uriSpace / #first @@ (#GET -> (HOPPluggableHandler new block: [ :req | 1 / 0 ])).
+	uriSpace addHandler: (HOPExceptionHandlerWrapper new
+		exceptionMapper: HOPTestExceptionMapper new;
+		yourself).
+	response := self inDebugModeDo: [
+		uriSpace asZincDelegate handleRequest: (ZnRequest get: #first) ].
+	self assert: response status equals: 400
+]
+
+{ #category : 'tests' }
+HOPRouteHanderWrapperTest >> testInDebugModeAnUnmappedExceptionIsPassed [
+	"what the mapper leaves as an internal server error goes on to the debugger"
+	uriSpace / #first @@ (#GET -> (HOPPluggableHandler new block: [ :req | Error signal: 'unmapped' ])).
+	uriSpace addHandler: (HOPExceptionHandlerWrapper new
+		exceptionMapper: HOPTestExceptionMapper new;
+		yourself).
+	self
+		should: [ self inDebugModeDo: [
+			uriSpace asZincDelegate handleRequest: (ZnRequest get: #first) ] ]
+		raise: Error
+		withExceptionDo: [ :error | self assert: error messageText equals: 'unmapped' ]
 ]
