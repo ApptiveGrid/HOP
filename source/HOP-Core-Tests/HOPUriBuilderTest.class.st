@@ -75,7 +75,7 @@ HOPUriBuilderTest >> testAClassAtSeveralSegmentsCannotBeAskedWithoutAResource [
 		raise: Error.
 	self 
 		assert: (uriSpace segmentForResourceType: HOPUriBuildObject) name
-		equals: #objectId
+		equals: #objectsId
 ]
 
 { #category : 'tests' }
