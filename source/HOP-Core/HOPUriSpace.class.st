@@ -3,7 +3,8 @@ Class {
 	#superclass : 'HOPNamedSegment',
 	#instVars : [
 		'operations',
-		'behaviorSegments'
+		'behaviorSegments',
+		'instanceClasses'
 	],
 	#category : 'HOP-Core',
 	#package : 'HOP-Core'
@@ -110,6 +111,7 @@ HOPUriSpace >> canonicalUriForResource: resource operation: operation [
 { #category : 'initialization' }
 HOPUriSpace >> initialize [ 
 	super initialize.
+	instanceClasses := IdentityDictionary new.
 	behaviorSegments := Dictionary new. "class -> the segments it is canonical at"
 	operations := Dictionary new
 ]
@@ -239,10 +241,25 @@ HOPUriSpace >> segment: aSegment fitsContainersOf: aResource [
 	container := resource perform: segment containerSelector asSymbol.
 	above := segment parent ifNotNil: [ :each | each nearestResourceNode ].
 	above ifNil: [ ^ true ].
-	above instanceMapClasses ifNil: [ ^ true ].
-	(above instanceMapClasses includes: container class) ifFalse: [ ^ false ].
+	(self instanceClassesOf: above) ifNotNil: [ :classes |
+		(classes includes: container class) ifFalse: [ ^ false ] ] ifNil: [ ^ true ].
 	segment := above.
 	resource := container ] repeat
+]
+
+{ #category : 'private' }
+HOPUriSpace >> instanceClassesOf: aSegment [
+	"the classes a segment resolves, nil when it resolves none. They are asked for each
+	step of a chain, and for a class with many subclasses finding them is not cheap, while
+	they do not change once the tree stands"
+
+	^ instanceClasses 
+		at: aSegment 
+		ifAbsent: [ 
+			| classes |
+			classes := aSegment instanceMapClasses ifNotNil: #asSet.
+			instanceClasses at: aSegment put: classes.
+			classes ]
 ]
 
 { #category : 'as yet unclassified' }
