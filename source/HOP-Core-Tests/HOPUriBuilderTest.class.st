@@ -7,6 +7,94 @@ Class {
 }
 
 { #category : 'tests' }
+HOPUriBuilderTest >> testABuildLinkFollowsTheHolderOfTheResource [
+	"the operation hangs at each of the segments the class is canonical at, so its link
+	leads to the one of the holder"
+	| uriSpace item link |
+	uriSpace := self uriSpaceWithItemsUnderTwoHolders.
+	item := HOPUriBuildItem new container: HOPUriBuildOtherObject new.
+	link := uriSpace newUriBuilder 
+		resource: item; 
+		operation: HOPTestOperationMapping; 
+		buildLink.
+	self assert: link href equals: '/api/others/9/items/3/entries'.
+	self assert: link method equals: #post.
+	item container: HOPUriBuildObject new.
+	link := uriSpace newUriBuilder 
+		resource: item; 
+		operation: HOPTestOperationMapping; 
+		buildLink.
+	self assert: link href equals: '/api/objects/1/items/3/entries'
+]
+
+{ #category : 'tests' }
+HOPUriBuilderTest >> testAClassAtSeveralSegmentsBuildsTheUriOfItsHolder [
+	| uriSpace item |
+	uriSpace := self uriSpaceWithItemsUnderTwoHolders.
+	item := HOPUriBuildItem new container: HOPUriBuildObject new.
+	self 
+		assert: (uriSpace buildUriForResource: item) 
+		equals: '/api/objects/1/items/3'.
+	item container: HOPUriBuildOtherObject new.
+	self 
+		assert: (uriSpace buildUriForResource: item) 
+		equals: '/api/others/9/items/3'
+]
+
+{ #category : 'tests' }
+HOPUriBuilderTest >> testAClassAtSeveralSegmentsIsAmbiguousUnderTheSameHolderClass [
+	| uriSpace api |
+	api := #api asHOPSegment.
+	uriSpace := (HOPUriSpace /+ api) root.
+	api /+ #objects /+ (self variable: #objectId resolving: HOPUriBuildObject) /+ #items /+ (self variable: #itemId resolving: HOPUriBuildItem).
+	api /+ #mirror /+ (self variable: #mirrorId resolving: HOPUriBuildObject) /+ #items /+ (self variable: #itemId resolving: HOPUriBuildItem).
+	uriSpace buildInstanceMap.
+	self 
+		should: [ uriSpace buildUriForResource: (HOPUriBuildItem new container: HOPUriBuildObject new) ]
+		raise: Error
+]
+
+{ #category : 'tests' }
+HOPUriBuilderTest >> testAClassAtSeveralSegmentsNeedsAHolderThatFits [
+	| uriSpace |
+	uriSpace := self uriSpaceWithItemsUnderTwoHolders.
+	self 
+		should: [ uriSpace buildUriForResource: HOPUriBuildItem new ]
+		raise: Error.
+	self 
+		should: [ uriSpace buildUriForResource: (HOPUriBuildItem new container: HOPUriBuildChildObject new) ]
+		raise: Error
+]
+
+{ #category : 'tests' }
+HOPUriBuilderTest >> testAClassAtSeveralSegmentsCannotBeAskedWithoutAResource [
+	| uriSpace |
+	uriSpace := self uriSpaceWithItemsUnderTwoHolders.
+	self 
+		should: [ uriSpace segmentForResourceType: HOPUriBuildItem ]
+		raise: Error.
+	self 
+		assert: (uriSpace segmentForResourceType: HOPUriBuildObject) name
+		equals: #objectsId
+]
+
+{ #category : 'tests' }
+HOPUriBuilderTest >> testAChildOfAResourceAtSeveralSegmentsFollowsTheHolderTwoLevelsUp [
+	"the child's own container is the item at both of its segments, so only the chain up to
+	the holder tells them apart"
+	| uriSpace item |
+	uriSpace := self uriSpaceWithItemsUnderTwoHolders.
+	item := HOPUriBuildItem new container: HOPUriBuildOtherObject new.
+	self 
+		assert: (uriSpace buildUriForResource: (HOPUriBuildChildObject new container: item)) 
+		equals: '/api/others/9/items/3/children/2'.
+	item container: HOPUriBuildObject new.
+	self 
+		assert: (uriSpace buildUriForResource: (HOPUriBuildChildObject new container: item)) 
+		equals: '/api/objects/1/items/3/children/2'
+]
+
+{ #category : 'tests' }
 HOPUriBuilderTest >> testBuildLinkForOperation [
 	"the link carries the method the operation hangs at, the way a request reaches it"
 	| uriSpace objectSegment object link |
@@ -120,6 +208,34 @@ HOPUriBuilderTest >> testBuildUriOutsideTheScopeOfTheRoute [
 	self 
 		assert: (uriSpace newUriBuilder resource: child; resourceRoute: route; build)
 		equals: '/api/objects/1/children/2'
+]
+
+{ #category : 'running' }
+HOPUriBuilderTest >> uriSpaceWithItemsUnderTwoHolders [
+	"items have their canonical place under objects and under others, below an item hang
+	its children and an operation"
+	| api uriSpace |
+	api := #api asHOPSegment.
+	uriSpace := (HOPUriSpace /+ api) root.
+	{ #objects -> HOPUriBuildObject . #others -> HOPUriBuildOtherObject } do: [ :each | 
+		| items |
+		items := api /+ each key /+ (self variable: (each key , 'Id') asSymbol resolving: each value) /+ #items /+ (self variable: #itemId resolving: HOPUriBuildItem).
+		items /+ #children /+ (self variable: #childId resolving: HOPUriBuildChildObject).
+		items /+ #entries @@ (#POST -> HOPTestOperationMapping) ].
+	uriSpace 
+		buildInstanceMap;
+		buildOperationSegments.
+	^ uriSpace
+]
+
+{ #category : 'running' }
+HOPUriBuilderTest >> variable: aName resolving: aClass [
+	^ HOPVariableSegment new 
+		name: aName;
+		segmentNameSelector: #id;
+		resolveClass: aClass;
+		beCanonical;
+		yourself
 ]
 
 { #category : 'running' }

@@ -48,16 +48,15 @@ HOPUriSpace >> build [
 HOPUriSpace >> buildInstanceMap [
 	"the model we expose via URIs needs to have entries for resolving an object to 
 	its canonical location in the tree. Each instance node registers the instance 
-	class in the map so it can be looked up"
+	class in the map so it can be looked up. A class may have several canonical
+	locations, e.g. the blocks of a space and those of a grid; segmentForResource: chooses
+	among them"
 	self root recursiveDo: [ :node | 
 		((node isKindOf: HOPVariableSegment) and: [ node isCanonical ]) ifTrue: [
 			"objects at a URI can be polymorph. Therefor we register all subclasses 
 			for the same node"
 			node instanceMapClasses do: [ :instanceKind | 
-				behaviorSegments 
-					at: instanceKind 
-					ifPresent: [ Error signal: 'try to register class ', instanceKind asString, ' more than once ' ]
-					ifAbsent: [ behaviorSegments at: instanceKind put: node ] ] ] ]
+				self registerSegment: node forInstanceClass: instanceKind ] ] ]
 ]
 
 { #category : 'as yet unclassified' }
@@ -83,8 +82,6 @@ HOPUriSpace >> buildTree [
 { #category : 'as yet unclassified' }
 HOPUriSpace >> buildUriForOperation: aClass resource: anObject [
 
-	| resourceRoot |
-	resourceRoot := behaviorSegments at: anObject class.
 	^ self newUriBuilder 
 		resource: anObject;
 		operation: aClass;
@@ -113,7 +110,7 @@ HOPUriSpace >> canonicalUriForResource: resource operation: operation [
 { #category : 'initialization' }
 HOPUriSpace >> initialize [ 
 	super initialize.
-	behaviorSegments := Dictionary new.
+	behaviorSegments := Dictionary new. "class -> the segments it is canonical at"
 	operations := Dictionary new
 ]
 
@@ -173,10 +170,16 @@ HOPUriSpace >> printOn: aStream [
 { #category : 'as yet unclassified' }
 HOPUriSpace >> registerSegment: segment  forResourceType: aClass [ 
 	aClass hopExposedClasses do: [ :behavior | 
-		behaviorSegments 
-			at: behavior 
-			ifPresent: [ Error signal: 'try to register class ', behavior asString, ' more than once ' ]
-			ifAbsent: [ behaviorSegments at: behavior put: segment ] ] 
+		self registerSegment: segment forInstanceClass: behavior ] 
+]
+
+{ #category : 'as yet unclassified' }
+HOPUriSpace >> registerSegment: segment forInstanceClass: aClass [
+	"a class may be canonical at several segments, each is kept once"
+
+	| segments |
+	segments := behaviorSegments at: aClass ifAbsentPut: [ OrderedCollection new ].
+	(segments anySatisfy: [ :each | each == segment ]) ifFalse: [ segments add: segment ]
 ]
 
 { #category : 'as yet unclassified' }
@@ -206,8 +209,47 @@ HOPUriSpace >> segmentAndMethodForResource: resource andOperation: anOperation [
 ]
 
 { #category : 'as yet unclassified' }
-HOPUriSpace >> segmentForResource: aResource [ 	
-	^ self segmentForResourceType: aResource yourself class
+HOPUriSpace >> segmentForResource: aResource [ 
+	"the segment aResource is canonical at. A class with several canonical segments is
+	told apart by what is above the resource: only one of the segments has a chain of
+	containers up to the root that the segments above accept"
+
+	| segments fitting |
+	segments := self segmentsForResourceType: aResource yourself class.
+	segments size = 1 ifTrue: [ ^ segments first ].
+	fitting := segments select: [ :each | self segment: each fitsContainersOf: aResource ].
+	fitting size = 1 ifTrue: [ ^ fitting first ].
+	^ Error signal: (fitting isEmpty
+		ifTrue: [ 'no canonical segment of ' , aResource yourself class asString , ' fits the containers of the resource' ]
+		ifFalse: [ 'more than one canonical segment of ' , aResource yourself class asString , ' fits the containers of the resource' ])
+]
+
+{ #category : 'testing' }
+HOPUriSpace >> segment: aSegment fitsContainersOf: aResource [
+	"walking up from aResource: the container, which the segment names by its
+	containerSelector, must be of a class the next variable segment above resolves. A
+	segment that resolves no classes cannot be asked and ends the walk, as does the
+	root"
+
+	| segment resource |
+	segment := aSegment.
+	resource := aResource.
+	[ | container above |
+	(resource respondsTo: segment containerSelector asSymbol) ifFalse: [ ^ false ].
+	container := resource perform: segment containerSelector asSymbol.
+	above := segment parent ifNotNil: [ :each | each nearestResourceNode ].
+	above ifNil: [ ^ true ].
+	above instanceMapClasses ifNil: [ ^ true ].
+	(above instanceMapClasses includes: container class) ifFalse: [ ^ false ].
+	segment := above.
+	resource := container ] repeat
+]
+
+{ #category : 'as yet unclassified' }
+HOPUriSpace >> segmentsForResourceType: aClass [
+	"all segments the instances of aClass are canonical at"
+
+	^ behaviorSegments at: aClass
 ]
 
 { #category : 'as yet unclassified' }
@@ -221,8 +263,15 @@ HOPUriSpace >> segmentForResourceRoot: resourceRoot andOperation: anOperation [
 ]
 
 { #category : 'as yet unclassified' }
-HOPUriSpace >> segmentForResourceType: aClass [ 	
-	^ behaviorSegments at: aClass
+HOPUriSpace >> segmentForResourceType: aClass [ 
+	"only for a class that is canonical at one segment: without a resource there is nothing
+	to tell several apart"
+
+	| segments |
+	segments := self segmentsForResourceType: aClass.
+	segments size = 1 ifFalse: [
+		^ Error signal: aClass asString , ' is canonical at several segments, ask for the resource' ].
+	^ segments first
 ]
 
 { #category : 'as yet unclassified' }
