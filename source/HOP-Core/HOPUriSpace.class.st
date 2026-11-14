@@ -229,7 +229,9 @@ HOPUriSpace >> segmentForResource: aResource [
 { #category : 'testing' }
 HOPUriSpace >> segment: aSegment fitsContainersOf: aResource [
 	"walking up from aResource: the container, which the segment names by its
-	containerSelector, must be of a class the next variable segment above resolves. A
+	containerSelector, must be of a class the next variable segment above resolves; a
+	container that stands in for another, like a database proxy, is asked for the object it
+	stands for. A
 	segment that resolves no classes cannot be asked and ends the walk, as does the
 	root"
 
@@ -238,7 +240,7 @@ HOPUriSpace >> segment: aSegment fitsContainersOf: aResource [
 	resource := aResource.
 	[ | container above |
 	(resource respondsTo: segment containerSelector asSymbol) ifFalse: [ ^ false ].
-	container := resource perform: segment containerSelector asSymbol.
+	container := (resource perform: segment containerSelector asSymbol) yourself.
 	above := segment parent ifNotNil: [ :each | each nearestResourceNode ].
 	above ifNil: [ ^ true ].
 	(self instanceClassesOf: above) ifNotNil: [ :classes |

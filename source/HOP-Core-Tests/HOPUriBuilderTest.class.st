@@ -67,6 +67,21 @@ HOPUriBuilderTest >> testAClassAtSeveralSegmentsNeedsAHolderThatFits [
 ]
 
 { #category : 'tests' }
+HOPUriBuilderTest >> testAClassAtSeveralSegmentsChoosesThroughAProxyOfItsContainer [
+	"a container read from a database can be a proxy whose class is not the class of the
+	object it stands for"
+	| uriSpace item |
+	uriSpace := self uriSpaceWithItemsUnderTwoHolders.
+	item := HOPUriBuildItem new container: (HOPUriBuildProxy on: HOPUriBuildOtherObject new).
+	self 
+		assert: (uriSpace buildUriForResource: item) 
+		equals: '/api/others/9/items/3'.
+	self 
+		assert: (uriSpace buildUriForResource: (HOPUriBuildChildObject new container: (HOPUriBuildProxy on: item))) 
+		equals: '/api/others/9/items/3/children/2'
+]
+
+{ #category : 'tests' }
 HOPUriBuilderTest >> testAClassAtSeveralSegmentsCannotBeAskedWithoutAResource [
 	| uriSpace |
 	uriSpace := self uriSpaceWithItemsUnderTwoHolders.
